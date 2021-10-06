@@ -93,8 +93,8 @@ const CancelButton = ({ onClick }) => {
 
 function saveOnDisk(fileName: string, blob: any) {
   // if IE11
-  if (window.navigator.msSaveOrOpenBlob) {
-    window.navigator.msSaveOrOpenBlob(blob, fileName);
+  if ((window as any).navigator.msSaveOrOpenBlob) {
+    (window as any).navigator.msSaveOrOpenBlob(blob, fileName);
     return;
   }
 
