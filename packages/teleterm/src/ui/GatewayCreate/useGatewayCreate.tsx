@@ -14,35 +14,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppContext } from 'teleterm/ui/appContextProvider';
 import useAsync from 'teleterm/ui/useAsync';
+import { GatewayProtocol } from 'teleterm/ui/services/clusters/types';
 
-export default function useGatewayCreate({ targetUri, onClose }: Props) {
+export default function useGatewayCreate({
+  targetUri,
+  onClose,
+  onSuccess,
+}: Props) {
   const ctx = useAppContext();
-  const db = ctx.serviceClusters.findDb(targetUri);
-  const [createAttempt, create] = useAsync((port: string) => {
-    return ctx.serviceClusters.createGateway(targetUri, port);
-  });
+  const db = ctx.clustersService.findDb(targetUri);
+
+  const [port, setPort] = useState('');
+  const [user, setUser] = useState('');
+
+  const [createAttempt, createGateway] = useAsync(
+    (params: { port: string; user?: string }) => {
+      return ctx.clustersService.createGateway({ targetUri, ...params });
+    }
+  );
 
   useEffect(() => {
     if (createAttempt.status === 'success') {
-      ctx.serviceDocs.open(createAttempt.data.uri);
       onClose();
+      if (onSuccess) {
+        onSuccess(createAttempt.data.uri);
+      }
     }
   }, [createAttempt.status]);
 
   return {
     createAttempt,
-    create,
+    createGateway,
+    port,
+    user,
+    userRequired: (db.protocol as GatewayProtocol) === 'mongodb',
     db,
     onClose,
+    setPort,
+    setUser,
   };
 }
 
 export type Props = {
   onClose(): void;
+  onSuccess?(gatewayUri: string): void;
   targetUri: string;
+  port?: string;
 };
 
 export type State = ReturnType<typeof useGatewayCreate>;

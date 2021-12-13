@@ -18,18 +18,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { Flex } from 'design';
 import { useAppContext } from 'teleterm/ui/appContextProvider';
-import * as types from 'teleterm/ui/types';
+import * as types from 'teleterm/ui/services/docs/types';
 import Tabs from 'teleterm/ui/Tabs';
+import Document from 'teleterm/ui/Document';
 import DocumentHome from 'teleterm/ui/DocumentHome';
-import DocumentServers from 'teleterm/ui/DocumentServers';
-import DocumentDbs from 'teleterm/ui/DocumentDbs';
 import DocumentGateway from 'teleterm/ui/DocumentGateway';
 import DocumentTerminal from 'teleterm/ui/DocumentTerminal';
+import DocumentCluster from 'teleterm/ui/DocumentCluster';
 import useTabShortcuts from './useTabShortcuts';
 
 export default function TabHost(props: Props) {
   const ctx = useAppContext();
-  const { serviceDocs, mainProcessClient } = ctx;
+  const { docsService: serviceDocs } = ctx;
   const documents = serviceDocs.getDocuments();
   const docActive = serviceDocs.getActive();
 
@@ -44,34 +44,49 @@ export default function TabHost(props: Props) {
   }
 
   function handleTabClose(doc: types.Document) {
-    serviceDocs.close(doc);
+    serviceDocs.close(doc.uri);
   }
 
   function handleTabMoved(oldIndex: number, newIndex: number) {
-    serviceDocs.changeIndex(oldIndex, newIndex);
+    serviceDocs.swapPosition(oldIndex, newIndex);
   }
 
   function handleTabNew() {
-    const doc = serviceDocs.addNewTerminalShellDocument();
-    serviceDocs.open(doc.uri);
+    serviceDocs.openNewTerminal();
   }
 
-  const $docs = documents.map(doc => (
-    <MemoizedDocument doc={doc} visible={doc === docActive} key={doc.uri} />
-  ));
+  function handleTabContextMenu(doc: types.Document) {
+    ctx.mainProcessClient.openTabContextMenu({
+      documentKind: doc.kind,
+      onClose: () => {
+        serviceDocs.close(doc.uri);
+      },
+      onCloseOthers: () => {
+        serviceDocs.closeOthers(doc.uri);
+      },
+      onCloseToRight: () => {
+        serviceDocs.closeToRight(doc.uri);
+      },
+      onDuplicatePty: () => {
+        serviceDocs.duplicatePtyAndActivate(doc.uri);
+      },
+    });
+  }
 
-  const openContextMenu = () => {
-    mainProcessClient.openContextMenu();
-  };
+  const $docs = documents.map(doc => {
+    const isActiveDoc = doc === docActive;
+    return <MemoizedDocument doc={doc} visible={isActiveDoc} key={doc.uri} />;
+  });
 
   return (
-    <StyledTabHost {...props} onContextMenu={openContextMenu}>
-      <Flex bg="bgTerminal" height="32px">
+    <StyledTabHost {...props}>
+      <Flex bg="terminalDark" height="32px">
         <Tabs
           flex="1"
-          items={documents}
+          items={documents.filter(d => d.kind !== 'doc.home')}
           onClose={handleTabClose}
           onSelect={handleTabClick}
+          onContextMenu={handleTabContextMenu}
           activeTab={docActive.uri}
           onMoved={handleTabMoved}
           disableNew={false}
@@ -87,26 +102,27 @@ function MemoizedDocument(props: { doc: types.Document; visible: boolean }) {
   const { doc, visible } = props;
   return React.useMemo(() => {
     switch (doc.kind) {
-      case 'home':
+      case 'doc.home':
         return <DocumentHome doc={doc} visible={visible} />;
-      case 'servers':
-        return <DocumentServers doc={doc} visible={visible} />;
-      case 'dbs':
-        return <DocumentDbs doc={doc} visible={visible} />;
-      case 'gateway':
+      case 'doc.cluster':
+        return <DocumentCluster doc={doc} visible={visible} />;
+      case 'doc.gateway':
         return <DocumentGateway doc={doc} visible={visible} />;
-      case 'terminal_shell':
-      case 'terminal_tsh_session':
+      case 'doc.terminal_shell':
+      case 'doc.terminal_tsh_node':
+      case 'doc.terminal_tsh_kube':
         return <DocumentTerminal doc={doc} visible={visible} />;
-
       default:
-        return null;
+        return (
+          <Document visible={visible}>
+            Document kind "{doc.kind}" is not supported
+          </Document>
+        );
     }
   }, [visible, doc]);
 }
 
 const StyledTabHost = styled.div`
-  background-color: ${props => props.theme.colors.bgTerminal};
   display: flex;
   flex-direction: column;
   width: 100%;

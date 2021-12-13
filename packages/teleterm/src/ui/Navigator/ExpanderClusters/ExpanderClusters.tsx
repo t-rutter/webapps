@@ -15,56 +15,40 @@ limitations under the License.
 */
 
 import React from 'react';
-import { Flex, Text, ButtonIcon } from 'design';
-import * as Icons from 'design/Icon';
+import { Flex, Text, ButtonIcon, Box } from 'design';
+import { Restore, Add } from 'design/Icon';
 import Expander, { ExpanderHeader, ExpanderContent } from './../Expander';
-import NavItem from 'teleterm/ui/Navigator/NavItem';
-import useExpanderClusters, {
-  State,
-  ClusterNavItem,
-} from './useExpanderClusters';
+import { useExpanderClusters } from './useExpanderClusters';
+import { ExpanderClusterItem } from './ExpanderClusterItem';
+import { ExpanderClusterState } from './types';
 
-export default function Container() {
+export function ExpanderClusters() {
   const state = useExpanderClusters();
-  return <ExpanderClusters {...state} />;
+  return <ExpanderClustersPresentational {...state} />;
 }
 
-export const ExpanderClusters: React.FC<State> = props => {
-  const {
-    clusterItems,
-    openLoginDialog,
-    syncClusters,
-    addCluster,
-    logout,
-    remove,
-  } = props;
+export function ExpanderClustersPresentational(props: ExpanderClusterState) {
+  const { items, onSyncClusters, onAddCluster, onOpen, onOpenContextMenu } =
+    props;
 
   const handleSyncClick = (e: React.BaseSyntheticEvent) => {
     e.stopPropagation();
-    syncClusters();
+    onSyncClusters?.();
   };
 
   const handleAddClick = (e: React.BaseSyntheticEvent) => {
     e.stopPropagation();
-    addCluster();
+    onAddCluster?.();
   };
 
-  const $onlineClusters = clusterItems
-    .filter(i => i.connected)
-    .map(i => (
-      <ClusterItem key={i.uri} item={i} onRemove={remove} onLogout={logout} />
-    ));
-
-  const $offlineClusters = clusterItems
-    .filter(i => !i.connected)
-    .map(i => (
-      <ClusterOfflineItem
-        key={i.uri}
-        item={i}
-        onRemove={remove}
-        onLogin={openLoginDialog}
-      />
-    ));
+  const $clustersItems = items.map(i => (
+    <ExpanderClusterItem
+      key={i.clusterUri}
+      item={i}
+      onOpen={onOpen}
+      onContextMenu={() => onOpenContextMenu?.(i)}
+    />
+  ));
 
   return (
     <Expander>
@@ -74,114 +58,33 @@ export const ExpanderClusters: React.FC<State> = props => {
           alignItems="center"
           flex="1"
           width="100%"
+          minWidth="0"
         >
-          <Text typography="body1">Clusters</Text>
+          <Text typography="body1" bold>
+            Clusters
+          </Text>
           <Flex>
             <ButtonIcon
               p={3}
               color="text.placeholder"
+              title="Sync clusters"
               onClick={handleSyncClick}
             >
-              <Icons.Restore />
+              <Restore />
             </ButtonIcon>
-            <ButtonIcon color="text.placeholder" onClick={handleAddClick}>
-              <Icons.Add />
+            <ButtonIcon
+              color="text.placeholder"
+              onClick={handleAddClick}
+              title="Add cluster"
+            >
+              <Add />
             </ButtonIcon>
           </Flex>
         </Flex>
       </ExpanderHeader>
       <ExpanderContent>
-        {$onlineClusters}
-        {$offlineClusters}
+        <Box>{$clustersItems}</Box>
       </ExpanderContent>
     </Expander>
   );
-};
-
-type ClusterItemProps = {
-  item: ClusterNavItem;
-  onLogout(string): void;
-  onRemove(string): void;
-};
-
-const ClusterItem: React.FC<ClusterItemProps> = props => {
-  const { title, items } = props.item;
-
-  function handleLogout(e: React.SyntheticEvent) {
-    e.stopPropagation();
-    props.onLogout(props.item.uri);
-  }
-
-  function handleRemove(e: React.SyntheticEvent) {
-    e.stopPropagation();
-    props.onRemove(props.item.uri);
-  }
-
-  return (
-    <Expander>
-      <ExpanderHeader pl={5}>
-        <Flex
-          alignItems="center"
-          justifyContent="space-between"
-          flex="1"
-          width="100%"
-        >
-          <Text typography="body1" style={{ position: 'relative' }}>
-            {title}
-          </Text>
-          <ButtonIcon color="text.placeholder" onClick={handleLogout}>
-            <Icons.EmailSolid />
-          </ButtonIcon>
-          <ButtonIcon color="text.placeholder" onClick={handleRemove}>
-            <Icons.Trash />
-          </ButtonIcon>
-        </Flex>
-      </ExpanderHeader>
-      <ExpanderContent>
-        {items.map(i => (
-          <NavItem key={i.uri} pl={9} item={i} />
-        ))}
-      </ExpanderContent>
-    </Expander>
-  );
-};
-
-const ClusterOfflineItem: React.FC<{
-  item: ClusterNavItem;
-  onLogin(string): void;
-  onRemove(string): void;
-}> = props => {
-  const { item } = props;
-
-  function handleRemove(e: React.SyntheticEvent) {
-    e.stopPropagation();
-    props.onRemove(item.uri);
-  }
-
-  function handleLogin(e: React.SyntheticEvent) {
-    e.stopPropagation();
-    props.onLogin(item.uri);
-  }
-
-  return (
-    <Expander>
-      <ExpanderHeader pl={5} color="grey.500">
-        <Flex
-          alignItems="center"
-          justifyContent="space-between"
-          flex="1"
-          width="100%"
-        >
-          <Text typography="body1">{item.title}</Text>
-          <ButtonIcon color="text.placeholder" onClick={handleLogin}>
-            <Icons.Restore />
-          </ButtonIcon>
-          <ButtonIcon color="text.placeholder" onClick={handleRemove}>
-            <Icons.Trash />
-          </ButtonIcon>
-        </Flex>
-      </ExpanderHeader>
-      <ExpanderContent />
-    </Expander>
-  );
-};
+}

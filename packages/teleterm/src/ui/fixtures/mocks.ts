@@ -1,6 +1,7 @@
 import { MockMainProcessClient } from 'teleterm/mainProcess/fixtures/mocks';
 import { MockTshClient } from 'teleterm/services/tshd/fixtures/mocks';
 import { MockPtyServiceClient } from 'teleterm/services/pty/fixtures/mocks';
+import { createMockFileStorage } from 'teleterm/services/fileStorage/fixtures/mocks';
 import AppContext from 'teleterm/ui/appContext';
 
 export class MockAppContext extends AppContext {
@@ -8,20 +9,27 @@ export class MockAppContext extends AppContext {
     const mainProcessClient = new MockMainProcessClient();
     const tshdClient = new MockTshClient();
     const ptyServiceClient = new MockPtyServiceClient();
+    const loggerService = createLoggerService();
+    const fileStorage = createMockFileStorage();
 
     super({
-      createLogger,
+      loggerService,
       mainProcessClient,
       tshClient: tshdClient,
       ptyServiceClient,
+      fileStorage,
     });
   }
 }
 
-function createLogger(context = 'default') {
+function createLoggerService() {
   return {
-    error: (...args) => {},
-    warn: (...args) => {},
-    info: (...args) => {},
+    createLogger() {
+      return {
+        error: () => {},
+        warn: () => {},
+        info: () => {},
+      };
+    },
   };
 }

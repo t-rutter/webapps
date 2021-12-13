@@ -15,116 +15,76 @@ limitations under the License.
 */
 
 import React from 'react';
-import styled from 'styled-components';
-import { Text, Flex, Box, ButtonSecondary } from 'design';
-import Document from './../Document';
-import useGateway from './useGateway';
-import { ThemeProviderTabs } from './../ThemeProvider';
-import * as types from '../types';
-import TextSelectCopy from 'teleport/components/TextSelectCopy';
+import { Text, Flex, Box, ButtonPrimary } from 'design';
+import Document from 'teleterm/ui/Document';
 import * as Alerts from 'design/Alert';
+import * as types from 'teleterm/ui/services/docs/types';
+import LinearProgress from 'teleterm/ui/components/LinearProgress';
+import { GatewayProtocol } from 'teleterm/ui/services/clusters/types';
+import useDocumentGateway, { State } from './useDocumentGateway';
+import { Postgres } from './Postgres';
+import { Mongo } from './Mongo';
+import { MySql } from './MySql';
 
 type Props = {
   visible: boolean;
   doc: types.DocumentGateway;
 };
 
-export default function DocumentGateway(props: Props) {
+export default function Container(props: Props) {
   const { doc, visible } = props;
-  const { gateway, status, statusText, removeGateway } = useGateway(doc);
-
+  const state = useDocumentGateway(doc);
   return (
-    <ThemeProviderTabs>
-      <Document visible={visible}>
-        <Container mx="auto" mt="4" px="5">
-          <Flex justifyContent="space-between" mb="4">
-            <Text typography="h3" color="text.secondary">
-              Gateway
-            </Text>
-            <ButtonSecondary size="small" onClick={removeGateway}>
-              Close Gateway
-            </ButtonSecondary>
-          </Flex>
-          {status === 'error' && <Alerts.Danger mb={5} children={statusText} />}
-          <Text bold>Database</Text>
-          <Flex
-            bg={'primary.dark'}
-            p="2"
-            alignItems="center"
-            justifyContent="space-between"
-            borderRadius={2}
-            mb={3}
-          >
-            <Text>{gateway.protocol}</Text>
-          </Flex>
-
-          <Text bold>Host Name</Text>
-          <Flex
-            bg={'primary.dark'}
-            p="2"
-            alignItems="center"
-            justifyContent="space-between"
-            borderRadius={2}
-            mb={3}
-          >
-            <Text>{gateway.resourceName}</Text>
-          </Flex>
-
-          <Text bold>Local Address</Text>
-          <TextSelectCopy
-            bash={false}
-            bg={'primary.dark'}
-            mb={4}
-            text={`https://${gateway.localAddress}:${gateway.localPort}`}
-          />
-          <Text bold>Psql</Text>
-          <TextSelectCopy
-            bash={false}
-            bg={'primary.dark'}
-            mb={6}
-            text={`psql "${gateway.nativeClientArgs}"`}
-          />
-          <Text typography="h4" bold mb={3}>
-            Access Keys
-          </Text>
-          <Text bold>CA certificate path</Text>
-          <TextSelectCopy
-            bash={false}
-            bg={'primary.dark'}
-            mb={3}
-            text={gateway.caCertPath}
-          />
-          <Text bold>Database access certificate path</Text>
-          <TextSelectCopy
-            bash={false}
-            bg={'primary.dark'}
-            mb={3}
-            text={gateway.dbCertPath}
-          />
-          <Text bold>Private Key Path</Text>
-          <TextSelectCopy
-            bash={false}
-            bg={'primary.dark'}
-            mb={3}
-            text={gateway.keyPath}
-          />
-        </Container>
-      </Document>
-    </ThemeProviderTabs>
+    <Document visible={visible}>
+      <DocumentGateway {...state} />
+    </Document>
   );
 }
 
-const Container = styled(Box)`
-  max-width: 1024px;
-`;
+export function DocumentGateway(props: State) {
+  const { doc, gateway, connected, connectAttempt, disconnect, reconnect } =
+    props;
 
-/*
-clusterId: "localhost"
-hostId: "5546a2f0-fc51-416b-a44d-1ef8747c3341"
-localAddress: "127.0.0.1:43293"
-localPort: ""
-protocol: "postgres"
-resourceName: "mydb"
-status: 0
+  if (!connected) {
+    return (
+      <Flex flexDirection="column" mx="auto" alignItems="center" mt={100}>
+        <Text
+          typography="h5"
+          color="text.primary"
+          style={{ position: 'relative' }}
+        >
+          The Database Proxy connection is currently offline
+          {connectAttempt.status === 'processing' && <LinearProgress />}
+        </Text>
+        {connectAttempt.status === 'error' && (
+          <Alerts.Danger>{connectAttempt.statusText}</Alerts.Danger>
+        )}
+        <ButtonPrimary
+          mt={4}
+          width="100px"
+          onClick={reconnect}
+          disabled={connectAttempt.status === 'processing'}
+        >
+          Reconnect
+        </ButtonPrimary>
+      </Flex>
+    );
+  }
 
-*/
+  switch (gateway.protocol as GatewayProtocol) {
+    case 'mongodb':
+      return (
+        <Mongo gateway={gateway} title={doc.title} disconnect={disconnect} />
+      );
+    case 'postgres':
+      return (
+        <Postgres gateway={gateway} title={doc.title} disconnect={disconnect} />
+      );
+    case 'mysql':
+      return (
+        <MySql gateway={gateway} title={doc.title} disconnect={disconnect} />
+      );
+    default:
+      return <Box> {`Unknown protocol type ${gateway.protocol}`}</Box>;
+  }
+}

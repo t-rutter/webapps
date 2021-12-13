@@ -14,26 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Document from 'teleterm/ui/Document';
-import useDocumentTerminal, { Props } from './useDocTerminal';
+import useDocTerminal, { Props } from './useDocumentTerminal';
 import Terminal from './Terminal';
+import DocumentReconnect from './DocumentReconnect';
 
-export default function DocumentTerminal(props: Props & { visible: boolean }) {
+export default function DocumentTerminalContainer({ doc, visible }: Props) {
+  if (doc.kind === 'doc.terminal_tsh_node' && doc.status === 'disconnected') {
+    return <DocumentReconnect visible={visible} doc={doc} />;
+  }
+
+  return <DocumentTerminal visible={visible} doc={doc} />;
+}
+
+export function DocumentTerminal(props: Props & { visible: boolean }) {
   const { visible, doc } = props;
-  const refTerminal = useRef<Terminal>();
-  const { ptyProcess } = useDocumentTerminal(doc);
-
-  useEffect(() => {
-    if (refTerminal && refTerminal.current) {
-      // when switching tabs or closing tabs, focus on visible terminal
-      refTerminal.current.terminal.term.focus();
-    }
-  }, [visible]);
+  const state = useDocTerminal(doc);
+  const ptyProcess = state.data?.ptyProcess;
 
   return (
-    <Document visible={visible} flexDirection="column" pl={2}>
-      <Terminal ptyProcess={ptyProcess} ref={refTerminal} />
+    <Document
+      visible={visible}
+      flexDirection="column"
+      pl={2}
+      onContextMenu={state.data?.openContextMenu}
+    >
+      {ptyProcess && (
+        <Terminal
+          ptyProcess={ptyProcess}
+          visible={props.visible}
+          onEnterKey={state.data.refreshTitle}
+        />
+      )}
     </Document>
   );
 }

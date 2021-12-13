@@ -2,11 +2,14 @@ import * as types from 'teleterm/services/tshd/types';
 
 export class MockTshClient implements types.TshClient {
   listGateways: () => Promise<types.Gateway[]>;
-  listClusters: () => Promise<types.Cluster[]>;
+  listRootClusters: () => Promise<types.Cluster[]>;
+  listLeafClusters: (clusterUri: string) => Promise<types.Cluster[]>;
   listDatabases: (clusterUri: string) => Promise<types.Database[]>;
+  listKubes: (clusterUri: string) => Promise<types.Kube[]>;
+  listApps: (clusterUri: string) => Promise<types.Application[]>;
   listServers: (clusterUri: string) => Promise<types.Server[]>;
-  addCluster: (clusterUri: string) => Promise<types.Cluster>;
-  createGateway: (targetUri: string, port: string) => Promise<types.Gateway>;
+  addRootCluster: (clusterUri: string) => Promise<types.Cluster>;
+  createGateway: (params: types.CreateGatewayParams) => Promise<types.Gateway>;
   createAbortController: () => types.TshAbortController;
   getCluster: (clusterUri: string) => Promise<types.Cluster>;
   getAuthSettings: (clusterUri: string) => Promise<types.AuthSettings>;
@@ -16,4 +19,6 @@ export class MockTshClient implements types.TshClient {
     params: types.LoginParams,
     abortSignal?: types.TshAbortSignal
   ) => Promise<void>;
+  logout: (clusterUri: string) => Promise<void>;
+  removeCluster: (clusterUri: string) => Promise<void>;
 }

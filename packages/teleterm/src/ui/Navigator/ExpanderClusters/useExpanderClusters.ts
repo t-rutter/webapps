@@ -14,98 +14,97 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Icons from 'design/Icon';
 import { useAppContext } from 'teleterm/ui/appContextProvider';
 import AppContext from 'teleterm/ui/appContext';
-import * as navTypes from 'teleterm/ui/Navigator/types';
-import { SyncStatus } from 'teleterm/ui/services/clusters/types';
+import { ExpanderClusterState, ClusterNavItem } from './types';
 
-export default function useExpanderClusters() {
+export function useExpanderClusters(): ExpanderClusterState {
   const ctx = useAppContext();
-  const clusterItems = initItems(ctx);
+  const items = initItems(ctx);
 
   // subscribe
-  ctx.serviceClusters.useState();
+  ctx.clustersService.useState();
+  ctx.docsService.useState();
 
-  function addCluster() {
-    ctx.serviceModals.openDialog({ kind: 'add-cluster' });
+  function onAddCluster() {
+    ctx.commandLauncher.executeCommand('cluster-connect', {});
   }
 
-  function syncClusters() {
-    ctx.serviceClusters.syncClusters();
+  function onSyncClusters() {
+    ctx.clustersService.syncRootClusters();
   }
 
-  function logout(clusterUri: string) {
-    ctx.serviceClusters.logout(clusterUri);
+  function onLogin(clusterUri: string) {
+    ctx.commandLauncher.executeCommand('cluster-connect', { clusterUri });
   }
 
-  function remove(clusterUri: string) {
-    ctx.serviceClusters.removeCluster(clusterUri);
+  function onLogout(clusterUri: string) {
+    ctx.clustersService.logout(clusterUri);
+  }
+
+  function onOpen(clusterUri: string) {
+    ctx.commandLauncher.executeCommand('cluster-open', { clusterUri });
+  }
+
+  function onRemove(clusterUri: string) {
+    ctx.commandLauncher.executeCommand('cluster-remove', { clusterUri });
+  }
+
+  function onOpenContextMenu(navItem: ClusterNavItem) {
+    ctx.mainProcessClient.openClusterContextMenu({
+      isClusterConnected: navItem.connected,
+      onLogin() {
+        onLogin(navItem.clusterUri);
+      },
+      onLogout() {
+        onLogout(navItem.clusterUri);
+      },
+      onRemove() {
+        onRemove(navItem.clusterUri);
+      },
+      onRefresh() {
+        ctx.clustersService.syncRootCluster(navItem.clusterUri);
+      },
+    });
   }
 
   return {
-    clusterItems,
-    addCluster,
-    syncClusters,
-    logout,
-    remove,
-    openLoginDialog(clusterUri: string) {
-      ctx.serviceModals.openDialog({
-        kind: 'cluster-login',
-        clusterUri,
-      });
-    },
+    items,
+    onAddCluster,
+    onOpenContextMenu,
+    onSyncClusters,
+    onOpen,
   };
 }
 
 function initItems(ctx: AppContext): ClusterNavItem[] {
-  return ctx.serviceClusters.getClusters().map<ClusterNavItem>(cluster => {
-    const syncing = ctx.serviceClusters.getClusterSyncStatus(cluster.uri);
-    return {
-      title: cluster.name,
-      Icon: Icons.Clusters,
-      uri: cluster.uri,
-      kind: 'clusters',
-      connected: cluster.connected,
-      syncing: syncing.servers,
-      items: [
-        {
-          title: 'Servers',
-          status: getNavItemStatus(syncing.servers),
-          Icon: Icons.Server,
-          uri: ctx.uris.getUriServers({ clusterId: cluster.name }),
-          kind: 'servers',
-          items: [],
-          group: false,
-        },
-        {
-          title: 'Databases',
-          Icon: Icons.Database,
-          uri: ctx.uris.getUriDbs({ clusterId: cluster.name }),
-          kind: 'dbs',
-          items: [],
-          status: getNavItemStatus(syncing.dbs),
-          group: false,
-        },
-      ],
-      group: true,
-    };
-  });
-}
-
-function getNavItemStatus(syncStatus: SyncStatus): navTypes.NavItem['status'] {
-  switch (syncStatus.status) {
-    case 'failed':
-      return 'failed';
-    case 'processing':
-      return 'loading';
-    default:
-      return '';
+  function findLeaves(clusterUri: string) {
+    return ctx.clustersService
+      .getClusters()
+      .filter(c => c.leaf && c.uri.startsWith(clusterUri))
+      .map<ClusterNavItem>(cluster => {
+        return {
+          active: ctx.docsService.isClusterDocumentActive(cluster.uri),
+          clusterUri: cluster.uri,
+          title: cluster.name,
+          connected: true,
+          syncing: false,
+        };
+      });
   }
-}
 
-export type State = ReturnType<typeof useExpanderClusters>;
-
-export interface ClusterNavItem extends navTypes.NavItem {
-  connected: boolean;
+  return ctx.clustersService
+    .getClusters()
+    .filter(c => !c.leaf)
+    .map<ClusterNavItem>(cluster => {
+      const { syncing } = ctx.clustersService.getClusterSyncStatus(cluster.uri);
+      return {
+        active: ctx.docsService.isClusterDocumentActive(cluster.uri),
+        title: cluster.name,
+        clusterUri: cluster.uri,
+        connected: cluster.connected,
+        syncing: syncing,
+        leaves: cluster.connected ? findLeaves(cluster.uri) : [],
+      };
+    });
 }

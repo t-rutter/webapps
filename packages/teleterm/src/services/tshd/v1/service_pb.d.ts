@@ -9,6 +9,8 @@ import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty
 import * as v1_cluster_pb from "../v1/cluster_pb";
 import * as v1_database_pb from "../v1/database_pb";
 import * as v1_gateway_pb from "../v1/gateway_pb";
+import * as v1_kube_pb from "../v1/kube_pb";
+import * as v1_app_pb from "../v1/app_pb";
 import * as v1_server_pb from "../v1/server_pb";
 import * as v1_auth_settings_pb from "../v1/auth_settings_pb";
 
@@ -187,6 +189,48 @@ export namespace AddClusterRequest {
     }
 }
 
+export class ListKubesRequest extends jspb.Message { 
+    getClusterUri(): string;
+    setClusterUri(value: string): ListKubesRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListKubesRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: ListKubesRequest): ListKubesRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListKubesRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListKubesRequest;
+    static deserializeBinaryFromReader(message: ListKubesRequest, reader: jspb.BinaryReader): ListKubesRequest;
+}
+
+export namespace ListKubesRequest {
+    export type AsObject = {
+        clusterUri: string,
+    }
+}
+
+export class ListAppsRequest extends jspb.Message { 
+    getClusterUri(): string;
+    setClusterUri(value: string): ListAppsRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListAppsRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: ListAppsRequest): ListAppsRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListAppsRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListAppsRequest;
+    static deserializeBinaryFromReader(message: ListAppsRequest, reader: jspb.BinaryReader): ListAppsRequest;
+}
+
+export namespace ListAppsRequest {
+    export type AsObject = {
+        clusterUri: string,
+    }
+}
+
 export class ListClustersRequest extends jspb.Message { 
 
     serializeBinary(): Uint8Array;
@@ -248,6 +292,27 @@ export namespace ListDatabasesRequest {
     }
 }
 
+export class ListLeafClustersRequest extends jspb.Message { 
+    getClusterUri(): string;
+    setClusterUri(value: string): ListLeafClustersRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListLeafClustersRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: ListLeafClustersRequest): ListLeafClustersRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListLeafClustersRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListLeafClustersRequest;
+    static deserializeBinaryFromReader(message: ListLeafClustersRequest, reader: jspb.BinaryReader): ListLeafClustersRequest;
+}
+
+export namespace ListLeafClustersRequest {
+    export type AsObject = {
+        clusterUri: string,
+    }
+}
+
 export class ListDatabasesResponse extends jspb.Message { 
     clearDatabasesList(): void;
     getDatabasesList(): Array<v1_database_pb.Database>;
@@ -275,8 +340,11 @@ export class CreateGatewayRequest extends jspb.Message {
     getTargetUri(): string;
     setTargetUri(value: string): CreateGatewayRequest;
 
-    getPort(): string;
-    setPort(value: string): CreateGatewayRequest;
+    getTargetUser(): string;
+    setTargetUser(value: string): CreateGatewayRequest;
+
+    getLocalPort(): string;
+    setLocalPort(value: string): CreateGatewayRequest;
 
 
     serializeBinary(): Uint8Array;
@@ -292,7 +360,8 @@ export class CreateGatewayRequest extends jspb.Message {
 export namespace CreateGatewayRequest {
     export type AsObject = {
         targetUri: string,
-        port: string,
+        targetUser: string,
+        localPort: string,
     }
 }
 
@@ -404,6 +473,52 @@ export class ListServersResponse extends jspb.Message {
 export namespace ListServersResponse {
     export type AsObject = {
         serversList: Array<v1_server_pb.Server.AsObject>,
+    }
+}
+
+export class ListKubesResponse extends jspb.Message { 
+    clearKubesList(): void;
+    getKubesList(): Array<v1_kube_pb.Kube>;
+    setKubesList(value: Array<v1_kube_pb.Kube>): ListKubesResponse;
+    addKubes(value?: v1_kube_pb.Kube, index?: number): v1_kube_pb.Kube;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListKubesResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: ListKubesResponse): ListKubesResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListKubesResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListKubesResponse;
+    static deserializeBinaryFromReader(message: ListKubesResponse, reader: jspb.BinaryReader): ListKubesResponse;
+}
+
+export namespace ListKubesResponse {
+    export type AsObject = {
+        kubesList: Array<v1_kube_pb.Kube.AsObject>,
+    }
+}
+
+export class ListAppsResponse extends jspb.Message { 
+    clearAppsList(): void;
+    getAppsList(): Array<v1_app_pb.App>;
+    setAppsList(value: Array<v1_app_pb.App>): ListAppsResponse;
+    addApps(value?: v1_app_pb.App, index?: number): v1_app_pb.App;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListAppsResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: ListAppsResponse): ListAppsResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListAppsResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListAppsResponse;
+    static deserializeBinaryFromReader(message: ListAppsResponse, reader: jspb.BinaryReader): ListAppsResponse;
+}
+
+export namespace ListAppsResponse {
+    export type AsObject = {
+        appsList: Array<v1_app_pb.App.AsObject>,
     }
 }
 

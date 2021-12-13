@@ -12,6 +12,14 @@ export class MockPtyProcess implements PtyProcess {
   onData(cb: (data: string) => void) {}
 
   onExit(cb: (ev: { exitCode: number; signal?: number }) => void) {}
+
+  onOpen(cb: () => void) {}
+
+  getPid() {
+    return 0;
+  }
+
+  getCwd = async () => '';
 }
 
 export class MockPtyServiceClient implements PtyServiceClient {

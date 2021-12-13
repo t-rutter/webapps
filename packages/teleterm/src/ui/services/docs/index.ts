@@ -14,5 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import DocsService from './docs';
-export default DocsService;
+export * from './documentsService';
+export * from './types';

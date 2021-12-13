@@ -14,43 +14,52 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import * as nodePTY from 'node-pty';
+import { readlink } from 'fs';
+import { promisify } from 'util';
+import { exec } from 'child_process';
 import { EventEmitter } from 'events';
 import { PtyOptions } from './types';
-import * as nodePTY from 'node-pty';
-import { createLogger, Logger } from 'teleterm/services/logger';
+import Logger from 'teleterm/logger';
+
+type Status = 'open' | 'not_initialized' | 'terminated';
 
 class PtyProcess extends EventEmitter {
-  _options: PtyOptions;
-  _buffered = true;
-  _attachedBufferTimer;
-  _attachedBuffer: string;
-  _process: nodePTY.IPty;
-  _logger: Logger;
+  private _buffered = true;
+  private _attachedBufferTimer;
+  private _attachedBuffer: string;
+  private _process: nodePTY.IPty;
+  private _logger: Logger;
+  private _status: Status = 'not_initialized';
+  private _disposed: boolean = false;
 
-  constructor(options: PtyOptions) {
+  constructor(private options: PtyOptions) {
     super();
-    this._options = options;
-    this._logger = createLogger('PTY Process');
+    this._logger = new Logger(`PTY Process: ${options.path} ${options.args}`);
   }
 
   start(cols: number, rows: number) {
-    this._process = nodePTY.spawn(this._options.path, this._options.args, {
+    this._process = nodePTY.spawn(this.options.path, this.options.args, {
       cols,
       rows,
       name: 'xterm-color',
-      cwd: process.cwd(),
+      cwd: this.options.cwd || process.cwd(),
       env: {
         ...process.env,
-        ...this._options.env,
+        ...this.options.env,
       },
     });
 
-    this._process.onData(data => this._onData(data));
-    this._process.onExit(ev => this._onExit(ev));
+    this._setStatus('open');
+    this.emit(TermEventEnum.OPEN);
+
+    this._process.onData(data => this._handleData(data));
+    this._process.onExit(ev => this._handleExit(ev));
   }
 
   send(data: string) {
-    if (!this._process || !data) {
+    if (this._status !== 'open' || this._disposed) {
+      this._logger.warn('pty is not started or has been terminated');
       return;
     }
 
@@ -58,22 +67,51 @@ class PtyProcess extends EventEmitter {
   }
 
   resize(cols: number, rows: number) {
+    if (this._status !== 'open' || this._disposed) {
+      this._logger.warn('pty is not started or has been terminated');
+      return;
+    }
+
     this._process.resize(cols, rows);
+  }
+
+  getPid() {
+    return this._process?.pid;
+  }
+
+  getStatus() {
+    return this._status;
+  }
+
+  async getCwd() {
+    if (this._status !== 'open' || this._disposed) {
+      return '';
+    }
+
+    try {
+      return await getWorkingDirectory(this.getPid());
+    } catch (err) {
+      this._logger.error(
+        `Unable to read directory for PID: ${this.getPid()}`,
+        err
+      );
+    }
   }
 
   dispose() {
     this.removeAllListeners();
-    this._process.kill();
+    this._process?.kill();
+    this._disposed = true;
   }
 
-  _flushBuffer() {
+  private _flushBuffer() {
     this.emit(TermEventEnum.DATA, this._attachedBuffer);
     this._attachedBuffer = null;
     clearTimeout(this._attachedBufferTimer);
     this._attachedBufferTimer = null;
   }
 
-  _pushToBuffer(data: string) {
+  private _pushToBuffer(data: string) {
     if (this._attachedBuffer) {
       this._attachedBuffer += data;
     } else {
@@ -82,17 +120,13 @@ class PtyProcess extends EventEmitter {
     }
   }
 
-  _onExit(e: { exitCode: number; signal?: number }) {
+  private _handleExit(e: { exitCode: number; signal?: number }) {
     this.emit(TermEventEnum.EXIT, e);
-    this._logger.info('pty has been terminated');
+    this._logger.info(`pty has been terminated with exit code: ${e.exitCode}`);
+    this._setStatus('terminated');
   }
 
-  _onStart() {
-    this.emit('open');
-    this._logger.info('pty is open');
-  }
-
-  _onData(data: string) {
+  private _handleData(data: string) {
     try {
       if (this._buffered) {
         this._pushToBuffer(data);
@@ -103,14 +137,40 @@ class PtyProcess extends EventEmitter {
       this._logger.error('failed to parse incoming message.', err);
     }
   }
+
+  private _setStatus(value: Status) {
+    this._status = value;
+    this._logger.info(`status -> ${value}`);
+  }
 }
 
 export default PtyProcess;
 
 export const TermEventEnum = {
-  RESIZE: 'terminal.resize',
   CLOSE: 'terminal.close',
   RESET: 'terminal.reset',
   DATA: 'terminal.data',
+  OPEN: 'terminal.open',
   EXIT: 'terminal.exit',
 };
+
+async function getWorkingDirectory(pid: number): Promise<string> {
+  switch (process.platform) {
+    case 'darwin':
+      const asyncExec = promisify(exec);
+      // -a: join using AND instead of OR for the -p and -d options
+      // -p: PID
+      // -d: only include the file descriptor, cwd
+      // -F: fields to output (the n character outputs 3 things, the last one is cwd)
+      const { stdout, stderr } = await asyncExec(
+        `lsof -a -p ${pid} -d cwd -F n`
+      );
+      if (stderr) {
+        throw new Error(stderr);
+      }
+      return stdout.split('\n').filter(Boolean).reverse()[0].substring(1);
+    case 'linux':
+      const asyncReadlink = promisify(readlink);
+      return await asyncReadlink(`/proc/${pid}/cwd`);
+  }
+}

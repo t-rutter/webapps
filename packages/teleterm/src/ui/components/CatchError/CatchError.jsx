@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import { Failed } from 'design/CardError';
-import { createLogger } from 'teleterm/ui/utils/rendererLogger';
-
-const logger = createLogger('components/CatchError');
+import Logger from 'teleterm/ui/logger';
 
 export default class CatchError extends React.Component {
+  logger = new Logger('components/CatchError');
+
   static getDerivedStateFromError(error) {
     return { error };
   }
@@ -30,7 +30,7 @@ export default class CatchError extends React.Component {
   };
 
   componentDidCatch(err) {
-    logger.error('render', err);
+    this.logger.error('render', err);
   }
 
   render() {

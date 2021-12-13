@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import { typography } from 'design/system';
-import TabItem from './TabItem';
-import * as Icons from 'design/Icon';
 import { Box, ButtonIcon, Flex } from 'design';
-import { Document } from '../types';
+import * as Icons from 'design/Icon';
+import { Document } from 'teleterm/ui/services/docs/types';
+import TabItem from './TabItem';
 
 export default function TabsContainer(props: Props) {
   return <Tabs {...props} />;
@@ -35,12 +35,12 @@ export function Tabs(props: Props) {
     onNew,
     disableNew,
     onMoved,
+    onContextMenu,
     ...styledProps
   } = props;
 
   const $items = items
     .map((item, index) => ({ item, index }))
-    .filter(i => i.item.kind !== 'blank')
     .map(({ item, index }) => {
       const active = item.uri === activeTab;
       return (
@@ -52,6 +52,7 @@ export function Tabs(props: Props) {
           active={active}
           onClick={() => onSelect(item)}
           onClose={() => onClose(item)}
+          onContextMenu={() => onContextMenu(item)}
           onMoved={onMoved}
           style={{
             flex: '1',
@@ -73,17 +74,15 @@ export function Tabs(props: Props) {
       <Flex minWidth={0} width="100%">
         {$items}
       </Flex>
-      {$items.length > 0 && (
-        <ButtonIcon
-          ml="2"
-          size={0}
-          disabled={disableNew}
-          title="New Tab"
-          onClick={onNew}
-        >
-          <Icons.Add fontSize="16px" />
-        </ButtonIcon>
-      )}
+      <ButtonIcon
+        ml="2"
+        size={0}
+        disabled={disableNew}
+        title="New Tab"
+        onClick={onNew}
+      >
+        <Icons.Add fontSize="16px" />
+      </ButtonIcon>
     </StyledTabs>
   );
 }
@@ -94,6 +93,7 @@ type Props = {
   disableNew: boolean;
   onNew: () => void;
   onSelect: (doc: Document) => void;
+  onContextMenu: (doc: Document) => void;
   onMoved: (oldIndex: number, newIndex: number) => void;
   [index: string]: any;
 };

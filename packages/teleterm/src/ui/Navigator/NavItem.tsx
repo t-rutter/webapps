@@ -16,66 +16,31 @@ limitations under the License.
 
 import React from 'react';
 import styled from 'styled-components';
-import { Warning } from 'design/Icon';
 import { color, space } from 'design/system';
-import * as types from 'teleterm/ui/Navigator/types';
-import { useAppContext } from 'teleterm/ui/appContextProvider';
-import LinearProgress from 'teleterm/ui/components/LinearProgress';
 
 type Props = {
-  item?: types.NavItem;
-  onClick?: (item: types.NavItem) => void;
+  active: boolean;
+  onClick?: () => void;
   [key: string]: any;
 };
 
 const NavItem: React.FC<Props> = props => {
-  const { item, onClick, ...styles } = props;
-  const ctx = useAppContext();
-  const active = ctx.serviceDocs.isActive(item.uri);
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick(item);
-    } else {
-      ctx.serviceDocs.open(item.uri);
-    }
-  };
-
-  const Icon = item.status === 'failed' ? Warning : item.Icon;
-
+  const { active, onClick, ...styles } = props;
   return (
-    <StyledNavItem
-      $active={active}
-      $status={item.status}
-      {...styles}
-      onClick={handleClick}
-    >
-      {!props.children && (
-        <>
-          <Icon mr={2} ml={-2} fontSize="10px" color="inherit" />
-          <div style={{ position: 'relative' }}>
-            {item.title}
-            {item.status === 'loading' && <LinearProgress />}
-          </div>
-        </>
-      )}
+    <StyledNavItem $active={active} {...styles} onClick={onClick}>
       {props.children}
     </StyledNavItem>
   );
 };
 
-export const StyledNavItem = styled.div(props => {
-  const { theme, $active, $status } = props;
+const StyledNavItem = styled.div(props => {
+  const { theme, $active } = props;
   const colors = $active
     ? {
         color: theme.colors.primary.contrastText,
-        background: theme.colors.primary.light,
+        background: theme.colors.primary.lighter,
       }
     : {};
-
-  if ($status === 'failed') {
-    colors.color = theme.colors.error.light;
-  }
 
   return {
     whiteSpace: 'nowrap',

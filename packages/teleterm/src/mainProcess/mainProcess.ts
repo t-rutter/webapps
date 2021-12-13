@@ -1,23 +1,39 @@
 import path from 'path';
-import { app, screen, BrowserWindow, ipcMain, Menu } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  MenuItemConstructorOptions,
+  screen,
+} from 'electron';
 import { ChildProcess, spawn } from 'child_process';
-import { RuntimeSettings } from 'teleterm/types';
+import { Logger, RuntimeSettings } from 'teleterm/types';
 import { getAssetPath } from './runtimeSettings';
-import { Logger } from 'teleterm/services/logger';
+import { subscribeToClusterContextMenuEvent } from './contextMenus/clusterContextMenu';
+import { subscribeToTerminalContextMenuEvent } from './contextMenus/terminalContextMenu';
+import {
+  ConfigService,
+  subscribeToConfigServiceEvents,
+} from '../services/config';
+import { subscribeToTabContextMenuEvent } from './contextMenus/tabContextMenu';
 
 type Options = {
   settings: RuntimeSettings;
   logger: Logger;
+  configService: ConfigService;
 };
 
 export default class MainProcess {
-  settings: RuntimeSettings;
-  tshdProcess: ChildProcess;
-  logger: Logger;
+  readonly settings: RuntimeSettings;
+  private readonly logger: Logger;
+  private readonly configService: ConfigService;
+  private tshdProcess: ChildProcess;
 
   private constructor(opts: Options) {
     this.settings = opts.settings;
     this.logger = opts.logger;
+    this.configService = opts.configService;
   }
 
   static create(opts: Options) {
@@ -44,7 +60,7 @@ export default class MainProcess {
       },
     });
 
-    if (this.settings.isDev) {
+    if (this.settings.dev) {
       win.loadURL('https://localhost:8080');
     } else {
       win.loadFile(path.join(__dirname, '../renderer/index.html'));
@@ -52,6 +68,7 @@ export default class MainProcess {
   }
 
   private _init() {
+    this._setAppMenu();
     try {
       this._initTshd();
       this._initIpc();
@@ -85,17 +102,38 @@ export default class MainProcess {
       event.returnValue = this.settings;
     });
 
-    ipcMain.on('main-process-open-context-menu', () => {
-      Menu.buildFromTemplate([
-        {
-          label: 'Copy',
-          role: 'copy',
-        },
-        {
-          label: 'Paste',
-          role: 'paste',
-        },
-      ]).popup();
-    });
+    subscribeToTerminalContextMenuEvent();
+    subscribeToClusterContextMenuEvent();
+    subscribeToTabContextMenuEvent();
+    subscribeToConfigServiceEvents(this.configService);
+  }
+
+  private _setAppMenu() {
+    const isMac = this.settings.platform === 'darwin';
+
+    const template: MenuItemConstructorOptions[] = [
+      ...(isMac ? ([{ role: 'appMenu' }] as const) : []),
+      ...(isMac ? [] : ([{ role: 'fileMenu' }] as const)),
+      { role: 'editMenu' },
+      { role: 'viewMenu' },
+      isMac
+        ? { role: 'windowMenu' }
+        : {
+            label: 'Window',
+            submenu: [{ role: 'minimize' }, { role: 'zoom' }],
+          },
+      {
+        role: 'help',
+        submenu: [
+          {
+            label: 'Learn More',
+            click: () => {},
+          },
+        ],
+      },
+    ];
+
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
   }
 }

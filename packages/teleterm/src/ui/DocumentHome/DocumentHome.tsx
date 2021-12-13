@@ -15,57 +15,30 @@ limitations under the License.
 */
 
 import React from 'react';
-import { Box, Text, Flex } from 'design';
-import * as Icons from 'design/Icon';
-import Document from './../Document';
-import * as types from './../types';
-
-import Select, { DarkStyledSelect } from 'shared/components/Select';
+import { Text, Box, Flex } from 'design';
+import Document from 'teleterm/ui/Document';
+import * as types from 'teleterm/ui/services/docs/types';
 
 export default function DocumentHome(props: PropTypes) {
   const { visible } = props;
-  const [selected, setSelected] = React.useState([]);
-
-  const options = [
-    { value: 'prod', label: 'prod' },
-    { value: 'stage', label: 'stage' },
-  ];
-
   return (
     <Document visible={visible}>
       <Flex flexDirection="column" alignItems="center" flex="1" width="100%">
-        <Box width="100%" maxWidth="60%" mt={10}>
-          <DarkStyledSelect mb={8}>
-            <Select
-              value={selected}
-              placeholder="Search..."
-              onChange={(opt: any) => setSelected(opt)}
-              options={options}
-              isMulti={false}
-              components={{ DropdownIndicator }}
-            />
-          </DarkStyledSelect>
-          <Box>
-            <Icons.Cli
-              style={{
-                textAlign: 'center',
-                borderRadius: '50%',
-              }}
-              fontSize="40px"
-              bg="#01172C"
-              p="8px"
-              mb={2}
-              color="text.secondary"
-            />
-            <Text color="text.secondary">Terminal</Text>
-          </Box>
+        <Box width="100%" maxWidth="60%" mx="auto" textAlign="center" mt="20%">
+          <Text mb={2} color="text.secondary" typography="subtitle1">
+            Show All Commands <Key>F1</Key>
+          </Text>
+          <Text mb={2} color="text.secondary" typography="subtitle1">
+            Open a new terminal tab <Key mr={1}>Ctrl</Key>+
+            <Key mx={1}>Shift</Key>+<Key mx={1}>T</Key>
+          </Text>
         </Box>
       </Flex>
     </Document>
   );
 }
 
-const DropdownIndicator = () => null;
+const Key = props => <Text p={1} as="span" {...props} bg="primary.light" />;
 
 type PropTypes = {
   visible: boolean;

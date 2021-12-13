@@ -22,6 +22,8 @@ export type SyncStatus = {
   statusText?: string;
 };
 
+export type KindTsh = 'tsh.cluster' | 'tsh.server' | 'tsh.app' | 'tsh.db';
+
 export type PreferredMfaType = shared.PreferredMfaType;
 
 export type Auth2faType = shared.Auth2faType;
@@ -32,9 +34,28 @@ export type AuthProvider = tsh.AuthProvider;
 
 export type LoginParams = tsh.LoginParams;
 
+export type CreateGatewayParams = tsh.CreateGatewayParams;
+
+export type GatewayProtocol = tsh.GatewayProtocol;
+
+export type Gateway = tsh.Gateway;
+
 export interface AuthSettings extends tsh.AuthSettings {
   secondFactor: Auth2faType;
   preferredMfa: PreferredMfaType;
 }
 
 export { tsh };
+
+export type ClustersServiceState = {
+  clusters: Map<string, tsh.Cluster>;
+  gateways: Map<string, tsh.Gateway>;
+  apps: Map<string, tsh.Application>;
+  servers: Map<string, tsh.Server>;
+  kubes: Map<string, tsh.Kube>;
+  dbs: Map<string, tsh.Database>;
+  kubesSyncStatus: Map<string, SyncStatus>;
+  appsSyncStatus: Map<string, SyncStatus>;
+  serversSyncStatus: Map<string, SyncStatus>;
+  dbsSyncStatus: Map<string, SyncStatus>;
+};

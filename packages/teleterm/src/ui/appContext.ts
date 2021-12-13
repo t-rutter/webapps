@@ -14,45 +14,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import uris from 'teleterm/ui/uris';
-import ServiceClusters from 'teleterm/ui/services/clusters';
-import ServiceModals from 'teleterm/ui/services/modals';
-import ServiceDocs from 'teleterm/ui/services/docs';
-import ServiceTerminals from 'teleterm/ui/services/terminals';
-import ServiceGlobalSearch from 'teleterm/ui/services/globalSearch';
+import { MainProcessClient, ElectronGlobals } from 'teleterm/types';
+import { ClustersService } from 'teleterm/ui/services/clusters';
+import { ModalsService } from 'teleterm/ui/services/modals';
+import { DocumentsService } from 'teleterm/ui/services/docs';
+import { TerminalsService } from 'teleterm/ui/services/terminals';
+import { ConnectionTrackerService } from 'teleterm/ui/services/connectionTracker';
+import { QuickInputService } from 'teleterm/ui/services/quickInput';
+import { WorkspaceService } from 'teleterm/ui/services/workspace';
 import { KeyboardShortcutsService } from 'teleterm/ui/services/keyboardShortcuts';
-import * as types from 'teleterm/types';
-
-export type Config = types.ElectronGlobals;
+import { CommandLauncher } from './commandLauncher';
 
 export default class AppContext {
-  serviceGlobalSearch: ServiceGlobalSearch;
-  serviceClusters: ServiceClusters;
-  serviceModals: ServiceModals;
-  serviceDocs: ServiceDocs;
-  serviceTerminals: ServiceTerminals;
-  mainProcessClient: types.MainProcessClient;
-  serviceKeyboardShortcuts: KeyboardShortcutsService;
+  clustersService: ClustersService;
+  modalsService: ModalsService;
+  docsService: DocumentsService;
+  terminalsService: TerminalsService;
+  keyboardShortcutsService: KeyboardShortcutsService;
+  quickInputService: QuickInputService;
+  workspaceService: WorkspaceService;
+  mainProcessClient: MainProcessClient;
+  commandLauncher: CommandLauncher;
+  connectionTracker: ConnectionTrackerService;
 
-  uris = uris;
+  constructor(config: ElectronGlobals) {
+    const { tshClient, ptyServiceClient, mainProcessClient } = config;
+    this.mainProcessClient = mainProcessClient;
+    this.clustersService = new ClustersService(tshClient);
+    this.modalsService = new ModalsService();
+    this.terminalsService = new TerminalsService(ptyServiceClient);
+    this.docsService = new DocumentsService();
 
-  constructor(config: Config) {
-    this.mainProcessClient = config.mainProcessClient;
-    this.serviceGlobalSearch = new ServiceGlobalSearch();
-    this.serviceClusters = new ServiceClusters(config.tshClient);
-    this.serviceGlobalSearch.registerProvider(
-      this.serviceClusters.searchProvider
+    this.keyboardShortcutsService = new KeyboardShortcutsService(
+      this.mainProcessClient.getRuntimeSettings().platform,
+      this.mainProcessClient.configService
     );
 
-    this.serviceModals = new ServiceModals();
-    this.serviceDocs = new ServiceDocs();
-    this.serviceTerminals = new ServiceTerminals(config.ptyServiceClient);
-    this.serviceKeyboardShortcuts = new KeyboardShortcutsService(
-      this.mainProcessClient.getRuntimeSettings().platform
+    this.workspaceService = new WorkspaceService(config.fileStorage);
+    this.commandLauncher = new CommandLauncher(this);
+
+    this.quickInputService = new QuickInputService(
+      this.commandLauncher,
+      this.clustersService
+    );
+
+    this.connectionTracker = new ConnectionTrackerService(
+      this.workspaceService,
+      this.docsService,
+      this.clustersService
     );
   }
 
   async init() {
-    await this.serviceClusters.syncClusters();
+    await this.clustersService.syncRootClusters();
   }
 }

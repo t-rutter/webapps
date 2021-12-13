@@ -16,44 +16,43 @@
 
 import React from 'react';
 import { useAppContext } from 'teleterm/ui/appContextProvider';
-import ClusterAdd from 'teleterm/ui/ClusterAdd';
-import ClusterLogin from 'teleterm/ui/ClusterLogin';
 import GatewayCreate from 'teleterm/ui/GatewayCreate';
 import ServerConnect from 'teleterm/ui/ServerConnect';
+import ClusterRemove from '../ClusterRemove/ClusterRemove';
+import { ClusterConnect } from 'teleterm/ui/ClusterConnect';
 
 export default function ModalsHost() {
-  const { serviceModals } = useAppContext();
-  const dialog = serviceModals.useState();
+  const { modalsService } = useAppContext();
+  const dialog = modalsService.useState();
 
-  if (dialog.kind === 'add-cluster') {
-    return <ClusterAdd onClose={() => serviceModals.closeDialog()} />;
+  const handleClose = () => modalsService.closeDialog();
+
+  if (dialog.kind === 'cluster-connect') {
+    return (
+      <ClusterConnect
+        clusterUri={dialog.clusterUri}
+        onClose={handleClose}
+        onSuccess={dialog.onSuccess}
+      />
+    );
   }
 
-  if (dialog.kind === 'cluster-login') {
+  if (dialog.kind === 'cluster-remove') {
     return (
-      <ClusterLogin
+      <ClusterRemove
         clusterUri={dialog.clusterUri}
-        onClose={() => serviceModals.closeDialog()}
+        clusterTitle={dialog.clusterTitle}
+        onClose={handleClose}
       />
     );
   }
 
   if (dialog.kind === 'create-gateway') {
-    return (
-      <GatewayCreate
-        targetUri={dialog.targetUri}
-        onClose={() => serviceModals.closeDialog()}
-      />
-    );
+    return <GatewayCreate {...dialog} onClose={handleClose} />;
   }
 
   if (dialog.kind === 'server-connect') {
-    return (
-      <ServerConnect
-        serverUri={dialog.serverUri}
-        onClose={() => serviceModals.closeDialog()}
-      />
-    );
+    return <ServerConnect serverUri={dialog.serverUri} onClose={handleClose} />;
   }
 
   return null;

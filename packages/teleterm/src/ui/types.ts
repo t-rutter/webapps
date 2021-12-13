@@ -14,76 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type ResourceKind =
-  | 'gateways'
-  | 'terminal'
-  | 'servers'
-  | 'server'
-  | 'blank'
-  | 'home'
-  | 'apps'
-  | 'clusters'
-  | 'dbs'
-  | 'db'
-  | 'gateway'
-  | 'terminal_shell'
-  | 'terminal_tsh_session';
+import { MainProcessClient } from 'teleterm/types';
+import { ClustersService } from 'teleterm/ui/services/clusters';
+import { ModalsService } from 'teleterm/ui/services/modals';
+import { DocumentsService } from 'teleterm/ui/services/docs';
+import { TerminalsService } from 'teleterm/ui/services/terminals';
+import { QuickInputService } from 'teleterm/ui/services/quickInput';
+import { CommandLauncher } from 'teleterm/ui/commandLauncher';
+import { KeyboardShortcutsService } from 'teleterm/ui/services/keyboardShortcuts';
 
-interface DocumentBase {
-  uri: string;
-  title: string;
-  kind: ResourceKind;
-}
-
-export interface DocumentHome extends DocumentBase {
-  kind: 'home';
-}
-
-export interface DocumentBlank extends DocumentBase {
-  kind: 'blank';
-}
-
-export interface DocumentTshSession extends DocumentBase {
-  status: 'connecting' | 'connected' | 'disconnected';
-  kind: 'terminal_tsh_session';
-  serverId: string;
-  clusterId: string;
-  login: string;
-}
-
-export interface DocumentServers extends DocumentBase {
-  kind: 'servers';
-  clusterUri: string;
-}
-
-export interface DocumentDatabases extends DocumentBase {
-  kind: 'dbs';
-  clusterUri: string;
-}
-
-export interface DocumentGateway extends DocumentBase {
-  kind: 'gateway';
-  clusterUri: string;
-}
-
-export interface DocumentPtySession extends DocumentBase {
-  kind: 'terminal_shell';
-}
-
-export type Document =
-  | DocumentServers
-  | DocumentHome
-  | DocumentBlank
-  | DocumentDatabases
-  | DocumentGateway
-  | DocumentTshSession
-  | DocumentPtySession;
-
-export interface UriParams {
-  clusterId?: string;
-  serverId?: string;
-  dbId?: string;
-  gatewayId?: string;
-  tabId?: string;
-  sid?: string;
+export interface IAppContext {
+  clustersService: ClustersService;
+  modalsService: ModalsService;
+  docsService: DocumentsService;
+  terminalsService: TerminalsService;
+  keyboardShortcutsService: KeyboardShortcutsService;
+  quickInputService: QuickInputService;
+  mainProcessClient: MainProcessClient;
+  commandLauncher: CommandLauncher;
 }

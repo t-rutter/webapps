@@ -18,11 +18,20 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { Close as CloseIcon } from 'design/Icon';
 import { space } from 'design/system';
-import { Flex, Text } from 'design';
+import { Text } from 'design';
 import { useTabDnD } from './useTabDnD';
 
 export default function TabItem(props: Props) {
-  const { name, active, onClick, onClose, style, index, onMoved } = props;
+  const {
+    name,
+    active,
+    onClick,
+    onClose,
+    style,
+    index,
+    onMoved,
+    onContextMenu,
+  } = props;
   const ref = useRef<HTMLDivElement>(null);
   const { isDragging } = useTabDnD({ index, onDrop: onMoved, ref });
 
@@ -31,16 +40,15 @@ export default function TabItem(props: Props) {
     onClose();
   };
 
-  const opacity = isDragging ? 0 : 1;
-
   return (
     <StyledTabItem
       onClick={onClick}
+      onContextMenu={onContextMenu}
       ref={ref}
-      alignItems="center"
       active={active}
+      dragging={isDragging}
       title={name}
-      style={{ ...style, opacity }}
+      style={{ ...style }}
     >
       <StyledTabButton>
         <Text mx="auto">{name}</Text>
@@ -60,11 +68,18 @@ type Props = {
   onClick: () => void;
   onClose: () => void;
   onMoved: (oldIndex: number, newIndex: number) => void;
+  onContextMenu: () => void;
   style: any;
 };
 
-function fromProps({ theme, active }) {
-  let styles: Record<any, any> = {
+const StyledTabItem = styled.div(({ theme, active, dragging }) => {
+  const styles: any = {
+    display: 'flex',
+    opacity: '1',
+    alignItems: 'center',
+    minWidth: '0',
+    height: '100%',
+    cursor: 'pointer',
     border: 'none',
     borderRight: `1px solid ${theme.colors.bgTerminal}`,
     '&:hover, &:focus': {
@@ -74,34 +89,25 @@ function fromProps({ theme, active }) {
   };
 
   if (active) {
-    styles = {
-      ...styles,
-      backgroundColor: theme.colors.bgTerminal,
-      color: theme.colors.primary.contrastText,
-      fontWeight: 'bold',
-      transition: 'none',
-    };
+    styles['backgroundColor'] = theme.colors.bgTerminal;
+    styles['color'] = theme.colors.primary.contrastText;
+    styles['fontWeight'] = 'bold';
+    styles['transition'] = 'none';
+  }
+
+  if (dragging) {
+    styles['opacity'] = 0;
   }
 
   return styles;
-}
-
-const StyledTabItem = styled(Flex)`
-  min-width: 0;
-  height: 100%;
-  cursor: pointer;
-
-  ${fromProps}
-  &:hover {
-    background: ${props => props.theme.colors.primary.light};
-  }
-`;
+});
 
 const StyledTabButton = styled.button`
   display: flex;
   cursor: pointer;
   outline: none;
   color: inherit;
+  font-family: inherit;
   line-height: 32px;
   background-color: transparent;
   white-space: nowrap;
@@ -122,10 +128,6 @@ const StyledCloseButton = styled.button`
   padding: 0;
   margin: 0 8px 0 0;
   transition: all 0.3s;
-
-  &:hover {
-    background: ${props => props.theme.colors.danger};
-  }
 
   ${space}
 `;

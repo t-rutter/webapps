@@ -1,12 +1,14 @@
-import PtyProcess, { TermEventEnum } from './ptyProcess';
-import { PtyOptions, PtyCommand } from './types';
 import { RuntimeSettings } from 'teleterm/types';
+import PtyProcess, { TermEventEnum } from './ptyProcess';
+import { PtyCommand, PtyOptions, PtyServiceClient } from './types';
 
-export default function createPtyService(runtimeSettings: RuntimeSettings) {
-  const service = {
+export default function createPtyService(
+  settings: RuntimeSettings
+): PtyServiceClient {
+  return {
     createPtyProcess(cmd: PtyCommand) {
-      let options = buildOptions(runtimeSettings, cmd);
-      let _ptyProcess = new PtyProcess(options);
+      const options = buildOptions(settings, cmd);
+      const _ptyProcess = new PtyProcess(options);
 
       return {
         start(cols: number, rows: number) {
@@ -29,14 +31,28 @@ export default function createPtyService(runtimeSettings: RuntimeSettings) {
           _ptyProcess.addListener(TermEventEnum.DATA, cb);
         },
 
+        onOpen(cb: () => void) {
+          _ptyProcess.addListener(TermEventEnum.OPEN, cb);
+        },
+
+        getStatus() {
+          return _ptyProcess.getStatus();
+        },
+
+        getPid() {
+          return _ptyProcess.getPid();
+        },
+
+        getCwd() {
+          return _ptyProcess.getCwd();
+        },
+
         onExit(cb: (ev: { exitCode: number; signal?: number }) => void) {
           _ptyProcess.addListener(TermEventEnum.EXIT, cb);
         },
       };
     },
   };
-
-  return service;
 }
 
 function buildOptions(settings: RuntimeSettings, cmd: PtyCommand): PtyOptions {
@@ -45,25 +61,48 @@ function buildOptions(settings: RuntimeSettings, cmd: PtyCommand): PtyOptions {
   };
 
   switch (cmd.kind) {
-    case 'new-shell':
+    case 'pty.shell':
       return {
         path: settings.defaultShell,
         args: [],
+        cwd: cmd.cwd,
         env,
       };
 
-    case 'tsh-login':
+    case 'pty.tsh-kube-login':
+      if (cmd.leafClusterId) {
+        env['TELEPORT_CLUSTER'] = cmd.leafClusterId;
+      }
+
+      return {
+        //path: settings.tshd.binaryPath,
+        path: settings.defaultShell,
+        args: [
+          `-c`,
+          `${settings.tshd.binaryPath}`,
+          `--proxy=${cmd.rootClusterId}`,
+          `kube`,
+          `login`,
+          `${cmd.kubeId}`,
+        ],
+        env,
+      };
+
+    case 'pty.tsh-login':
+      if (cmd.leafClusterId) {
+        env['TELEPORT_CLUSTER'] = cmd.leafClusterId;
+      }
+
       return {
         path: settings.tshd.binaryPath,
         args: [
-          `--proxy=${cmd.clusterId}`,
+          `--proxy=${cmd.rootClusterId}`,
           'ssh',
           `${cmd.login}@${cmd.serverId}`,
         ],
         env,
       };
     default:
+      throw Error(`Unknown pty command: ${cmd}`);
   }
-
-  throw Error(`Unknown pty command type: ${cmd.kind}`);
 }

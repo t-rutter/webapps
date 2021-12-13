@@ -1,13 +1,18 @@
-const { ipcRenderer } = require('electron');
+import { ipcRenderer } from 'electron';
+import { openClusterContextMenu } from './contextMenus/clusterContextMenu';
+import { openTerminalContextMenu } from './contextMenus/terminalContextMenu';
 import { MainProcessClient } from './types';
+import { createConfigServiceClient } from '../services/config';
+import { openTabContextMenu } from './contextMenus/tabContextMenu';
 
 export default function createMainProcessClient(): MainProcessClient {
   return {
     getRuntimeSettings() {
       return ipcRenderer.sendSync('main-process-get-runtime-settings');
     },
-    openContextMenu() {
-      return ipcRenderer.send('main-process-open-context-menu');
-    },
+    openTerminalContextMenu,
+    openClusterContextMenu,
+    openTabContextMenu,
+    configService: createConfigServiceClient(),
   };
 }

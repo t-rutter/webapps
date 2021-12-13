@@ -1,36 +1,25 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Box } from 'design';
-import SplitPane from 'shared/components/SplitPane';
-import { ThemeProviderTabs } from './ThemeProvider';
-import CatchError from './components/CatchError';
-import AppContextProvider from './appContextProvider';
-import Navigator from './Navigator';
-import AppContext from './appContext';
-import TabHost from './TabHost';
-import ModalsHost from './ModalsHost';
-import GlobalSearch from './GlobalSearch';
-import { DndProvider,  } from 'react-dnd';
+import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import styled from 'styled-components';
+import CatchError from './components/CatchError';
+import ModalsHost from './ModalsHost';
+import AppContextProvider from './appContextProvider';
+import AppContext from './appContext';
+import ThemeProvider from './ThemeProvider';
+import { LayoutManager } from './LayoutManager';
 
 const App: React.FC<{ ctx: AppContext }> = ({ ctx }) => {
+  const { appearance } = ctx.mainProcessClient.configService.get();
   return (
     <StyledApp>
       <CatchError>
         <DndProvider backend={HTML5Backend}>
           <AppContextProvider value={ctx}>
-            <ThemeProviderTabs>
-              <GlobalSearch />
-              <SplitPane defaultSize="20%" flex="1" split="vertical">
-                <Box flex="1" bg="primary.light">
-                  <Navigator />
-                </Box>
-                <Box flex="1" style={{ position: 'relative' }}>
-                  <TabHost />
-                </Box>
-              </SplitPane>
+            <ThemeProvider appearanceConfig={appearance}>
+              <LayoutManager />
               <ModalsHost />
-            </ThemeProviderTabs>
+            </ThemeProvider>
           </AppContextProvider>
         </DndProvider>
       </CatchError>
