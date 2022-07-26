@@ -16,23 +16,25 @@
 
 import React from 'react';
 import { fireEvent, render, screen } from 'design/utils/testing';
-import AddDialog, { Props } from './AddDatabase';
+
+import { Props, AddDatabase } from './AddDatabase';
+import { State } from './useAddDatabase';
 
 describe('correct database add command generated with given input', () => {
   test.each`
     input                     | output
-    ${'self-hosted mysql'}    | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=mysql --uri=[uri]'}
-    ${'rds mysql'}            | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=mysql --uri=[uri] --aws-region=[region]'}
-    ${'cloud sql mysql'}      | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=mysql --uri=[uri] --ca-cert=[instance-ca-filepath] --gcp-project-id=[project-id] --gcp-instance-id=[instance-id]'}
-    ${'self-hosted postgres'} | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri]'}
-    ${'rds postgres'}         | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] --aws-region=[region]'}
-    ${'cloud sql postgres'}   | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] --ca-cert=[instance-ca-filepath] --gcp-project-id=[project-id] --gcp-instance-id=[instance-id]'}
-    ${'redshift'}             | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] --aws-region=[region] --aws-redshift-cluster-id=[cluster-id]'}
-    ${'self-hosted mongodb'}  | ${'teleport db start --token=[generated-join-token] --auth-server=localhost:443 --name=[db-name] --protocol=mongodb --uri=[uri]'}
+    ${'self-hosted mysql'}    | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=mysql --uri=[uri] -o file'}
+    ${'rds mysql'}            | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=mysql --uri=[uri] -o file --aws-region=[region]'}
+    ${'cloud sql mysql'}      | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=mysql --uri=[uri] -o file --ca-cert-file=[instance-ca-filepath] --gcp-project-id=[project-id] --gcp-instance-id=[instance-id]'}
+    ${'self-hosted postgres'} | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] -o file'}
+    ${'rds postgres'}         | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] -o file --aws-region=[region]'}
+    ${'cloud sql postgres'}   | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] -o file --ca-cert-file=[instance-ca-filepath] --gcp-project-id=[project-id] --gcp-instance-id=[instance-id]'}
+    ${'redshift'}             | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=postgres --uri=[uri] -o file --aws-region=[region] --aws-redshift-cluster-id=[cluster-id]'}
+    ${'self-hosted mongodb'}  | ${'teleport db configure create --token=[generated-join-token] --proxy=localhost:443 --name=[db-name] --protocol=mongodb --uri=[uri] -o file'}
   `(
     'should generate correct command for input: $input',
     ({ input, output }) => {
-      render(<AddDialog {...props} />);
+      render(<AddDatabase {...props} />);
 
       const dropDownInputEl = document.querySelector('input');
 
@@ -45,29 +47,18 @@ describe('correct database add command generated with given input', () => {
   );
 });
 
-test('correct tsh login command generated with local authType', () => {
-  render(<AddDialog {...props} />);
-  const output = 'tsh login --proxy=localhost:443 --auth=local --user=yassine';
-
-  expect(screen.queryByText(output)).not.toBeNull();
-});
-
-test('correct tsh login command generated with sso authType', () => {
-  render(<AddDialog {...props} authType="sso" />);
-  const output = 'tsh login --proxy=localhost:443';
-
-  expect(screen.queryByText(output)).not.toBeNull();
-});
-
-test('render instructions dialog for adding database', () => {
-  render(<AddDialog {...props} />);
-  expect(screen.getByTestId('Modal')).toMatchSnapshot();
-});
-
-const props: Props = {
+const props: Props & State = {
   isEnterprise: false,
   username: 'yassine',
   version: '6.1.3',
   onClose: () => null,
   authType: 'local',
+  attempt: {
+    status: 'failed',
+    statusText: '',
+  } as any,
+  token: { id: 'some-token', expiryText: '4 hours', expiry: null },
+  createJoinToken() {
+    return Promise.resolve(null);
+  },
 };

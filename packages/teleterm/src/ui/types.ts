@@ -17,19 +17,27 @@ limitations under the License.
 import { MainProcessClient } from 'teleterm/types';
 import { ClustersService } from 'teleterm/ui/services/clusters';
 import { ModalsService } from 'teleterm/ui/services/modals';
-import { DocumentsService } from 'teleterm/ui/services/docs';
 import { TerminalsService } from 'teleterm/ui/services/terminals';
 import { QuickInputService } from 'teleterm/ui/services/quickInput';
+import { StatePersistenceService } from 'teleterm/ui/services/statePersistence';
 import { CommandLauncher } from 'teleterm/ui/commandLauncher';
 import { KeyboardShortcutsService } from 'teleterm/ui/services/keyboardShortcuts';
+import { WorkspacesService } from 'teleterm/ui/services/workspacesService';
+import { NotificationsService } from 'teleterm/ui/services/notifications';
+import { ConnectionTrackerService } from 'teleterm/ui/services/connectionTracker';
 
 export interface IAppContext {
   clustersService: ClustersService;
   modalsService: ModalsService;
-  docsService: DocumentsService;
+  notificationsService: NotificationsService;
   terminalsService: TerminalsService;
   keyboardShortcutsService: KeyboardShortcutsService;
   quickInputService: QuickInputService;
+  statePersistenceService: StatePersistenceService;
+  workspacesService: WorkspacesService;
   mainProcessClient: MainProcessClient;
   commandLauncher: CommandLauncher;
+  connectionTracker: ConnectionTrackerService;
+
+  init(): Promise<void>;
 }

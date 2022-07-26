@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`clipboard error 1`] = `
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -27,7 +27,7 @@ exports[`clipboard error 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -36,20 +36,20 @@ exports[`clipboard error 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -59,12 +59,6 @@ exports[`clipboard error 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -83,46 +77,46 @@ exports[`clipboard error 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
-.c12 {
+.c11 {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2px;
   box-sizing: border-box;
-  box-shadow: 0 1px 4px rgba(0,0,0,.24);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.24);
   margin: 0 0 24px 0;
   min-height: 40px;
   padding: 8px 16px;
   overflow: auto;
-  word-break: break-all;
+  word-break: break-word;
   line-height: 1.5;
+  margin-left: 72px;
+  margin-right: 72px;
   margin-top: 8px;
   margin-bottom: 8px;
   background: #f50057;
@@ -131,7 +125,7 @@ exports[`clipboard error 1`] = `
   min-width: 450px;
 }
 
-.c12 a {
+.c11 a {
   color: #FFFFFF;
 }
 
@@ -152,45 +146,34 @@ exports[`clipboard error 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -198,7 +181,7 @@ exports[`clipboard error 1`] = `
       </div>
     </nav>
     <div
-      class="c12"
+      class="c11"
       kind="danger"
     >
       clipboard error
@@ -211,20 +194,20 @@ exports[`clipboard error 1`] = `
 `;
 
 exports[`connected settings false 1`] = `
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -237,7 +220,7 @@ exports[`connected settings false 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -246,20 +229,20 @@ exports[`connected settings false 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -269,12 +252,6 @@ exports[`connected settings false 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -293,31 +270,29 @@ exports[`connected settings false 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
 <div>
@@ -337,45 +312,34 @@ exports[`connected settings false 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -390,20 +354,20 @@ exports[`connected settings false 1`] = `
 `;
 
 exports[`connected settings true 1`] = `
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -416,7 +380,7 @@ exports[`connected settings true 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -425,20 +389,20 @@ exports[`connected settings true 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -448,12 +412,6 @@ exports[`connected settings true 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -472,31 +430,29 @@ exports[`connected settings true 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
 <div>
@@ -516,45 +472,34 @@ exports[`connected settings true 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.87); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.87);"
-        />
-        Clipboard Sharing 
-        Enabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgb(255, 82, 82);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.87);"
-          >
-            
-            Recording
-          </div>
+            title="Directory Sharing Enabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.87);"
+            title="Clipboard Sharing Enabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -569,20 +514,20 @@ exports[`connected settings true 1`] = `
 `;
 
 exports[`connection error 1`] = `
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -595,7 +540,7 @@ exports[`connection error 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -604,20 +549,20 @@ exports[`connection error 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -627,12 +572,6 @@ exports[`connection error 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -651,46 +590,46 @@ exports[`connection error 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
-.c12 {
+.c11 {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2px;
   box-sizing: border-box;
-  box-shadow: 0 1px 4px rgba(0,0,0,.24);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.24);
   margin: 0 0 24px 0;
   min-height: 40px;
   padding: 8px 16px;
   overflow: auto;
-  word-break: break-all;
+  word-break: break-word;
   line-height: 1.5;
+  margin-left: 72px;
+  margin-right: 72px;
   margin-top: 8px;
   margin-bottom: 8px;
   background: #f50057;
@@ -699,7 +638,7 @@ exports[`connection error 1`] = `
   min-width: 450px;
 }
 
-.c12 a {
+.c11 a {
   color: #FFFFFF;
 }
 
@@ -720,45 +659,34 @@ exports[`connection error 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -766,7 +694,7 @@ exports[`connection error 1`] = `
       </div>
     </nav>
     <div
-      class="c12"
+      class="c11"
       kind="danger"
     >
       some connection error
@@ -779,26 +707,26 @@ exports[`connection error 1`] = `
 `;
 
 exports[`disconnected 1`] = `
-.c12 {
+.c11 {
   box-sizing: border-box;
   margin: 72px;
   text-align: center;
 }
 
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -811,7 +739,7 @@ exports[`disconnected 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -820,20 +748,20 @@ exports[`disconnected 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -845,7 +773,7 @@ exports[`disconnected 1`] = `
   padding-right: 16px;
 }
 
-.c3 {
+.c12 {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0px;
@@ -867,31 +795,29 @@ exports[`disconnected 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
 <div>
@@ -911,45 +837,34 @@ exports[`disconnected 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -957,10 +872,10 @@ exports[`disconnected 1`] = `
       </div>
     </nav>
     <div
-      class="c12"
+      class="c11"
     >
       <div
-        class="c3"
+        class="c12"
       >
         Session successfully disconnected
       </div>
@@ -973,20 +888,20 @@ exports[`disconnected 1`] = `
 `;
 
 exports[`fetch error 1`] = `
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -999,7 +914,7 @@ exports[`fetch error 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -1008,20 +923,20 @@ exports[`fetch error 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -1031,12 +946,6 @@ exports[`fetch error 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -1055,46 +964,46 @@ exports[`fetch error 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
-.c12 {
+.c11 {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2px;
   box-sizing: border-box;
-  box-shadow: 0 1px 4px rgba(0,0,0,.24);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.24);
   margin: 0 0 24px 0;
   min-height: 40px;
   padding: 8px 16px;
   overflow: auto;
-  word-break: break-all;
+  word-break: break-word;
   line-height: 1.5;
+  margin-left: 72px;
+  margin-right: 72px;
   margin-top: 8px;
   margin-bottom: 8px;
   background: #f50057;
@@ -1103,7 +1012,7 @@ exports[`fetch error 1`] = `
   min-width: 450px;
 }
 
-.c12 a {
+.c11 a {
   color: #FFFFFF;
 }
 
@@ -1124,45 +1033,34 @@ exports[`fetch error 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -1170,7 +1068,7 @@ exports[`fetch error 1`] = `
       </div>
     </nav>
     <div
-      class="c12"
+      class="c11"
       kind="danger"
     >
       some fetch  error
@@ -1183,20 +1081,20 @@ exports[`fetch error 1`] = `
 `;
 
 exports[`unintended disconnect 1`] = `
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -1209,7 +1107,7 @@ exports[`unintended disconnect 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -1218,20 +1116,20 @@ exports[`unintended disconnect 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -1241,12 +1139,6 @@ exports[`unintended disconnect 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -1265,46 +1157,46 @@ exports[`unintended disconnect 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
-.c12 {
+.c11 {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2px;
   box-sizing: border-box;
-  box-shadow: 0 1px 4px rgba(0,0,0,.24);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.24);
   margin: 0 0 24px 0;
   min-height: 40px;
   padding: 8px 16px;
   overflow: auto;
-  word-break: break-all;
+  word-break: break-word;
   line-height: 1.5;
+  margin-left: 72px;
+  margin-right: 72px;
   margin-top: 8px;
   margin-bottom: 8px;
   background: #f50057;
@@ -1313,7 +1205,7 @@ exports[`unintended disconnect 1`] = `
   min-width: 450px;
 }
 
-.c12 a {
+.c11 a {
   color: #FFFFFF;
 }
 
@@ -1334,45 +1226,34 @@ exports[`unintended disconnect 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -1380,7 +1261,7 @@ exports[`unintended disconnect 1`] = `
       </div>
     </nav>
     <div
-      class="c12"
+      class="c11"
       kind="danger"
     >
       Session disconnected for an unknown reason
@@ -1393,26 +1274,26 @@ exports[`unintended disconnect 1`] = `
 `;
 
 exports[`webauthn prompt 1`] = `
-.c12 {
+.c11 {
   box-sizing: border-box;
   margin: 72px;
   text-align: center;
 }
 
-.c5 {
+.c6 {
   display: inline-block;
-  transition: color .3s;
-  padding-right: 8px;
-  color: #FFFFFF;
-}
-
-.c11 {
-  display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
+  padding-right: 16px;
   color: #FFFFFF;
 }
 
 .c10 {
+  display: inline-block;
+  transition: color 0.3s;
+  color: #FFFFFF;
+}
+
+.c9 {
   align-items: center;
   border: none;
   cursor: pointer;
@@ -1425,7 +1306,7 @@ exports[`webauthn prompt 1`] = `
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
   font-size: 12px;
   height: 24px;
@@ -1434,20 +1315,20 @@ exports[`webauthn prompt 1`] = `
   color: rgba(255,255,255,0.56);
 }
 
-.c10 .c4 {
+.c9 .c5 {
   color: inherit;
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:disabled {
+.c9:disabled {
   color: rgba(255,255,255,0.3);
 }
 
-.c10:hover,
-.c10:focus {
+.c9:hover,
+.c9:focus {
   background: rgba(255,255,255,0.1);
 }
 
@@ -1457,12 +1338,6 @@ exports[`webauthn prompt 1`] = `
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.c3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0px;
 }
 
 .c0 {
@@ -1481,31 +1356,29 @@ exports[`webauthn prompt 1`] = `
   flex-direction: row;
 }
 
-.c7 {
+.c3 {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;
 }
 
-.c8 {
+.c4 {
   box-sizing: border-box;
   display: flex;
   align-items: center;
 }
 
-.c6 {
+.c8 {
   font-weight: 600;
   font-size: 18px;
   align-self: 'center';
 }
 
-.c9 {
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  margin-right: 6px;
-  vertical-align: text-bottom;
+.c7 {
+  font-weight: 600;
+  font-size: 22px;
+  align-self: 'center';
 }
 
 <div>
@@ -1525,45 +1398,34 @@ exports[`webauthn prompt 1`] = `
       </div>
       <div
         class="c3"
-        style="color: rgba(255, 255, 255, 0.56); vertical-align: text-bottom;"
-      >
-        <span
-          class="c4 c5 icon icon-clipboard-text c6"
-          color="light"
-          style="color: rgba(255, 255, 255, 0.56);"
-        />
-        Clipboard Sharing 
-        Disabled
-      </div>
-      <div
-        class="c7"
       >
         <div
-          class="c8"
+          class="c4"
         >
-          <div
-            class="c9"
-            style="background-color: rgba(255, 255, 255, 0.56);"
-          />
-          <div
-            class="c3"
+          <span
+            class="c5 c6 icon icon-folder-shared c7"
+            color="light"
             style="color: rgba(255, 255, 255, 0.56);"
-          >
-            Not 
-            Recording
-          </div>
+            title="Directory Sharing Disabled"
+          />
+          <span
+            class="c5 c6 icon icon-clipboard-text c8"
+            color="light"
+            style="color: rgba(255, 255, 255, 0.56);"
+            title="Clipboard Sharing Disabled"
+          />
         </div>
         <div
-          class="c8"
+          class="c4"
         >
           <button
-            class="c10"
+            class="c9"
             color="text.secondary"
             data-testid="button"
             style="font-size: 20px;"
           >
             <span
-              class="c4 c11 icon icon-ellipsis "
+              class="c5 c10 icon icon-ellipsis "
               color="light"
             />
           </button>
@@ -1571,7 +1433,7 @@ exports[`webauthn prompt 1`] = `
       </div>
     </nav>
     <div
-      class="c12"
+      class="c11"
     />
     <canvas
       style="display: none; flex: 1;"

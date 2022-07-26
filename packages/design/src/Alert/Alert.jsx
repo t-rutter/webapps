@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
 import { space, color, width } from 'design/system';
 import defaultTheme from 'design/theme';
 
@@ -57,12 +58,12 @@ const Alert = styled.div`
   justify-content: center;
   border-radius: 2px;
   box-sizing: border-box;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .24);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.24);
   margin: 0 0 24px 0;
   min-height: 40px;
   padding: 8px 16px;
   overflow: auto;
-  word-break: break-all;
+  word-break: break-word;
   line-height: 1.5;
   ${space}
   ${kind}

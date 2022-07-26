@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { formatDistanceStrict } from 'date-fns';
+
 import { Event, RawEvent, Formatters, eventCodes } from './types';
 
 export const formatters: Formatters = {
@@ -41,6 +42,12 @@ export const formatters: Formatters = {
     desc: 'Access Request Deleted',
     format: ({ id }) => `Access request [${id}] has been deleted`,
   },
+  [eventCodes.ACCESS_REQUEST_RESOURCE_SEARCH]: {
+    type: 'access_request.search',
+    desc: 'Resource Access Request Search',
+    format: ({ user, resource_type, search_as_roles }) =>
+      `User [${user}] searched for resource type [${resource_type}] with role(s) [${search_as_roles}]`,
+  },
   [eventCodes.SESSION_COMMAND]: {
     type: 'session.command',
     desc: 'Session Command',
@@ -56,8 +63,12 @@ export const formatters: Formatters = {
   [eventCodes.SESSION_NETWORK]: {
     type: 'session.network',
     desc: 'Session Network Connection',
-    format: ({ sid, program, src_addr, dst_addr, dst_port }) =>
-      `Program [${program}] opened a connection [${src_addr} <-> ${dst_addr}:${dst_port}] within a session [${sid}]`,
+    format: ({ action, sid, program, src_addr, dst_addr, dst_port }) => {
+      const a = action === 1 ? '[DENY]' : '[ALLOW]';
+      const desc =
+        action === 1 ? 'was prevented from opening' : 'successfully opened';
+      return `${a} Program [${program}] ${desc} a connection [${src_addr} <-> ${dst_addr}:${dst_port}] within a session [${sid}]`;
+    },
   },
   [eventCodes.SESSION_PROCESS_EXIT]: {
     type: 'session.process_exit',
@@ -306,6 +317,17 @@ export const formatters: Formatters = {
     desc: 'SSO Login Failed',
     format: ({ error }) => `SSO user login failed [${error}]`,
   },
+  [eventCodes.USER_SSO_TEST_FLOW_LOGIN]: {
+    type: 'user.login',
+    desc: 'SSO Test Flow Login',
+    format: ({ user }) =>
+      `SSO Test Flow: user [${user}] successfully logged in`,
+  },
+  [eventCodes.USER_SSO_TEST_FLOW_LOGINFAILURE]: {
+    type: 'user.login',
+    desc: 'SSO Test Flow Login Failed',
+    format: ({ error }) => `SSO Test flow: user login failed [${error}]`,
+  },
   [eventCodes.ROLE_CREATED]: {
     type: 'role.created',
     desc: 'User Role Created',
@@ -374,6 +396,12 @@ export const formatters: Formatters = {
         db_query,
         80
       )}] in database [${db_name}] on [${db_service}] failed`,
+  },
+  [eventCodes.DATABASE_SESSION_MALFORMED_PACKET]: {
+    type: 'db.session.malformed_packet"',
+    desc: 'Database Malformed Packet',
+    format: ({ user, db_service, db_name }) =>
+      `Recived malformed packet from [${user}] in [${db_name}] on database [${db_service}]`,
   },
   [eventCodes.DATABASE_CREATED]: {
     type: 'db.create',
@@ -445,25 +473,32 @@ export const formatters: Formatters = {
   [eventCodes.MYSQL_STATEMENT_SEND_LONG_DATA]: {
     type: 'db.session.mysql.statements.send_long_data',
     desc: 'MySQL Statement Send Long Data',
-    format: ({ user, db_service, db_name, statement_id, parameter_id, data_size }) =>
+    format: ({
+      user,
+      db_service,
+      db_name,
+      statement_id,
+      parameter_id,
+      data_size,
+    }) =>
       `User [${user}] has sent ${data_size} bytes of data to parameter [${parameter_id}] of statement [${statement_id}] in database [${db_name}] on [${db_service}]`,
   },
   [eventCodes.MYSQL_STATEMENT_CLOSE]: {
     type: 'db.session.mysql.statements.close',
     desc: 'MySQL Statement Close',
-    format: ({ user, db_service, db_name, statement_id}) =>
+    format: ({ user, db_service, db_name, statement_id }) =>
       `User [${user}] has closed statement [${statement_id}] in database [${db_name}] on [${db_service}]`,
   },
   [eventCodes.MYSQL_STATEMENT_RESET]: {
     type: 'db.session.mysql.statements.reset',
     desc: 'MySQL Statement Reset',
-    format: ({ user, db_service, db_name, statement_id}) =>
+    format: ({ user, db_service, db_name, statement_id }) =>
       `User [${user}] has reset statement [${statement_id}] in database [${db_name}] on [${db_service}]`,
   },
   [eventCodes.MYSQL_STATEMENT_FETCH]: {
     type: 'db.session.mysql.statements.fetch',
     desc: 'MySQL Statement Fetch',
-    format: ({ user, db_service, db_name, rows_count, statement_id}) =>
+    format: ({ user, db_service, db_name, rows_count, statement_id }) =>
       `User [${user}] has fetched ${rows_count} rows of statement [${statement_id}] in database [${db_name}] on [${db_service}]`,
   },
   [eventCodes.MYSQL_STATEMENT_BULK_EXECUTE]: {
@@ -471,6 +506,54 @@ export const formatters: Formatters = {
     desc: 'MySQL Statement Bulk Execute',
     format: ({ user, db_service, db_name, statement_id }) =>
       `User [${user}] has executed statement [${statement_id}] in database [${db_name}] on [${db_service}]`,
+  },
+  [eventCodes.MYSQL_INIT_DB]: {
+    type: 'db.session.mysql.init_db',
+    desc: 'MySQL Change Database',
+    format: ({ user, db_service, schema_name }) =>
+      `User [${user}] has changed default database to [${schema_name}] on [${db_service}]`,
+  },
+  [eventCodes.MYSQL_CREATE_DB]: {
+    type: 'db.session.mysql.create_db',
+    desc: 'MySQL Create Database',
+    format: ({ user, db_service, schema_name }) =>
+      `User [${user}] has created database [${schema_name}] on [${db_service}]`,
+  },
+  [eventCodes.MYSQL_DROP_DB]: {
+    type: 'db.session.mysql.drop_db',
+    desc: 'MySQL Drop Database',
+    format: ({ user, db_service, schema_name }) =>
+      `User [${user}] has dropped database [${schema_name}] on [${db_service}]`,
+  },
+  [eventCodes.MYSQL_SHUT_DOWN]: {
+    type: 'db.session.mysql.shut_down',
+    desc: 'MySQL Shut Down',
+    format: ({ user, db_service }) =>
+      `User [${user}] has attempted to shut down [${db_service}]`,
+  },
+  [eventCodes.MYSQL_PROCESS_KILL]: {
+    type: 'db.session.mysql.process_kill',
+    desc: 'MySQL Kill Process',
+    format: ({ user, db_service, process_id }) =>
+      `User [${user}] has attempted to kill process [${process_id}] on [${db_service}]`,
+  },
+  [eventCodes.MYSQL_DEBUG]: {
+    type: 'db.session.mysql.debug',
+    desc: 'MySQL Debug',
+    format: ({ user, db_service }) =>
+      `User [${user}] has asked [${db_service}] to dump debug information`,
+  },
+  [eventCodes.MYSQL_REFRESH]: {
+    type: 'db.session.mysql.refresh',
+    desc: 'MySQL Refresh',
+    format: ({ user, db_service, subcommand }) =>
+      `User [${user}] has sent command [${subcommand}] to [${db_service}]`,
+  },
+  [eventCodes.SQLSERVER_RPC_REQUEST]: {
+    type: 'db.session.sqlserver.rpc_request""',
+    desc: 'SQLServer RPC Request',
+    format: ({ user, db_service, db_name, proc_name }) =>
+      `User [${user}] has send RPC Request [${proc_name}] in database [${db_name}] on [${db_service}]`,
   },
   [eventCodes.MFA_DEVICE_ADD]: {
     type: 'mfa.add',
@@ -589,15 +672,21 @@ export const formatters: Formatters = {
     format: ({ server_addr }) => `Session connected to [${server_addr}]`,
   },
   [eventCodes.CERTIFICATE_CREATED]: {
-    type: "cert.create",
-    desc: "Certificate Issued",
+    type: 'cert.create',
+    desc: 'Certificate Issued',
     format: ({ cert_type, identity: { user } }) => {
       if (cert_type === 'user') {
-        return `User certificate issued for [${user}]`
+        return `User certificate issued for [${user}]`;
       }
-      return `Certificate of type [${cert_type}] issued for [${user}]`
-    }
-  }
+      return `Certificate of type [${cert_type}] issued for [${user}]`;
+    },
+  },
+  [eventCodes.UNKNOWN]: {
+    type: 'unknown',
+    desc: 'Unknown Event',
+    format: ({ unknown_type, unknown_code }) =>
+      `Unknown '${unknown_type}' event (${unknown_code})`,
+  },
 };
 
 const unknownFormatter = {
@@ -614,7 +703,7 @@ export default function makeEvent(json: any): Event {
     id: getId(json),
     code: json.code,
     user: json.user,
-    time: new Date(json.time),
+    time: json.time,
     raw: json,
   };
 

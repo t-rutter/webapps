@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import makeLogins from './makeLogins';
+import cfg from 'teleport/config';
+
 import { Acl } from './types';
 
 export default function makeAcl(json): Acl {
   json = json || {};
-  const sshLogins = makeLogins(json.sshLogins);
   const windowsLogins = json.windowsLogins || [];
   const authConnectors = json.authConnectors || defaultAccess;
   const trustedClusters = json.trustedClusters || defaultAccess;
   const roles = json.roles || defaultAccess;
-  const sessions = json.sessions || defaultAccess;
+  const recordedSessions = json.recordedSessions || defaultAccess;
+  const activeSessions = json.activeSessions || defaultAccess;
   const events = json.events || defaultAccess;
   const users = json.users || defaultAccess;
   const appServers = json.appServers || defaultAccess;
@@ -44,14 +45,21 @@ export default function makeAcl(json): Acl {
     json.desktopSessionRecording !== undefined
       ? json.desktopSessionRecording
       : true;
+  // Behaves like clipboardSharingEnabled, see
+  // https://github.com/gravitational/teleport/pull/12684#issue-1237830087
+  const directorySharingEnabled =
+    (json.directorySharing !== undefined ? json.directorySharing : true) &&
+    cfg.enableDirectorySharing;
+
+  const nodes = json.nodes || defaultAccess;
 
   return {
-    sshLogins,
     windowsLogins,
     authConnectors,
     trustedClusters,
     roles,
-    sessions,
+    recordedSessions,
+    activeSessions,
     events,
     users,
     appServers,
@@ -63,6 +71,8 @@ export default function makeAcl(json): Acl {
     desktops,
     clipboardSharingEnabled,
     desktopSessionRecordingEnabled,
+    nodes,
+    directorySharingEnabled,
   };
 }
 

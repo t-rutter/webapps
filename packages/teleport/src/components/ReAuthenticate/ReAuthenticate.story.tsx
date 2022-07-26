@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { State } from './useReAuthenticate';
 import { ReAuthenticate } from './ReAuthenticate';
 
@@ -39,7 +40,6 @@ const props: State = {
   attempt: { status: '' },
   clearAttempt: () => null,
   submitWithTotp: () => null,
-  submitWithU2f: () => null,
   submitWithWebauthn: () => null,
   preferredMfaType: 'webauthn',
   onClose: () => null,

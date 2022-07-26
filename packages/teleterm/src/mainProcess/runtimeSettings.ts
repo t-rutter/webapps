@@ -1,8 +1,11 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+
 import { app } from 'electron';
-import { Logger } from 'shared/libs/logger';
+
+import Logger from 'teleterm/logger';
+
 import { RuntimeSettings } from './types';
 
 const { argv, env } = process;
@@ -14,17 +17,21 @@ const RESOURCES_PATH = app.isPackaged
 const dev = env.NODE_ENV === 'development' || env.DEBUG_PROD === 'true';
 
 // Allows running tsh in insecure mode (development)
-const isInsecure = dev || argv.slice(2).indexOf('--insecure') !== -1;
+const isInsecure = dev || argv.includes('--insecure');
 
 function getRuntimeSettings(): RuntimeSettings {
   const userDataDir = app.getPath('userData');
-  const tshNetworkAddr = getTshNetworkAddr();
+  const binDir = getBinDir();
+  const tshNetworkAddr = getTshNetworkAddress();
   const tshd = {
     insecure: isInsecure,
     binaryPath: getTshBinaryPath(),
     homeDir: getTshHomeDir(),
     networkAddr: tshNetworkAddr,
     flags: ['daemon', 'start', `--addr=${tshNetworkAddr}`],
+  };
+  const sharedProcess = {
+    networkAddr: getSharedProcessNetworkAddress(),
   };
 
   if (isInsecure) {
@@ -35,21 +42,31 @@ function getRuntimeSettings(): RuntimeSettings {
   return {
     dev,
     tshd,
+    sharedProcess,
     userDataDir,
+    binDir,
     defaultShell: getDefaultShell(),
     platform: process.platform,
   };
 }
 
-function getTshNetworkAddr() {
-  const unixSocketPath = path.resolve(app.getPath('userData'), 'tsh.socket');
+function getTshNetworkAddress() {
+  return getUnixSocketNetworkAddress('tsh.socket');
+}
+
+function getSharedProcessNetworkAddress() {
+  return getUnixSocketNetworkAddress('shared.socket');
+}
+
+function getUnixSocketNetworkAddress(socketName: string) {
+  const unixSocketPath = path.resolve(app.getPath('userData'), socketName);
 
   // try to cleanup after previous process that unexpectedly crashed
   if (fs.existsSync(unixSocketPath)) {
     fs.unlinkSync(unixSocketPath);
   }
 
-  return `unix://${path.resolve(app.getPath('userData'), 'tsh.socket')}`;
+  return `unix://${path.resolve(app.getPath('userData'), socketName)}`;
 }
 
 function getTshHomeDir() {
@@ -62,7 +79,7 @@ function getTshHomeDir() {
 
 function getTshBinaryPath() {
   if (app.isPackaged) {
-    return path.join(RESOURCES_PATH, 'tsh');
+    return path.join(getBinDir(), 'tsh');
   }
 
   const tshPath = env.TELETERM_TSH_PATH;
@@ -71,6 +88,14 @@ function getTshBinaryPath() {
   }
 
   return tshPath;
+}
+
+function getBinDir() {
+  if (!app.isPackaged) {
+    return;
+  }
+
+  return path.join(RESOURCES_PATH, 'bin');
 }
 
 function getAssetPath(...paths: string[]): string {

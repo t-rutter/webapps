@@ -18,9 +18,11 @@ import React from 'react';
 import * as Alerts from 'design/Alert';
 import { ButtonIcon, Text } from 'design';
 import * as Icons from 'design/Icon';
+
+import { DialogHeader, DialogContent } from 'design/Dialog';
+
 import LoginForm from './FormLogin';
 import useClusterLogin, { State, Props } from './useClusterLogin';
-import { DialogHeader, DialogContent } from 'design/Dialog';
 
 export function ClusterLogin(props: Props) {
   const state = useClusterLogin(props);
@@ -35,6 +37,7 @@ export function ClusterLoginPresentation({
   onLoginWithSso,
   onCloseDialog,
   onAbort,
+  loggedInUserName,
   shouldPromptSsoStatus,
   shouldPromptHardwareKey,
 }: State) {
@@ -62,6 +65,7 @@ export function ClusterLoginPresentation({
             auth2faType={initAttempt.data.secondFactor}
             isLocalAuthEnabled={initAttempt.data.localAuthEnabled}
             preferredMfa={initAttempt.data.preferredMfa}
+            loggedInUserName={loggedInUserName}
             onLoginWithSso={onLoginWithSso}
             onLogin={onLoginWithLocal}
             onAbort={onAbort}

@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Gravitational, Inc.
+ * Copyright 2020-2022 Gravitational, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 import React from 'react';
-import { Danger } from 'design/Alert';
-import { Indicator, Box, Text, Link } from 'design';
+import { Indicator, Box } from 'design';
+
 import useTeleport from 'teleport/useTeleport';
 import {
   FeatureBox,
@@ -24,9 +24,12 @@ import {
   FeatureHeaderTitle,
 } from 'teleport/components/Layout';
 import Empty, { EmptyStateInfo } from 'teleport/components/Empty';
+import ErrorMessage from 'teleport/components/AgentErrorMessage';
+
+import AgentButtonAdd from 'teleport/components/AgentButtonAdd';
+
 import AppList from './AppList';
 import AddApp from './AddApp';
-import ButtonAdd from './ButtonAdd';
 import useApps, { State } from './useApps';
 
 export default function Container() {
@@ -44,30 +47,67 @@ export function Apps(props: State) {
     hideAddApp,
     canCreate,
     attempt,
-    apps,
+    results,
+    fetchNext,
+    fetchPrev,
+    from,
+    to,
+    pageSize,
+    params,
+    setParams,
+    startKeys,
+    setSort,
+    pathname,
+    replaceHistory,
+    fetchStatus,
+    isSearchEmpty,
+    onLabelClick,
   } = props;
 
-  const isEmpty = attempt.status === 'success' && apps.length === 0;
-  const hasApps = attempt.status === 'success' && apps.length > 0;
+  const hasNoApps = results.apps.length === 0 && isSearchEmpty;
 
   return (
     <FeatureBox>
       <FeatureHeader alignItems="center" justifyContent="space-between">
         <FeatureHeaderTitle>Applications</FeatureHeaderTitle>
-        <ButtonAdd
-          isLeafCluster={isLeafCluster}
-          canCreate={canCreate}
-          onClick={showAddApp}
-        />
+        {attempt.status === 'success' && !hasNoApps && (
+          <AgentButtonAdd
+            agent="application"
+            beginsWithVowel={true}
+            isLeafCluster={isLeafCluster}
+            canCreate={canCreate}
+            onClick={showAddApp}
+          />
+        )}
       </FeatureHeader>
       {attempt.status === 'processing' && (
         <Box textAlign="center" m={10}>
           <Indicator />
         </Box>
       )}
-      {attempt.status === 'failed' && <Danger>{attempt.statusText} </Danger>}
-      {hasApps && <AppList apps={apps} />}
-      {isEmpty && (
+      {attempt.status === 'failed' && (
+        <ErrorMessage message={attempt.statusText} />
+      )}
+      {attempt.status !== 'processing' && !hasNoApps && (
+        <AppList
+          apps={results.apps}
+          fetchNext={fetchNext}
+          fetchPrev={fetchPrev}
+          fetchStatus={fetchStatus}
+          from={from}
+          to={to}
+          totalCount={results.totalCount}
+          pageSize={pageSize}
+          params={params}
+          setParams={setParams}
+          startKeys={startKeys}
+          setSort={setSort}
+          pathname={pathname}
+          replaceHistory={replaceHistory}
+          onLabelClick={onLabelClick}
+        />
+      )}
+      {attempt.status === 'success' && hasNoApps && (
         <Empty
           clusterId={clusterId}
           canCreate={canCreate && !isLeafCluster}
@@ -81,22 +121,11 @@ export function Apps(props: State) {
 }
 
 const emptyStateInfo: EmptyStateInfo = {
-  title: 'ADD YOUR FIRST APPLICATION',
-  description: (
-    <Text>
-      {`Quick access to web applications running behind NAT and firewalls with
-      security and compliance. Follow `}
-      <Link
-        target="_blank"
-        href="https://goteleport.com/docs/application-access/getting-started/"
-      >
-        the documentation
-      </Link>
-      {' to get started.'}
-    </Text>
-  ),
-  videoLink: 'https://www.youtube.com/watch?v=HkBQY-uWIbU',
-  buttonText: 'ADD APPLICATION',
+  title: 'Add your first application to Teleport',
+  byline:
+    'Teleport Application Access provides secure access to internal applications.',
+  docsURL: 'https://goteleport.com/docs/application-access/getting-started/',
+  resourceType: 'application',
   readOnly: {
     title: 'No Applications Found',
     resource: 'applications',

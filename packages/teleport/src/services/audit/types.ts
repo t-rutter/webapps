@@ -30,20 +30,21 @@ export const eventGroupTypes = {
  * eventCodes is a map of event codes.
  *
  * After defining an event code:
- *  1: Define fields from JSON response in `RawEvents` object
- *  2: Define formatter in `makeEvent` file which defines *events types and
+ *  1: Define fields from JSON response in `RawEvents` object (in this file)
+ *  2: Define formatter in `makeEvent.ts` file which defines *events types and
  *     defines short and long event definitions
  *  * Some events can have same event "type" but have unique "code".
  *    These duplicated event types needs to be defined in `eventGroupTypes` object
- *  3: Define icons for events under `EventTypeCell` file
- *  4: Add an actual JSON event to the fixtures file in `src/Audit` directory to
- *     be used for display and test in storybook.
+ *  3: Define icons for events under `EventTypeCell.tsx` file
+ *  4: Add an actual JSON event to the fixtures file in `src/Audit/fixtures/index.ts`.
+ *  5: Check fixture is rendered in storybook, then update snapshot for `Audit.story.test.tsx`
  */
 export const eventCodes = {
   ACCESS_REQUEST_CREATED: 'T5000I',
   ACCESS_REQUEST_REVIEWED: 'T5002I',
   ACCESS_REQUEST_UPDATED: 'T5001I',
   ACCESS_REQUEST_DELETED: 'T5003I',
+  ACCESS_REQUEST_RESOURCE_SEARCH: 'T5004I',
   APP_SESSION_CHUNK: 'T2008I',
   APP_SESSION_START: 'T2007I',
   AUTH_ATTEMPT_FAILURE: 'T3007W',
@@ -57,6 +58,7 @@ export const eventCodes = {
   DATABASE_SESSION_QUERY_FAILURE: 'TDB02W',
   DATABASE_SESSION_STARTED_FAILURE: 'TDB00W',
   DATABASE_SESSION_STARTED: 'TDB00I',
+  DATABASE_SESSION_MALFORMED_PACKET: 'TDB06I',
   DATABASE_CREATED: 'TDB03I',
   DATABASE_UPDATED: 'TDB04I',
   DATABASE_DELETED: 'TDB05I',
@@ -72,6 +74,14 @@ export const eventCodes = {
   MYSQL_STATEMENT_RESET: 'TMY04I',
   MYSQL_STATEMENT_FETCH: 'TMY05I',
   MYSQL_STATEMENT_BULK_EXECUTE: 'TMY06I',
+  MYSQL_INIT_DB: 'TMY07I',
+  MYSQL_CREATE_DB: 'TMY08I',
+  MYSQL_DROP_DB: 'TMY09I',
+  MYSQL_SHUT_DOWN: 'TMY10I',
+  MYSQL_PROCESS_KILL: 'TMY11I',
+  MYSQL_DEBUG: 'TMY12I',
+  MYSQL_REFRESH: 'TMY13I',
+  SQLSERVER_RPC_REQUEST: 'TMS00I',
   DESKTOP_SESSION_STARTED: 'TDP00I',
   DESKTOP_SESSION_STARTED_FAILED: 'TDP00W',
   DESKTOP_SESSION_ENDED: 'TDP01I',
@@ -122,6 +132,7 @@ export const eventCodes = {
   TRUSTED_CLUSTER_CREATED: 'T7000I',
   TRUSTED_CLUSTER_DELETED: 'T7001I',
   TRUSTED_CLUSTER_TOKEN_CREATED: 'T7002I',
+  UNKNOWN: 'TCC00E',
   USER_CREATED: 'T1002I',
   USER_DELETED: 'T1004I',
   USER_LOCAL_LOGIN: 'T1000I',
@@ -129,6 +140,8 @@ export const eventCodes = {
   USER_PASSWORD_CHANGED: 'T1005I',
   USER_SSO_LOGIN: 'T1001I',
   USER_SSO_LOGINFAILURE: 'T1001W',
+  USER_SSO_TEST_FLOW_LOGIN: 'T1010I',
+  USER_SSO_TEST_FLOW_LOGINFAILURE: 'T1011W',
   USER_UPDATED: 'T1003I',
   X11_FORWARD: 'T3008I',
   X11_FORWARD_FAILURE: 'T3008W',
@@ -150,6 +163,10 @@ export type RawEvents = {
   >;
   [eventCodes.ACCESS_REQUEST_DELETED]: RawEventAccess<
     typeof eventCodes.ACCESS_REQUEST_DELETED
+  >;
+  [eventCodes.ACCESS_REQUEST_RESOURCE_SEARCH]: RawEvent<
+    typeof eventCodes.ACCESS_REQUEST_RESOURCE_SEARCH,
+    { resource_type: string; search_as_roles: string }
   >;
   [eventCodes.AUTH_ATTEMPT_FAILURE]: RawEventAuthFailure<
     typeof eventCodes.AUTH_ATTEMPT_FAILURE
@@ -348,6 +365,15 @@ export type RawEvents = {
       error: string;
     }
   >;
+  [eventCodes.USER_SSO_TEST_FLOW_LOGIN]: RawEvent<
+    typeof eventCodes.USER_SSO_TEST_FLOW_LOGIN
+  >;
+  [eventCodes.USER_SSO_TEST_FLOW_LOGINFAILURE]: RawEvent<
+    typeof eventCodes.USER_SSO_TEST_FLOW_LOGINFAILURE,
+    {
+      error: string;
+    }
+  >;
   [eventCodes.ROLE_CREATED]: RawEvent<typeof eventCodes.ROLE_CREATED, HasName>;
   [eventCodes.ROLE_DELETED]: RawEvent<typeof eventCodes.ROLE_DELETED, HasName>;
   [eventCodes.TRUSTED_CLUSTER_TOKEN_CREATED]: RawEvent<
@@ -416,6 +442,14 @@ export type RawEvents = {
       db_name: string;
       db_user: string;
       db_query: string;
+    }
+  >;
+  [eventCodes.DATABASE_SESSION_MALFORMED_PACKET]: RawEvent<
+    typeof eventCodes.DATABASE_SESSION_MALFORMED_PACKET,
+    {
+      name: string;
+      db_service: string;
+      db_name: string;
     }
   >;
   [eventCodes.DATABASE_CREATED]: RawEvent<
@@ -538,6 +572,62 @@ export type RawEvents = {
       statement_id: number;
     }
   >;
+  [eventCodes.MYSQL_INIT_DB]: RawEvent<
+    typeof eventCodes.MYSQL_INIT_DB,
+    {
+      db_service: string;
+      schema_name: string;
+    }
+  >;
+  [eventCodes.MYSQL_CREATE_DB]: RawEvent<
+    typeof eventCodes.MYSQL_CREATE_DB,
+    {
+      db_service: string;
+      schema_name: string;
+    }
+  >;
+  [eventCodes.MYSQL_DROP_DB]: RawEvent<
+    typeof eventCodes.MYSQL_DROP_DB,
+    {
+      db_service: string;
+      schema_name: string;
+    }
+  >;
+  [eventCodes.MYSQL_SHUT_DOWN]: RawEvent<
+    typeof eventCodes.MYSQL_SHUT_DOWN,
+    {
+      db_service: string;
+    }
+  >;
+  [eventCodes.MYSQL_PROCESS_KILL]: RawEvent<
+    typeof eventCodes.MYSQL_PROCESS_KILL,
+    {
+      db_service: string;
+      process_id: number;
+    }
+  >;
+  [eventCodes.MYSQL_DEBUG]: RawEvent<
+    typeof eventCodes.MYSQL_DEBUG,
+    {
+      db_service: string;
+    }
+  >;
+  [eventCodes.MYSQL_REFRESH]: RawEvent<
+    typeof eventCodes.MYSQL_REFRESH,
+    {
+      db_service: string;
+      subcommand: string;
+    }
+  >;
+  [eventCodes.SQLSERVER_RPC_REQUEST]: RawEvent<
+    typeof eventCodes.SQLSERVER_RPC_REQUEST,
+    {
+      name: string;
+      db_service: string;
+      db_name: string;
+      proc_name: string;
+    }
+  >;
   [eventCodes.MFA_DEVICE_ADD]: RawEvent<
     typeof eventCodes.MFA_DEVICE_ADD,
     {
@@ -617,6 +707,14 @@ export type RawEvents = {
       windows_domain: string;
     }
   >;
+  [eventCodes.UNKNOWN]: RawEvent<
+    typeof eventCodes.UNKNOWN,
+    {
+      unknown_type: string;
+      unknown_code: string;
+      data: string;
+    }
+  >;
   [eventCodes.X11_FORWARD]: RawEvent<typeof eventCodes.X11_FORWARD>;
   [eventCodes.X11_FORWARD_FAILURE]: RawEvent<
     typeof eventCodes.X11_FORWARD_FAILURE
@@ -694,6 +792,7 @@ type RawEventCommand<T extends EventCode> = RawEvent<
 type RawEventNetwork<T extends EventCode> = RawEvent<
   T,
   {
+    action: number;
     login: string;
     namespace: string;
     pid: number;

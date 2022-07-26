@@ -14,72 +14,114 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import { useEffect } from 'react';
+
+import { useAsync } from 'shared/hooks/useAsync';
+
 import { useAppContext } from 'teleterm/ui/appContextProvider';
-import * as types from 'teleterm/ui/services/docs/types';
-import useAsync from 'teleterm/ui/useAsync';
+import * as types from 'teleterm/ui/services/workspacesService';
+import { useWorkspaceDocumentsService } from 'teleterm/ui/Documents';
+import { routing } from 'teleterm/ui/uri';
+import { retryWithRelogin } from 'teleterm/ui/utils';
 
 export default function useGateway(doc: types.DocumentGateway) {
   const ctx = useAppContext();
+  const workspaceDocumentsService = useWorkspaceDocumentsService();
   const gateway = ctx.clustersService.findGateway(doc.gatewayUri);
   const connected = !!gateway;
+  const rootCluster = ctx.clustersService.findRootClusterByResource(
+    doc.targetUri
+  );
+  const cluster = ctx.clustersService.findClusterByResource(doc.targetUri);
 
-  const [connectAttempt, createGateway, setConnectAttempt] = useAsync(
-    async () => {
-      const gw = await ctx.clustersService.createGateway({
+  const [connectAttempt, createGateway] = useAsync(async () => {
+    const gw = await retryWithRelogin(ctx, doc.uri, doc.targetUri, () =>
+      ctx.clustersService.createGateway({
         targetUri: doc.targetUri,
         port: doc.port,
         user: doc.targetUser,
-      });
+        subresource_name: doc.targetSubresourceName,
+      })
+    );
 
-      ctx.docsService.update(doc.uri, {
-        gatewayUri: gw.uri,
-      });
-    }
-  );
+    workspaceDocumentsService.update(doc.uri, {
+      gatewayUri: gw.uri,
+      // Set the port on doc to match the one returned from the daemon. Teleterm doesn't let the
+      // user provide a port for the gateway, so instead we have to let the daemon use a random
+      // one.
+      //
+      // Setting it here makes it so that on app restart, Teleterm will restart the proxy with the
+      // same port number.
+      port: gw.localPort,
+    });
+  });
 
   const [disconnectAttempt, disconnect] = useAsync(async () => {
     await ctx.clustersService.removeGateway(doc.gatewayUri);
   });
 
+  const [changeDbNameAttempt, changeDbName] = useAsync(async (name: string) => {
+    const updatedGateway =
+      await ctx.clustersService.setGatewayTargetSubresourceName(
+        doc.gatewayUri,
+        name
+      );
+
+    workspaceDocumentsService.update(doc.uri, {
+      targetSubresourceName: updatedGateway.targetSubresourceName,
+    });
+  });
+
   const reconnect = () => {
-    const cluster = ctx.clustersService.findRootClusterByResource(
-      doc.targetUri
-    );
-    if (cluster && cluster.connected) {
+    if (rootCluster.connected) {
       createGateway();
       return;
     }
 
-    if (cluster && !cluster.connected) {
-      ctx.commandLauncher.executeCommand('cluster-connect', {
-        clusterUri: cluster.uri,
-        onSuccess: createGateway,
-      });
-      return;
-    }
-
-    if (!cluster) {
-      setConnectAttempt({
-        status: 'error',
-        statusText: `unable to resolve cluster for ${doc.targetUri}`,
-      });
-    }
+    ctx.commandLauncher.executeCommand('cluster-connect', {
+      clusterUri: rootCluster.uri,
+      onSuccess: createGateway,
+    });
   };
 
-  React.useEffect(() => {
+  const runCliCommand = () => {
+    const { rootClusterId, leafClusterId } = routing.parseClusterUri(
+      cluster.uri
+    ).params;
+    workspaceDocumentsService.openNewTerminal({
+      initCommand: gateway.cliCommand,
+      rootClusterId,
+      leafClusterId,
+    });
+  };
+
+  useEffect(() => {
     if (disconnectAttempt.status === 'success') {
-      ctx.docsService.close(doc.uri);
+      workspaceDocumentsService.close(doc.uri);
     }
   }, [disconnectAttempt.status]);
 
+  const shouldCreateGateway =
+    rootCluster.connected && !connected && connectAttempt.status === '';
+
+  useEffect(
+    function createGatewayOnDocumentOpen() {
+      if (shouldCreateGateway) {
+        createGateway();
+      }
+    },
+    [shouldCreateGateway]
+  );
+
   return {
-    doc,
     gateway,
     disconnect,
     connected,
     reconnect,
     connectAttempt,
+    runCliCommand,
+    changeDbName,
+    changeDbNameAttempt,
   };
 }
 

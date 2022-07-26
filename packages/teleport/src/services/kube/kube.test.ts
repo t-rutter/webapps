@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,20 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import KubeService from './kube';
 import api from 'teleport/services/api';
+
+import KubeService from './kube';
 
 test('correct processed fetch response formatting', async () => {
   jest.spyOn(api, 'get').mockResolvedValue(mockApiResponse);
 
   const kubeService = new KubeService();
-  const response = await kubeService.fetchKubernetes('clusterId');
+  const response = await kubeService.fetchKubernetes('clusterId', {
+    search: 'does-not-matter',
+  });
 
   expect(response).toEqual({
-    kubes: [
+    agents: [
       {
         name: 'tele.logicoma.dev-prod',
-        tags: ['kernal: 4.15.0-51-generic', 'env: prod'],
+        labels: [
+          { name: 'kernal', value: '4.15.0-51-generic' },
+          { name: 'env', value: 'prod' },
+        ],
       },
     ],
     startKey: mockApiResponse.startKey,
@@ -39,10 +45,12 @@ test('handling of null fetch response', async () => {
   jest.spyOn(api, 'get').mockResolvedValue(null);
 
   const kubeService = new KubeService();
-  const response = await kubeService.fetchKubernetes('clusterId');
+  const response = await kubeService.fetchKubernetes('clusterId', {
+    search: 'does-not-matter',
+  });
 
   expect(response).toEqual({
-    kubes: [],
+    agents: [],
     startKey: undefined,
     totalCount: undefined,
   });
@@ -54,9 +62,11 @@ test('handling of null labels', async () => {
     .mockResolvedValue({ items: [{ name: 'test', labels: null }] });
 
   const kubeService = new KubeService();
-  const response = await kubeService.fetchKubernetes('clusterId');
+  const response = await kubeService.fetchKubernetes('clusterId', {
+    search: 'does-not-matter',
+  });
 
-  expect(response.kubes).toEqual([{ name: 'test', tags: [] }]);
+  expect(response.agents).toEqual([{ name: 'test', labels: [] }]);
 });
 
 const mockApiResponse = {

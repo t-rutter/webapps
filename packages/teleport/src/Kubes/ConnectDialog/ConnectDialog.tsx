@@ -22,6 +22,7 @@ import Dialog, {
   DialogContent,
 } from 'design/Dialog';
 import { Text, Box, ButtonSecondary } from 'design';
+
 import TextSelectCopy from 'teleport/components/TextSelectCopy';
 import { AuthType } from 'teleport/services/user';
 
@@ -53,26 +54,28 @@ function ConnectDialog(props: Props) {
         </Box>
         <Box mb={4}>
           <Text bold as="span">
-            *Step 2
+            Optional
+          </Text>{' '}
+          - To write kubectl configuration to a separate file instead of having
+          your global kubectl configuration modified, run the following command:
+          <TextSelectCopy
+            mt="2"
+            text="export KUBECONFIG=${HOME?}/teleport-kubeconfig.yaml"
+          />
+        </Box>
+        <Box mb={4}>
+          <Text bold as="span">
+            Step 2
           </Text>
           {' - Select the Kubernetes cluster'}
           <TextSelectCopy mt="2" text={`tsh kube login ${kubeConnectName}`} />
         </Box>
-        <Box mb={4}>
+        <Box mb={1}>
           <Text bold as="span">
             Step 3
           </Text>
           {' - Connect to the Kubernetes cluster'}
           <TextSelectCopy mt="2" text={`kubectl get pods`} />
-        </Box>
-        <Box>
-          * Note: To write kubectl configuration to a separate file instead of
-          having your global kubectl configuration modified, run the following
-          command, before running Step 2:
-          <TextSelectCopy
-            mt="2"
-            text="export KUBECONFIG=${HOME?}/teleport-kubeconfig.yaml"
-          />
         </Box>
       </DialogContent>
       <DialogFooter>

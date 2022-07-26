@@ -17,11 +17,15 @@ limitations under the License.
 import React from 'react';
 import { ButtonBorder } from 'design';
 import Table, { Cell, TextCell } from 'design/DataTable';
+import { dateTimeMatcher } from 'design/utils/match';
 import { displayDateTime } from 'shared/services/loc';
+
+import Icon, * as Icons from 'design/Icon/Icon';
+
 import cfg from 'teleport/config';
 import { Recording, RecordingType } from 'teleport/services/recordings';
+
 import { State } from './useRecordings';
-import Icon, * as Icons from 'design/Icon/Icon';
 
 export default function RecordingsList(props: Props) {
   const {
@@ -86,12 +90,27 @@ export default function RecordingsList(props: Props) {
         dir: 'DESC',
       }}
       isSearchable
+      searchableProps={[
+        'recordingType',
+        'hostname',
+        'description',
+        'createdDate',
+        'sid',
+        'users',
+        'durationText',
+      ]}
+      customSearchMatchers={[dateTimeMatcher(['createdDate'])]}
     />
   );
 }
 
 const renderIconCell = (type: RecordingType) => {
-  const icon = type === 'ssh' ? Icons.Cli : Icons.Desktop;
+  let icon = Icons.Cli;
+  if (type === 'desktop') {
+    icon = Icons.Desktop;
+  } else if (type === 'k8s') {
+    icon = Icons.Kubernetes;
+  }
 
   return (
     <Cell>

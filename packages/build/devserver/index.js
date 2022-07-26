@@ -19,15 +19,19 @@ limitations under the License.
 const uri = require('url');
 const WebpackDevServer = require('webpack-dev-server');
 const httpProxy = require('http-proxy');
+const optimist = require('optimist');
+
 const modifyIndexHtmlMiddleware = require('./modifyResponse');
 const initCompiler = require('./initCompiler');
 
 // parse target URL
-const argv = require('optimist')
+const argv = optimist
   .usage('Usage: $0 -target [url] -config [config]')
   .demand(['target', 'config']).argv;
 
-const target = argv.target.startsWith('https') ? argv.target : `https://${argv.target}`;
+const target = argv.target.startsWith('https')
+  ? argv.target
+  : `https://${argv.target}`;
 const urlObj = uri.parse(target);
 const webpackConfig = require(argv.config);
 
@@ -43,7 +47,7 @@ const PORT = 8080;
 // init webpack compiler
 const compiler = initCompiler({ webpackConfig });
 
-compiler.callWhenReady(function() {
+compiler.callWhenReady(function () {
   console.log(
     '\x1b[33m',
     `DevServer is ready to serve: https://localhost:${PORT}/web/`,
@@ -85,19 +89,18 @@ const devServer = new WebpackDevServer(
     },
     hot: true,
     headers: {
-      'X-Custom-Header': 'yes'
+      'X-Custom-Header': 'yes',
     },
   },
   compiler.webpackCompiler
 );
 
-
 // create a dedicated proxy server to proxy cherry-picked requests
 // to the remote target
 const proxyServer = httpProxy.createProxyServer();
 process.on('SIGINT', () => {
-  proxyServer.close()
-})
+  proxyServer.close();
+});
 
 // serveIndexHtml proxies all requests skipped by webpack-dev-server to
 // targeted server, these are requests to index.html (app entry point)
@@ -112,7 +115,12 @@ function serveIndexHtml(req, res) {
   }
 
   function handleRequest() {
-    proxyServer.web(req, res, getTargetOptions());
+    proxyServer.web(req, res, getTargetOptions(), (err, req, res) => {
+      const msg = `error handling request: ${err.message}. Is the target running and accessible at ${target}?`;
+      console.error(msg);
+      res.write(msg);
+      res.end();
+    });
   }
 
   if (!compiler.isLocalIndexHtmlReady()) {
@@ -126,7 +134,8 @@ devServer.start().then(() => {
   devServer.app.use(modifyIndexHtmlMiddleware(compiler));
   devServer.app.get('/*', serveIndexHtml);
   devServer.server.on('upgrade', (req, socket) => {
-    if (req.url === '/ws') {  // webpack WS (hot reloads endpoint)
+    if (req.url === '/ws') {
+      // webpack WS (hot reloads endpoint)
       return;
     }
     console.log('proxying ws', req.url);
@@ -134,8 +143,8 @@ devServer.start().then(() => {
       target: 'wss://' + PROXY_TARGET,
       secure: false,
     });
-    proxyServer.on('error', (err) => {
-      console.error('ws error:', err)
-    } )
+    proxyServer.on('error', err => {
+      console.error('ws error:', err);
+    });
   });
 });

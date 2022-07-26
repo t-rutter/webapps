@@ -14,17 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { StoreNav, StoreUserContext } from './stores';
 import cfg from 'teleport/config';
+
+import { StoreNav, StoreUserContext, defaultNavState } from './stores';
 import * as types from './types';
 import AuditService from './services/audit';
 import RecordingsService from './services/recordings';
-import nodeService from './services/nodes';
+import NodeService from './services/nodes';
 import clusterService from './services/clusters';
-import sshService from './services/ssh';
+import sessionService from './services/session';
 import ResourceService from './services/resources';
 import userService from './services/user';
 import appService from './services/apps';
+import JoinTokenService from './services/joinToken';
 import KubeService from './services/kube';
 import DatabaseService from './services/databases';
 import desktopService from './services/desktops';
@@ -41,12 +43,13 @@ class TeleportContext implements types.Context {
   // services
   auditService = new AuditService();
   recordingsService = new RecordingsService();
-  nodeService = nodeService;
+  nodeService = new NodeService();
   clusterService = clusterService;
-  sshService = sshService;
+  sshService = sessionService;
   resourceService = new ResourceService();
   userService = userService;
   appService = appService;
+  joinTokenService = new JoinTokenService();
   kubeService = new KubeService();
   databaseService = new DatabaseService();
   desktopService = desktopService;
@@ -55,7 +58,9 @@ class TeleportContext implements types.Context {
 
   init() {
     return userService.fetchUserContext().then(user => {
+      this.storeNav.setState(defaultNavState);
       this.storeUser.setState(user);
+      this.features = [];
     });
   }
 
@@ -74,6 +79,8 @@ class TeleportContext implements types.Context {
       billing: userContext.getBillingAccess().list,
       databases: userContext.getDatabaseAccess().list,
       desktops: userContext.getDesktopAccess().list,
+      nodes: userContext.getNodeAccess().list,
+      activeSessions: userContext.getActiveSessionsAccess().list,
     };
   }
 }

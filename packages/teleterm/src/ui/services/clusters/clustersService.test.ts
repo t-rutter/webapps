@@ -1,4 +1,7 @@
 import { tsh, SyncStatus } from 'teleterm/ui/services/clusters/types';
+
+import { NotificationsService } from 'teleterm/ui/services/notifications';
+
 import { ClustersService } from './clustersService';
 
 const clusterUri = '/clusters/test';
@@ -8,26 +11,14 @@ const clusterMock: tsh.Cluster = {
   name: 'Test',
   connected: true,
   leaf: false,
+  proxyHost: 'localhost:3080',
+  actualName: 'Test',
   loggedInUser: {
     name: 'admin',
     acl: {},
     sshLoginsList: [],
     rolesList: [],
   },
-};
-
-const gatewayMock: tsh.Gateway = {
-  uri: 'gatewayTestUri',
-  caCertPath: '',
-  certPath: '',
-  keyPath: '',
-  localAddress: 'localhost',
-  localPort: '2000',
-  protocol: 'https',
-  targetName: 'Test',
-  targetUser: '',
-  targetUri: 'clusters/xxx/',
-  insecure: true,
 };
 
 const dbMock: tsh.Database = {
@@ -39,6 +30,18 @@ const dbMock: tsh.Database = {
   type: '',
   hostname: 'localhost',
   labelsList: [{ name: 'type', value: 'postgres' }],
+};
+
+const gatewayMock: tsh.Gateway = {
+  uri: 'gatewayTestUri',
+  localAddress: 'localhost',
+  localPort: '2000',
+  protocol: 'https',
+  targetName: dbMock.name,
+  targetSubresourceName: '',
+  targetUser: 'sam',
+  targetUri: dbMock.uri,
+  cliCommand: 'psql postgres://postgres@localhost:5432/postgres',
 };
 
 const serverMock: tsh.Server = {
@@ -83,8 +86,15 @@ const appMock: tsh.Application = {
   publicAddr: 'app.test',
 };
 
-function createService(client: Partial<tsh.TshClient>): ClustersService {
-  return new ClustersService(client as tsh.TshClient);
+const NotificationsServiceMock = NotificationsService as jest.MockedClass<
+  typeof NotificationsService
+>;
+
+function createService(
+  client: Partial<tsh.TshClient>,
+  notificationsService?: NotificationsService
+): ClustersService {
+  return new ClustersService(client as tsh.TshClient, notificationsService);
 }
 
 function getClientMocks(): Partial<tsh.TshClient> {
@@ -100,6 +110,7 @@ function getClientMocks(): Partial<tsh.TshClient> {
     listServers: jest.fn().mockResolvedValueOnce([serverMock]),
     createGateway: jest.fn().mockResolvedValueOnce(gatewayMock),
     removeGateway: jest.fn().mockResolvedValueOnce(undefined),
+    restartGateway: jest.fn().mockResolvedValueOnce(undefined),
   };
 }
 
@@ -166,34 +177,23 @@ test('sync cluster and its resources', async () => {
 });
 
 test('login into cluster and sync resources', async () => {
-  const {
-    login,
-    listLeafClusters,
-    getCluster,
-    listGateways,
-    listDatabases,
-    listServers,
-  } = getClientMocks();
-  const service = createService({
-    login,
-    listLeafClusters,
-    getCluster,
-    listGateways,
-    listDatabases,
-    listServers,
-  });
+  const client = getClientMocks();
+  const service = createService(client, new NotificationsServiceMock());
   const loginParams = {
     clusterUri,
     local: { username: 'admin', password: 'admin', token: '1234' },
-    oss: { providerType: 'github', providerName: 'GitHub' },
   };
+
+  // Add mocked gateway to service state.
+  await service.syncGateways();
 
   await service.login(loginParams, undefined);
 
-  expect(login).toHaveBeenCalledWith(loginParams, undefined);
-  expect(listGateways).toHaveBeenCalledWith();
-  expect(listDatabases).toHaveBeenCalledWith(clusterUri);
-  expect(listServers).toHaveBeenCalledWith(clusterUri);
+  expect(client.login).toHaveBeenCalledWith(loginParams, undefined);
+  expect(client.listGateways).toHaveBeenCalledWith();
+  expect(client.listDatabases).toHaveBeenCalledWith(clusterUri);
+  expect(client.listServers).toHaveBeenCalledWith(clusterUri);
+  expect(client.restartGateway).toHaveBeenCalledWith(gatewayMock.uri);
   expect(service.findCluster(clusterUri).connected).toBe(true);
 });
 
@@ -221,10 +221,11 @@ test('create a gateway', async () => {
   });
   const targetUri = 'testId';
   const port = '2000';
+  const user = 'alice';
 
-  await service.createGateway({ targetUri, port });
+  await service.createGateway({ targetUri, port, user });
 
-  expect(createGateway).toHaveBeenCalledWith({ targetUri, port });
+  expect(createGateway).toHaveBeenCalledWith({ targetUri, port, user });
   expect(service.state.gateways).toStrictEqual(
     new Map([[gatewayMock.uri, gatewayMock]])
   );

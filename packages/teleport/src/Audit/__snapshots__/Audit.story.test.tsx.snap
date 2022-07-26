@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`list of all events 1`] = `
-.c13 {
+.c16 {
   line-height: 1.5;
   margin: 0;
   display: inline-flex;
@@ -30,49 +30,49 @@ exports[`list of all events 1`] = `
   width: 87px;
 }
 
-.c13:active {
+.c16:active {
   opacity: 0.56;
 }
 
-.c13:hover,
-.c13:focus {
+.c16:hover,
+.c16:focus {
   background: #2C3A73;
   border: 1px solid rgba(255,255,255,0.1);
   opacity: 1;
 }
 
-.c13:active {
+.c16:active {
   opacity: 0.24;
 }
 
-.c13:disabled {
+.c16:disabled {
   background: rgba(255,255,255,0.12);
   color: rgba(255,255,255,0.3);
 }
 
-.c8 {
+.c11 {
   display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
   color: #FFFFFF;
   font-size: 16px;
 }
 
-.c10 {
+.c13 {
   display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
   color: #FFFFFF;
 }
 
-.c12 {
+.c15 {
   display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
   margin-right: 16px;
   padding: 4px;
   color: #FFFFFF;
   font-size: 16px;
 }
 
-.c4 {
+.c6 {
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 400;
@@ -83,24 +83,30 @@ exports[`list of all events 1`] = `
   color: #FFFFFF;
 }
 
-.c2 {
+.c4 {
   box-sizing: border-box;
+  width: 100%;
   display: flex;
+  justify-content: flex-end;
 }
 
-.c3 {
+.c5 {
   box-sizing: border-box;
   margin-right: 8px;
   display: flex;
   align-items: center;
 }
 
-.c9 {
+.c8 {
+  box-sizing: border-box;
+  display: flex;
+}
+
+.c12 {
   background: #222C59;
   box-shadow: 0 4px 16px rgba(0,0,0,0.24);
   border-collapse: collapse;
   border-spacing: 0;
-  border-radius: 8px;
   font-size: 12px;
   width: 100%;
   border-top-left-radius: 0px;
@@ -109,39 +115,39 @@ exports[`list of all events 1`] = `
   border-bottom-left-radius: 8px;
 }
 
-.c9 > thead > tr > th,
-.c9 > tbody > tr > th,
-.c9 > tfoot > tr > th,
-.c9 > thead > tr > td,
-.c9 > tbody > tr > td,
-.c9 > tfoot > tr > td {
+.c12 > thead > tr > th,
+.c12 > tbody > tr > th,
+.c12 > tfoot > tr > th,
+.c12 > thead > tr > td,
+.c12 > tbody > tr > td,
+.c12 > tfoot > tr > td {
   padding: 8px 8px;
   vertical-align: middle;
 }
 
-.c9 > thead > tr > th:first-child,
-.c9 > tbody > tr > th:first-child,
-.c9 > tfoot > tr > th:first-child,
-.c9 > thead > tr > td:first-child,
-.c9 > tbody > tr > td:first-child,
-.c9 > tfoot > tr > td:first-child {
+.c12 > thead > tr > th:first-child,
+.c12 > tbody > tr > th:first-child,
+.c12 > tfoot > tr > th:first-child,
+.c12 > thead > tr > td:first-child,
+.c12 > tbody > tr > td:first-child,
+.c12 > tfoot > tr > td:first-child {
   padding-left: 24px;
 }
 
-.c9 > thead > tr > th:last-child,
-.c9 > tbody > tr > th:last-child,
-.c9 > tfoot > tr > th:last-child,
-.c9 > thead > tr > td:last-child,
-.c9 > tbody > tr > td:last-child,
-.c9 > tfoot > tr > td:last-child {
+.c12 > thead > tr > th:last-child,
+.c12 > tbody > tr > th:last-child,
+.c12 > tfoot > tr > th:last-child,
+.c12 > thead > tr > td:last-child,
+.c12 > tbody > tr > td:last-child,
+.c12 > tfoot > tr > td:last-child {
   padding-right: 24px;
 }
 
-.c9 > tbody > tr > td {
+.c12 > tbody > tr > td {
   vertical-align: baseline;
 }
 
-.c9 > thead > tr > th {
+.c12 > thead > tr > th {
   background: #111B48;
   color: #FFFFFF;
   cursor: pointer;
@@ -155,31 +161,23 @@ exports[`list of all events 1`] = `
   white-space: nowrap;
 }
 
-.c9 > thead > tr > th .c7 {
+.c12 > thead > tr > th .c10 {
   font-weight: bold;
   font-size: 8px;
   margin-left: 8px;
 }
 
-.c9 > tbody > tr > td {
+.c12 > tbody > tr > td {
   color: rgba(255,255,255,0.87);
   line-height: 16px;
 }
 
-.c9 tbody tr {
+.c12 tbody tr {
   border-bottom: 1px solid #1C254D;
 }
 
-.c9 tbody tr:hover {
+.c12 tbody tr:hover {
   background-color: rgb(37,49,98);
-}
-
-.c9 tbody > tr:last-child td:first-child {
-  border-bottom-left-radius: 8px;
-}
-
-.c9 tbody > tr:last-child td:last-child {
-  border-bottom-right-radius: 8px;
 }
 
 .c0 {
@@ -194,32 +192,32 @@ exports[`list of all events 1`] = `
   border-top-right-radius: 8px;
 }
 
-.c6 {
+.c9 {
   background: none;
   border: none;
   cursor: pointer;
 }
 
-.c6 .c7 {
+.c9 .c10 {
   font-size: 20px;
   transition: all 0.3s;
   opacity: 0.5;
 }
 
-.c6:hover .c7,
-.c6:focus .c7 {
+.c9:hover .c10,
+.c9:focus .c10 {
   opacity: 1;
 }
 
-.c6:disabled {
+.c9:disabled {
   cursor: default;
 }
 
-.c6:disabled .c7 {
+.c9:disabled .c10 {
   opacity: 0.1;
 }
 
-.c5 {
+.c7 {
   color: #03a9f4;
   background: none;
   text-decoration: underline;
@@ -231,45 +229,66 @@ exports[`list of all events 1`] = `
   font-size: 12px;
 }
 
-.c5:hover,
-.c5:focus {
+.c7:hover,
+.c7:focus {
   cursor: pointer;
 }
 
-.c5:disabled {
+.c7:disabled {
   color: rgba(255,255,255,0.3);
   cursor: wait;
 }
 
-.c1 {
-  box-sizing: border-box;
-  font-size: 12px;
-  min-width: 200px;
-  outline: none;
-  border: none;
+.c3 {
+  position: absolute;
+  height: 100%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2C3A73;
   border-radius: 200px;
-  height: 32px;
-  transition: all .2s;
-  color: rgba(255,255,255,0.87);
-  background: #111B48;
-  padding-left: 16px;
-  padding-right: 16px;
 }
 
-.c1:hover,
-.c1:focus,
-.c1:active {
+.c1 {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 200px;
+  height: 32px;
+  background: #111B48;
+}
+
+.c2 {
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 12px;
+  width: 100%;
+  transition: all 0.2s;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: rgba(255,255,255,0.87);
+  background: #111B48;
+  padding-right: 184px;
+}
+
+.c2:hover,
+.c2:focus,
+.c2:active {
   background: #1C254D;
   box-shadow: inset 0 2px 4px rgba(0,0,0,.24);
   color: rgba(255,255,255,0.87);
 }
 
-.c1::placeholder {
+.c2::placeholder {
   color: rgba(255,255,255,0.24);
   font-size: 12px;
 }
 
-.c14 {
+.c17 {
   background: #000;
   border: 2px solid #651FFF;
   color: rgba(255,255,255,0.87);
@@ -284,19 +303,19 @@ exports[`list of all events 1`] = `
   transition: all 0.3s;
 }
 
-.c14:hover,
-.c14:active,
-.c14:focus {
+.c17:hover,
+.c17:active,
+.c17:focus {
   box-shadow: 0 4px 16px rgba(0,0,0,0.24);
   color: #FFFFFF;
 }
 
-.c14:active {
+.c17:active {
   box-shadow: none;
   opacity: 0.56;
 }
 
-.c11 {
+.c14 {
   display: flex;
   align-items: center;
   min-width: 130px;
@@ -310,19 +329,27 @@ exports[`list of all events 1`] = `
   <nav
     class="c0"
   >
-    <input
-      class="c1"
-      placeholder="SEARCH..."
-      value=""
-    />
     <div
-      class="c2"
+      class="c1"
     >
+      <input
+        class="c2"
+        placeholder="SEARCH..."
+        value=""
+      />
       <div
         class="c3"
+      />
+    </div>
+    <div
+      class="c4"
+      width="100%"
+    >
+      <div
+        class="c5"
       >
         <div
-          class="c4"
+          class="c6"
           color="primary.contrastText"
         >
           SHOWING 
@@ -331,41 +358,41 @@ exports[`list of all events 1`] = `
           </strong>
            - 
           <strong>
-            73
+            85
           </strong>
            of
            
           <strong>
-            73
+            85
           </strong>
         </div>
         <button
-          class="c5"
+          class="c7"
         >
           Fetch More
         </button>
       </div>
       <div
-        class="c2"
+        class="c8"
       >
         <button
-          class="c6"
+          class="c9"
           disabled=""
           title="Previous page"
         >
           <span
-            class="c7 c8 icon icon-arrow-left-circle "
+            class="c10 c11 icon icon-arrow-left-circle "
             color="light"
             font-size="3"
           />
         </button>
         <button
-          class="c6"
+          class="c9"
           disabled=""
           title="Next page"
         >
           <span
-            class="c7 c8 icon icon-arrow-right-circle "
+            class="c10 c11 icon icon-arrow-right-circle "
             color="light"
             font-size="3"
           />
@@ -374,7 +401,7 @@ exports[`list of all events 1`] = `
     </div>
   </nav>
   <table
-    class="c9"
+    class="c12"
   >
     <thead>
       <tr>
@@ -382,24 +409,28 @@ exports[`list of all events 1`] = `
           <a>
             Type
             <span
-              class="c7 c10 icon icon-chevrons-expand-vertical "
+              class="c10 c13 icon icon-chevrons-expand-vertical "
               color="light"
             />
           </a>
         </th>
-        <th>
+        <th
+          style="cursor: default;"
+        >
           Description
         </th>
         <th>
           <a>
-            Created
+            Created (UTC)
             <span
-              class="c7 c10 icon icon-chevron-down "
+              class="c10 c13 icon icon-chevron-down "
               color="light"
             />
           </a>
         </th>
-        <th />
+        <th
+          style="cursor: default;"
+        />
       </tr>
     </thead>
     <tbody>
@@ -408,10 +439,454 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
+              color="light"
+              font-size="3"
+            />
+            Resource Access Request Search
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [foo] searched for resource type [db_server] with role(s) [admin]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-06-08T15:10:35.368Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            Database Malformed Packet
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          Recived malformed packet from [alice] in [master] on database [sqlserver02]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-06-02T08:46:33.825Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            SQLServer RPC Request
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice] has send RPC Request [undefined] in database [master] on [sqlserver02]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-06-02T08:29:17.693Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-info_outline c10 c15"
+              color="light"
+              font-size="3"
+            />
+            SSO Test Flow Login Failed
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          SSO Test flow: user login failed [No roles mapped from claims. The mappings may contain typos.]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-05-23T08:29:14.126Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-info_outline c10 c15"
+              color="light"
+              font-size="3"
+            />
+            SSO Test Flow Login
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          SSO Test Flow: user [ops@gravitational.io] successfully logged in
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-05-23T08:28:37.067Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Change Database
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has changed default database to [another_database] on [self-hosted-mysql]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:10.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Create Database
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has created database [another_database] on [self-hosted-mysql]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:09.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Drop Database
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has dropped database [another_database] on [self-hosted-mysql]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:08.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Shut Down
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has attempted to shut down [self-hosted-mysql]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:07.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Kill Process
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has attempted to kill process [60] on [self-hosted-mysql]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:06.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Debug
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has asked [self-hosted-mysql] to dump debug information
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:05.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
+              color="light"
+              font-size="3"
+            />
+            MySQL Refresh
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          User [alice@example.com] has sent command [REFRESH_THREADS] to [self-hosted-mysql]
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2022-04-13T20:00:04.000Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c16"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c14"
+          >
+            <span
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -426,13 +901,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:56
+          2022-02-10T20:57:56.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -445,10 +920,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -463,13 +938,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:55
+          2022-02-10T20:57:55.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -482,10 +957,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -500,13 +975,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:54
+          2022-02-10T20:57:54.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -519,10 +994,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -537,13 +1012,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:53
+          2022-02-10T20:57:53.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -556,10 +1031,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -574,13 +1049,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:52
+          2022-02-10T20:57:52.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -593,10 +1068,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -611,13 +1086,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:51
+          2022-02-10T20:57:51.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -630,10 +1105,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -648,13 +1123,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-10 20:57:50
+          2022-02-10T20:57:50.000Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -667,10 +1142,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-keypair c7 c12"
+              class="c10 c15 icon icon-keypair c10 c15"
               color="light"
               font-size="3"
             />
@@ -685,13 +1160,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-04 19:43:23
+          2022-02-04T19:43:23.529Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -704,10 +1179,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -722,13 +1197,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-02-04 18:15:28
+          2022-02-04T18:15:28.572Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -741,10 +1216,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -759,13 +1234,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-01-20 19:49:02
+          2022-01-20T19:49:02.307Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -778,10 +1253,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -796,13 +1271,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2022-01-20 18:31:45
+          2022-01-20T18:31:45.012Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -815,10 +1290,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -833,13 +1308,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-12-16 00:40:37
+          2021-12-16T00:40:37.073Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -852,10 +1327,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -870,13 +1345,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-12-16 00:40:37
+          2021-12-16T00:40:37.073Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -889,10 +1364,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -907,13 +1382,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-12-16 00:40:37
+          2021-12-16T00:40:37.071Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -926,10 +1401,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -944,13 +1419,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-12-16 00:40:37
+          2021-12-16T00:40:37.071Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -963,10 +1438,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -981,13 +1456,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-12-16 00:40:37
+          2021-12-16T00:40:37.069Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1000,10 +1475,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -1018,13 +1493,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-11-01 22:24:47
+          2021-11-01T22:24:47.99Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1037,10 +1512,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-clipboard-text c7 c12"
+              class="c10 c15 icon icon-clipboard-text c10 c15"
               color="light"
               font-size="3"
             />
@@ -1055,13 +1530,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-18 23:39:13
+          2021-10-18T23:39:13.105Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1074,10 +1549,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-clipboard-text c7 c12"
+              class="c10 c15 icon icon-clipboard-text c10 c15"
               color="light"
               font-size="3"
             />
@@ -1092,13 +1567,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-18 23:39:13
+          2021-10-18T23:39:13.105Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1111,10 +1586,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-desktop c7 c12"
+              class="c10 c15 icon icon-desktop c10 c15"
               color="light"
               font-size="3"
             />
@@ -1129,13 +1604,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-18 23:39:13
+          2021-10-18T23:39:13.105Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1148,10 +1623,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-desktop c7 c12"
+              class="c10 c15 icon icon-desktop c10 c15"
               color="light"
               font-size="3"
             />
@@ -1166,13 +1641,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-18 23:19:13
+          2021-10-18T23:19:13.105Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1185,10 +1660,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-desktop c7 c12"
+              class="c10 c15 icon icon-desktop c10 c15"
               color="light"
               font-size="3"
             />
@@ -1203,13 +1678,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-18 23:18:29
+          2021-10-18T23:18:29.144Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1222,10 +1697,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1240,13 +1715,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-08 15:42:36
+          2021-10-08T15:42:36.005Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1259,10 +1734,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1277,13 +1752,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-08 15:42:24
+          2021-10-08T15:42:24.581Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1296,10 +1771,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1314,13 +1789,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-10-08 15:42:15
+          2021-10-08T15:42:15.39Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1333,10 +1808,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-unlock c7 c12"
+              class="c10 c15 icon icon-unlock c10 c15"
               color="light"
               font-size="3"
             />
@@ -1351,13 +1826,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-08-06 18:49:51
+          2021-08-06T18:49:51.626Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1370,10 +1845,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-lock c7 c12"
+              class="c10 c15 icon icon-lock c10 c15"
               color="light"
               font-size="3"
             />
@@ -1388,13 +1863,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-08-06 18:47:19
+          2021-08-06T18:47:19.75Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1407,10 +1882,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-vpn_key c7 c12"
+              class="c10 c15 icon icon-vpn_key c10 c15"
               color="light"
               font-size="3"
             />
@@ -1425,13 +1900,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-08-05 23:32:41
+          2021-08-05T23:32:41.273Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1444,10 +1919,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -1462,13 +1937,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-08-05 21:41:14
+          2021-08-05T21:41:14.935Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1481,10 +1956,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-vpn_key c7 c12"
+              class="c10 c15 icon icon-vpn_key c10 c15"
               color="light"
               font-size="3"
             />
@@ -1499,13 +1974,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-08-05 21:22:46
+          2021-08-05T21:22:46.042Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1518,10 +1993,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-keypair c7 c12"
+              class="c10 c15 icon icon-keypair c10 c15"
               color="light"
               font-size="3"
             />
@@ -1536,13 +2011,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-08-05 21:16:17
+          2021-08-05T21:16:17.13Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1555,10 +2030,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1573,13 +2048,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-07-14 07:06:25
+          2021-07-14T07:06:25.608Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1592,10 +2067,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1610,13 +2085,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-07-14 07:05:22
+          2021-07-14T07:05:22.32Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1629,10 +2104,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1647,13 +2122,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-07-14 07:03:49
+          2021-07-14T07:03:49.783Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1666,10 +2141,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-database c7 c12"
+              class="c10 c15 icon icon-database c10 c15"
               color="light"
               font-size="3"
             />
@@ -1684,13 +2159,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-07-14 07:01:31
+          2021-07-14T07:01:31.958Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1703,10 +2178,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -1721,13 +2196,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-05-21 22:54:27
+          2021-05-21T22:54:27.123Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1740,10 +2215,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -1758,13 +2233,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-05-12 01:26:22
+          2021-05-12T01:26:22.613Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1777,7 +2252,7 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <a
               href="/web/cluster/im-a-cluster/session/941a4c65-c6cd-11ea-9bef-482ae3513733?recordingType=ssh"
@@ -1786,7 +2261,7 @@ exports[`list of all events 1`] = `
               title="Open Session Player"
             >
               <span
-                class="c7 c12 icon icon-terminal c14"
+                class="c10 c15 icon icon-terminal c17"
                 color="light"
                 font-size="3"
               />
@@ -1802,13 +2277,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-05-12 01:26:22
+          2021-05-12T01:26:22.613Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1821,10 +2296,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-credit-card c7 c12"
+              class="c10 c15 icon icon-credit-card c10 c15"
               color="light"
               font-size="3"
             />
@@ -1839,13 +2314,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-03-18 16:29:15
+          2021-03-18T16:29:15.719Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1858,10 +2333,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-credit-card c7 c12"
+              class="c10 c15 icon icon-credit-card c10 c15"
               color="light"
               font-size="3"
             />
@@ -1876,13 +2351,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-03-18 16:29:05
+          2021-03-18T16:29:05.044Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1895,10 +2370,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-credit-card c7 c12"
+              class="c10 c15 icon icon-credit-card c10 c15"
               color="light"
               font-size="3"
             />
@@ -1913,13 +2388,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-03-18 16:28:51
+          2021-03-18T16:28:51.219Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1932,10 +2407,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-credit-card c7 c12"
+              class="c10 c15 icon icon-credit-card c10 c15"
               color="light"
               font-size="3"
             />
@@ -1950,13 +2425,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-03-18 16:28:49
+          2021-03-18T16:28:49.067Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -1969,10 +2444,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -1987,13 +2462,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-03-03 22:58:44
+          2021-03-03T22:58:44.737Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2006,10 +2481,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2024,13 +2499,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2021-03-03 22:58:34
+          2021-03-03T22:58:34.737Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2043,10 +2518,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-kubernetes c7 c12"
+              class="c10 c15 icon icon-kubernetes c10 c15"
               color="light"
               font-size="3"
             />
@@ -2061,13 +2536,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-11-12 20:35:44
+          2020-11-12T20:35:44.978Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2080,10 +2555,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2098,13 +2573,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-10-30 17:28:14
+          2020-10-30T17:28:14.705Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2117,10 +2592,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2135,13 +2610,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-10-30 17:28:14
+          2020-10-30T17:28:14.705Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2154,10 +2629,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2172,13 +2647,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-10-30 17:28:14
+          2020-10-30T17:28:14.381Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2191,10 +2666,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2209,13 +2684,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:29:14
+          2020-06-05T19:29:14Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2228,10 +2703,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2246,13 +2721,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:28:28
+          2020-06-05T19:28:28Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2265,10 +2740,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2283,13 +2758,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:28:00
+          2020-06-05T19:28:00Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2302,10 +2777,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2320,13 +2795,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:26:53
+          2020-06-05T19:26:53Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2339,10 +2814,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2357,13 +2832,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:26:53
+          2020-06-05T19:26:53Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2376,10 +2851,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2394,13 +2869,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:26:53
+          2020-06-05T19:26:53Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2413,10 +2888,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2431,13 +2906,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 19:26:53
+          2020-06-05T19:26:53Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2450,10 +2925,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2468,13 +2943,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 16:24:22
+          2020-06-05T16:24:22Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2487,10 +2962,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2505,13 +2980,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 16:24:05
+          2020-06-05T16:24:05Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2524,10 +2999,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2542,13 +3017,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 16:24:05
+          2020-06-05T16:24:05Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2561,10 +3036,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -2579,13 +3054,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 16:24:05
+          2020-06-05T16:24:05Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2598,10 +3073,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2616,13 +3091,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 15:14:51
+          2020-06-05T15:14:51Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2635,10 +3110,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2653,13 +3128,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 15:14:51
+          2020-06-05T15:14:51Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2672,10 +3147,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2690,13 +3165,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-01-13 18:05:53
+          2020-01-13T18:05:53.919Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2709,10 +3184,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-file_upload c7 c12"
+              class="c10 c15 icon icon-file_upload c10 c15"
               color="light"
               font-size="3"
             />
@@ -2727,13 +3202,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:41:23
+          2019-04-22T19:41:23Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2746,10 +3221,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-get_app c7 c12"
+              class="c10 c15 icon icon-get_app c10 c15"
               color="light"
               font-size="3"
             />
@@ -2764,13 +3239,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:41:23
+          2019-04-22T19:41:23Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2783,10 +3258,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-get_app c7 c12"
+              class="c10 c15 icon icon-get_app c10 c15"
               color="light"
               font-size="3"
             />
@@ -2801,13 +3276,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:41:23
+          2019-04-22T19:41:23Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2820,10 +3295,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2838,13 +3313,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:52
+          2019-04-22T19:39:52.434Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2857,10 +3332,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2875,13 +3350,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:52
+          2019-04-22T19:39:52.432Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2894,10 +3369,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2912,13 +3387,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:26
+          2019-04-22T19:39:26.676Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2931,10 +3406,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2949,13 +3424,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:26
+          2019-04-22T19:39:26.676Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -2968,10 +3443,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-terminal c7 c12"
+              class="c10 c15 icon icon-terminal c10 c15"
               color="light"
               font-size="3"
             />
@@ -2981,18 +3456,18 @@ exports[`list of all events 1`] = `
         <td
           style="word-break: break-word;"
         >
-          Program [bash] opened a connection [10.217.136.161 &lt;-&gt; 190.58.129.4:3000] within a session [44c6cea8-362f-11ea-83aa-125400432324]
+          [DENY] Program [bash] was prevented from opening a connection [10.217.136.161 &lt;-&gt; 190.58.129.4:3000] within a session [44c6cea8-362f-11ea-83aa-125400432324]
         </td>
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:26
+          2019-04-22T19:39:26.676Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -3005,10 +3480,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -3023,13 +3498,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 18:06:32
+          2019-04-22T18:06:32Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -3042,10 +3517,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -3060,13 +3535,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 02:09:06
+          2019-04-22T02:09:06Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -3079,10 +3554,10 @@ exports[`list of all events 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c11"
+            class="c14"
           >
             <span
-              class="c7 c12 icon icon-info_outline c7 c12"
+              class="c10 c15 icon icon-info_outline c10 c15"
               color="light"
               font-size="3"
             />
@@ -3097,13 +3572,13 @@ exports[`list of all events 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 00:49:03
+          2019-04-22T00:49:03Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c13"
+            class="c16"
             kind="border"
             width="87px"
           >
@@ -3117,7 +3592,7 @@ exports[`list of all events 1`] = `
 `;
 
 exports[`loaded audit log screen 1`] = `
-.c17 {
+.c20 {
   line-height: 1.5;
   margin: 0;
   display: inline-flex;
@@ -3146,49 +3621,49 @@ exports[`loaded audit log screen 1`] = `
   width: 87px;
 }
 
-.c17:active {
+.c20:active {
   opacity: 0.56;
 }
 
-.c17:hover,
-.c17:focus {
+.c20:hover,
+.c20:focus {
   background: #2C3A73;
   border: 1px solid rgba(255,255,255,0.1);
   opacity: 1;
 }
 
-.c17:active {
+.c20:active {
   opacity: 0.24;
 }
 
-.c17:disabled {
+.c20:disabled {
   background: rgba(255,255,255,0.12);
   color: rgba(255,255,255,0.3);
 }
 
-.c12 {
+.c15 {
   display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
   color: #FFFFFF;
   font-size: 16px;
 }
 
-.c14 {
+.c17 {
   display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
   color: #FFFFFF;
 }
 
-.c16 {
+.c19 {
   display: inline-block;
-  transition: color .3s;
+  transition: color 0.3s;
   margin-right: 16px;
   padding: 4px;
   color: #FFFFFF;
   font-size: 16px;
 }
 
-.c9 {
+.c11 {
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 400;
@@ -3199,219 +3674,23 @@ exports[`loaded audit log screen 1`] = `
   color: #FFFFFF;
 }
 
-.c7 {
+.c9 {
   box-sizing: border-box;
+  width: 100%;
   display: flex;
+  justify-content: flex-end;
 }
 
-.c8 {
+.c10 {
   box-sizing: border-box;
   margin-right: 8px;
   display: flex;
   align-items: center;
 }
 
-.c1 {
+.c12 {
   box-sizing: border-box;
-  margin-bottom: 24px;
   display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  border-bottom: 1px solid #1C254D;
-  height: 56px;
-  margin-left: -40px;
-  margin-right: -40px;
-  padding-left: 40px;
-  padding-right: 40px;
-}
-
-.c2 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 300;
-  font-size: 22px;
-  line-height: 32px;
-  margin: 0px;
-  margin-right: 56px;
-  white-space: nowrap;
-}
-
-.c0 {
-  box-sizing: border-box;
-  padding-left: 40px;
-  padding-right: 40px;
-  display: flex;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-}
-
-.c0::after {
-  content: ' ';
-  padding-bottom: 24px;
-}
-
-.c13 {
-  background: #222C59;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.24);
-  border-collapse: collapse;
-  border-spacing: 0;
-  border-radius: 8px;
-  font-size: 12px;
-  width: 100%;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
-
-.c13 > thead > tr > th,
-.c13 > tbody > tr > th,
-.c13 > tfoot > tr > th,
-.c13 > thead > tr > td,
-.c13 > tbody > tr > td,
-.c13 > tfoot > tr > td {
-  padding: 8px 8px;
-  vertical-align: middle;
-}
-
-.c13 > thead > tr > th:first-child,
-.c13 > tbody > tr > th:first-child,
-.c13 > tfoot > tr > th:first-child,
-.c13 > thead > tr > td:first-child,
-.c13 > tbody > tr > td:first-child,
-.c13 > tfoot > tr > td:first-child {
-  padding-left: 24px;
-}
-
-.c13 > thead > tr > th:last-child,
-.c13 > tbody > tr > th:last-child,
-.c13 > tfoot > tr > th:last-child,
-.c13 > thead > tr > td:last-child,
-.c13 > tbody > tr > td:last-child,
-.c13 > tfoot > tr > td:last-child {
-  padding-right: 24px;
-}
-
-.c13 > tbody > tr > td {
-  vertical-align: baseline;
-}
-
-.c13 > thead > tr > th {
-  background: #111B48;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: 400;
-  padding-bottom: 0;
-  padding-top: 0;
-  text-align: left;
-  opacity: 0.75;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.c13 > thead > tr > th .c11 {
-  font-weight: bold;
-  font-size: 8px;
-  margin-left: 8px;
-}
-
-.c13 > tbody > tr > td {
-  color: rgba(255,255,255,0.87);
-  line-height: 16px;
-}
-
-.c13 tbody tr {
-  border-bottom: 1px solid #1C254D;
-}
-
-.c13 tbody tr:hover {
-  background-color: rgb(37,49,98);
-}
-
-.c13 tbody > tr:last-child td:first-child {
-  border-bottom-left-radius: 8px;
-}
-
-.c13 tbody > tr:last-child td:last-child {
-  border-bottom-right-radius: 8px;
-}
-
-.c5 {
-  padding: 16px 24px;
-  display: flex;
-  height: 24px;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: space-between;
-  background: #222C59;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-.c10 {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.c10 .c11 {
-  font-size: 20px;
-  transition: all 0.3s;
-  opacity: 0.5;
-}
-
-.c10:hover .c11,
-.c10:focus .c11 {
-  opacity: 1;
-}
-
-.c10:disabled {
-  cursor: default;
-}
-
-.c10:disabled .c11 {
-  opacity: 0.1;
-}
-
-.c6 {
-  box-sizing: border-box;
-  font-size: 12px;
-  min-width: 200px;
-  outline: none;
-  border: none;
-  border-radius: 200px;
-  height: 32px;
-  transition: all .2s;
-  color: rgba(255,255,255,0.87);
-  background: #111B48;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-.c6:hover,
-.c6:focus,
-.c6:active {
-  background: #1C254D;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,.24);
-  color: rgba(255,255,255,0.87);
-}
-
-.c6::placeholder {
-  color: rgba(255,255,255,0.24);
-  font-size: 12px;
-}
-
-.c15 {
-  display: flex;
-  align-items: center;
-  min-width: 130px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 24px;
-  white-space: nowrap;
 }
 
 .c4 .react-select-container {
@@ -3662,6 +3941,221 @@ exports[`loaded audit log screen 1`] = `
   color: rgba(255,255,255,0.24);
 }
 
+.c1 {
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-bottom: 1px solid #1C254D;
+  height: 56px;
+  margin-left: -40px;
+  margin-right: -40px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.c2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 32px;
+  margin: 0px;
+  margin-right: 56px;
+  white-space: nowrap;
+}
+
+.c0 {
+  box-sizing: border-box;
+  padding-left: 40px;
+  padding-right: 40px;
+  display: flex;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.c0::after {
+  content: ' ';
+  padding-bottom: 24px;
+}
+
+.c16 {
+  background: #222C59;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.24);
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 12px;
+  width: 100%;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.c16 > thead > tr > th,
+.c16 > tbody > tr > th,
+.c16 > tfoot > tr > th,
+.c16 > thead > tr > td,
+.c16 > tbody > tr > td,
+.c16 > tfoot > tr > td {
+  padding: 8px 8px;
+  vertical-align: middle;
+}
+
+.c16 > thead > tr > th:first-child,
+.c16 > tbody > tr > th:first-child,
+.c16 > tfoot > tr > th:first-child,
+.c16 > thead > tr > td:first-child,
+.c16 > tbody > tr > td:first-child,
+.c16 > tfoot > tr > td:first-child {
+  padding-left: 24px;
+}
+
+.c16 > thead > tr > th:last-child,
+.c16 > tbody > tr > th:last-child,
+.c16 > tfoot > tr > th:last-child,
+.c16 > thead > tr > td:last-child,
+.c16 > tbody > tr > td:last-child,
+.c16 > tfoot > tr > td:last-child {
+  padding-right: 24px;
+}
+
+.c16 > tbody > tr > td {
+  vertical-align: baseline;
+}
+
+.c16 > thead > tr > th {
+  background: #111B48;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 400;
+  padding-bottom: 0;
+  padding-top: 0;
+  text-align: left;
+  opacity: 0.75;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.c16 > thead > tr > th .c14 {
+  font-weight: bold;
+  font-size: 8px;
+  margin-left: 8px;
+}
+
+.c16 > tbody > tr > td {
+  color: rgba(255,255,255,0.87);
+  line-height: 16px;
+}
+
+.c16 tbody tr {
+  border-bottom: 1px solid #1C254D;
+}
+
+.c16 tbody tr:hover {
+  background-color: rgb(37,49,98);
+}
+
+.c5 {
+  padding: 16px 24px;
+  display: flex;
+  height: 24px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  background: #222C59;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.c13 {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.c13 .c14 {
+  font-size: 20px;
+  transition: all 0.3s;
+  opacity: 0.5;
+}
+
+.c13:hover .c14,
+.c13:focus .c14 {
+  opacity: 1;
+}
+
+.c13:disabled {
+  cursor: default;
+}
+
+.c13:disabled .c14 {
+  opacity: 0.1;
+}
+
+.c8 {
+  position: absolute;
+  height: 100%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2C3A73;
+  border-radius: 200px;
+}
+
+.c6 {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 200px;
+  height: 32px;
+  background: #111B48;
+}
+
+.c7 {
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 12px;
+  width: 100%;
+  transition: all 0.2s;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: rgba(255,255,255,0.87);
+  background: #111B48;
+  padding-right: 184px;
+}
+
+.c7:hover,
+.c7:focus,
+.c7:active {
+  background: #1C254D;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.24);
+  color: rgba(255,255,255,0.87);
+}
+
+.c7::placeholder {
+  color: rgba(255,255,255,0.24);
+  font-size: 12px;
+}
+
+.c18 {
+  display: flex;
+  align-items: center;
+  min-width: 130px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
 <div
   class="c0"
 >
@@ -3735,19 +4229,27 @@ exports[`loaded audit log screen 1`] = `
   <nav
     class="c5"
   >
-    <input
-      class="c6"
-      placeholder="SEARCH..."
-      value=""
-    />
     <div
-      class="c7"
+      class="c6"
     >
+      <input
+        class="c7"
+        placeholder="SEARCH..."
+        value=""
+      />
       <div
         class="c8"
+      />
+    </div>
+    <div
+      class="c9"
+      width="100%"
+    >
+      <div
+        class="c10"
       >
         <div
-          class="c9"
+          class="c11"
           color="primary.contrastText"
         >
           SHOWING 
@@ -3756,36 +4258,36 @@ exports[`loaded audit log screen 1`] = `
           </strong>
            - 
           <strong>
-            4
+            5
           </strong>
            of
            
           <strong>
-            4
+            5
           </strong>
         </div>
       </div>
       <div
-        class="c7"
+        class="c12"
       >
         <button
-          class="c10"
+          class="c13"
           disabled=""
           title="Previous page"
         >
           <span
-            class="c11 c12 icon icon-arrow-left-circle "
+            class="c14 c15 icon icon-arrow-left-circle "
             color="light"
             font-size="3"
           />
         </button>
         <button
-          class="c10"
+          class="c13"
           disabled=""
           title="Next page"
         >
           <span
-            class="c11 c12 icon icon-arrow-right-circle "
+            class="c14 c15 icon icon-arrow-right-circle "
             color="light"
             font-size="3"
           />
@@ -3794,7 +4296,7 @@ exports[`loaded audit log screen 1`] = `
     </div>
   </nav>
   <table
-    class="c13"
+    class="c16"
   >
     <thead>
       <tr>
@@ -3802,24 +4304,28 @@ exports[`loaded audit log screen 1`] = `
           <a>
             Type
             <span
-              class="c11 c14 icon icon-chevrons-expand-vertical "
+              class="c14 c17 icon icon-chevrons-expand-vertical "
               color="light"
             />
           </a>
         </th>
-        <th>
+        <th
+          style="cursor: default;"
+        >
           Description
         </th>
         <th>
           <a>
-            Created
+            Created (UTC)
             <span
-              class="c11 c14 icon icon-chevron-down "
+              class="c14 c17 icon icon-chevron-down "
               color="light"
             />
           </a>
         </th>
-        <th />
+        <th
+          style="cursor: default;"
+        />
       </tr>
     </thead>
     <tbody>
@@ -3828,10 +4334,10 @@ exports[`loaded audit log screen 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c15"
+            class="c18"
           >
             <span
-              class="c11 c16 icon icon-info_outline c11 c16"
+              class="c14 c19 icon icon-info_outline c14 c19"
               color="light"
               font-size="3"
             />
@@ -3846,13 +4352,13 @@ exports[`loaded audit log screen 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 16:24:05
+          2020-06-05T16:24:05Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c17"
+            class="c20"
             kind="border"
             width="87px"
           >
@@ -3865,10 +4371,10 @@ exports[`loaded audit log screen 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c15"
+            class="c18"
           >
             <span
-              class="c11 c16 icon icon-info_outline c11 c16"
+              class="c14 c19 icon icon-info_outline c14 c19"
               color="light"
               font-size="3"
             />
@@ -3883,13 +4389,13 @@ exports[`loaded audit log screen 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2020-06-05 16:24:05
+          2020-06-05T16:24:05Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c17"
+            class="c20"
             kind="border"
             width="87px"
           >
@@ -3902,10 +4408,47 @@ exports[`loaded audit log screen 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c15"
+            class="c18"
           >
             <span
-              class="c11 c16 icon icon-terminal c11 c16"
+              class="c14 c19 icon icon-question-circle c14 c19"
+              color="light"
+              font-size="3"
+            />
+            Unknown Event
+          </div>
+        </td>
+        <td
+          style="word-break: break-word;"
+        >
+          Unknown 'unimplemented.event' event (abc123)
+        </td>
+        <td
+          style="min-width: 120px;"
+        >
+          2019-04-22T19:39:26.676Z
+        </td>
+        <td
+          align="right"
+        >
+          <button
+            class="c20"
+            kind="border"
+            width="87px"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="vertical-align: inherit;"
+        >
+          <div
+            class="c18"
+          >
+            <span
+              class="c14 c19 icon icon-terminal c14 c19"
               color="light"
               font-size="3"
             />
@@ -3920,13 +4463,13 @@ exports[`loaded audit log screen 1`] = `
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:26
+          2019-04-22T19:39:26.676Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c17"
+            class="c20"
             kind="border"
             width="87px"
           >
@@ -3939,10 +4482,10 @@ exports[`loaded audit log screen 1`] = `
           style="vertical-align: inherit;"
         >
           <div
-            class="c15"
+            class="c18"
           >
             <span
-              class="c11 c16 icon icon-terminal c11 c16"
+              class="c14 c19 icon icon-terminal c14 c19"
               color="light"
               font-size="3"
             />
@@ -3952,18 +4495,18 @@ exports[`loaded audit log screen 1`] = `
         <td
           style="word-break: break-word;"
         >
-          Program [bash] opened a connection [10.217.136.161 &lt;-&gt; 190.58.129.4:3000] within a session [44c6cea8-362f-11ea-83aa-125400432324]
+          [ALLOW] Program [bash] successfully opened a connection [10.217.136.161 &lt;-&gt; 190.58.129.4:3000] within a session [44c6cea8-362f-11ea-83aa-125400432324]
         </td>
         <td
           style="min-width: 120px;"
         >
-          2019-04-22 19:39:26
+          2019-04-22T19:39:26.676Z
         </td>
         <td
           align="right"
         >
           <button
-            class="c17"
+            class="c20"
             kind="border"
             width="87px"
           >

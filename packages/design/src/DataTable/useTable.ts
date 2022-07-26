@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import isMatch from 'design/utils/match';
-import { displayDate } from 'shared/services/loc';
+
+import isMatch, { MatchCallback } from 'design/utils/match';
+
 import paginateData from './Pager/paginateData';
 import { TableProps, TableColumn } from './types';
 
@@ -9,20 +10,33 @@ export default function useTable<T>({
   columns,
   pagination,
   showFirst,
+  searchableProps,
+  customSearchMatchers = [],
+  serversideProps,
+  fetching,
+  customSort,
+  disableFilter = false,
   ...props
 }: TableProps<T>) {
   const [state, setState] = useState(() => {
     // Finds the first sortable column to use for the initial sorting
-    const col = props.initialSort
-      ? columns.find(column => column.key === props.initialSort.key)
-      : columns.find(column => column.isSortable);
+    let col: TableColumn<T>;
+    if (!customSort) {
+      if (props.initialSort) {
+        col = props.initialSort.altSortKey
+          ? columns.find(col => col.altSortKey === props.initialSort.altSortKey)
+          : columns.find(col => col.key === props.initialSort.key);
+      } else {
+        col = columns.find(column => column.isSortable);
+      }
+    }
 
     return {
-      data: [] as T[],
+      data: serversideProps || disableFilter ? data : [],
       searchValue: '',
       sort: col
         ? {
-            key: col.key as string,
+            key: (col.altSortKey || col.key) as string,
             onSort: col.onSort,
             dir: props.initialSort?.dir || 'ASC',
           }
@@ -32,22 +46,42 @@ export default function useTable<T>({
             paginatedData: paginateData(data, pagination.pageSize),
             currentPage: 0,
             pagerPosition: pagination.pagerPosition || 'top',
-            pageSize: pagination.pageSize || 10,
+            pageSize: pagination.pageSize || 15,
           }
         : null,
     };
   });
 
-  const updateData = (sort: typeof state.sort, searchValue: string) => {
-    const sortedAndFiltered = sortAndFilter(
-      data,
-      searchValue,
-      sort,
-      columns.map(column => column.key),
-      showFirst
-    );
+  function searchAndFilterCb(
+    targetValue: any,
+    searchValue: string,
+    propName: keyof T & string
+  ) {
+    for (const matcher of customSearchMatchers) {
+      const isMatched = matcher(targetValue, searchValue, propName);
+      if (isMatched) {
+        return true;
+      }
+    }
 
-    if (pagination) {
+    // No match found.
+    return false;
+  }
+
+  const updateData = (sort: typeof state.sort, searchValue: string) => {
+    // Don't do clientside sorting and filtering if serversideProps are defined
+    const sortedAndFiltered = serversideProps
+      ? data
+      : sortAndFilter(
+          data,
+          searchValue,
+          sort,
+          searchableProps ||
+            columns.filter(column => column.key).map(column => column.key),
+          searchAndFilterCb,
+          showFirst
+        );
+    if (pagination && !serversideProps) {
       setState({
         ...state,
         sort,
@@ -70,9 +104,17 @@ export default function useTable<T>({
   };
 
   function onSort(column: TableColumn<any>) {
+    if (customSort) {
+      customSort.onSort({
+        fieldName: column.key,
+        dir: customSort.dir === 'ASC' ? 'DESC' : 'ASC',
+      });
+      return;
+    }
+
     updateData(
       {
-        key: column.key,
+        key: column.altSortKey || column.key,
         onSort: column.onSort,
         dir: state.sort?.dir === 'ASC' ? 'DESC' : 'ASC',
       },
@@ -85,6 +127,9 @@ export default function useTable<T>({
   }
 
   function nextPage() {
+    if (serversideProps) {
+      fetching.onFetchNext();
+    }
     setState({
       ...state,
       pagination: {
@@ -95,6 +140,9 @@ export default function useTable<T>({
   }
 
   function prevPage() {
+    if (serversideProps) {
+      fetching.onFetchPrev();
+    }
     setState({
       ...state,
       pagination: {
@@ -105,8 +153,15 @@ export default function useTable<T>({
   }
 
   useEffect(() => {
-    updateData(state.sort, state.searchValue);
-  }, [data]);
+    if (serversideProps || disableFilter) {
+      setState({
+        ...state,
+        data,
+      });
+    } else {
+      updateData(state.sort, state.searchValue);
+    }
+  }, [data, serversideProps]);
 
   return {
     state,
@@ -116,6 +171,9 @@ export default function useTable<T>({
     onSort,
     nextPage,
     prevPage,
+    fetching,
+    serversideProps,
+    customSort,
     ...props,
   };
 }
@@ -124,16 +182,16 @@ function sortAndFilter<T>(
   data: T[] = [],
   searchValue = '',
   sort: State<T>['state']['sort'],
-  columnKeys: (keyof T)[],
+  searchableProps: (keyof T & string)[],
+  searchAndFilterCb: MatchCallback<T>,
   showFirst?: TableProps<T>['showFirst']
 ) {
   const output = data.filter(obj =>
     isMatch(obj, searchValue, {
-      searchableProps: columnKeys,
+      searchableProps,
       cb: searchAndFilterCb,
     })
   );
-
   if (sort) {
     if (sort.onSort) {
       output.sort((a, b) => sort.onSort(a[sort.key], b[sort.key]));
@@ -165,21 +223,6 @@ function sortAndFilter<T>(
   }
 
   return output;
-}
-
-function searchAndFilterCb<T>(
-  targetValue: any,
-  searchValue: string,
-  propName: keyof T & string
-) {
-  if (propName === 'tags') {
-    return targetValue.some(item => {
-      return item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase());
-    });
-  }
-  if (propName.toLocaleLowerCase().includes('date')) {
-    return displayDate(targetValue).includes(searchValue);
-  }
 }
 
 export type State<T> = Omit<

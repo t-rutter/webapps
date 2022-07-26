@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gravitational, Inc.
+Copyright 2019-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import * as Icon from '../Icon';
+
 import Flex from './../Flex';
 
 export default {
@@ -34,6 +36,8 @@ export const ListOfIcons = () => (
     <IconBox IconCmpt={Icon.AppRollback} text="AppRollback" />
     <IconBox IconCmpt={Icon.Archive} text="Archive" />
     <IconBox IconCmpt={Icon.ArrowDown} text="ArrowDown" />
+    <IconBox IconCmpt={Icon.ArrowForward} text="ArrowForward" />
+    <IconBox IconCmpt={Icon.ArrowBack} text="ArrowBack" />
     <IconBox IconCmpt={Icon.ArrowLeft} text="ArrowLeft" />
     <IconBox IconCmpt={Icon.ArrowRight} text="ArrowRight" />
     <IconBox IconCmpt={Icon.ArrowsVertical} text="ArrowsVertical" />
@@ -52,6 +56,7 @@ export const ListOfIcons = () => (
     <IconBox IconCmpt={Icon.CarrotSort} text="CarrotSort" />
     <IconBox IconCmpt={Icon.CarrotUp} text="CarrotUp" />
     <IconBox IconCmpt={Icon.Cash} text="Cash" />
+    <IconBox IconCmpt={Icon.ChatBubble} text="ChatBubble" />
     <IconBox IconCmpt={Icon.ChevronCircleDown} text="ChevronCircleDown" />
     <IconBox IconCmpt={Icon.ChevronCircleLeft} text="ChevronCircleLeft" />
     <IconBox IconCmpt={Icon.ChevronCircleRight} text="ChevronCircleRight" />
@@ -96,11 +101,14 @@ export const ListOfIcons = () => (
     <IconBox IconCmpt={Icon.Expand} text="Expand" />
     <IconBox IconCmpt={Icon.Facebook} text="Facebook" />
     <IconBox IconCmpt={Icon.FacebookSquare} text="FacebookSquare" />
+    <IconBox IconCmpt={Icon.FolderPlus} text="FolderPlus" />
+    <IconBox IconCmpt={Icon.FolderShared} text="FolderShared" />
     <IconBox IconCmpt={Icon.ForwarderAdded} text="ForwarderAdded" />
     <IconBox IconCmpt={Icon.Github} text="Github" />
     <IconBox IconCmpt={Icon.Google} text="Google" />
     <IconBox IconCmpt={Icon.Graph} text="Graph" />
     <IconBox IconCmpt={Icon.Home} text="Home" />
+    <IconBox IconCmpt={Icon.Key} text="Key" />
     <IconBox IconCmpt={Icon.Keypair} text="Keypair" />
     <IconBox IconCmpt={Icon.Kubernetes} text="Kubernetes" />
     <IconBox IconCmpt={Icon.Label} text="Label" />
@@ -169,6 +177,7 @@ export const ListOfIcons = () => (
     <IconBox IconCmpt={Icon.UsbDrive} text="UsbDrive" />
     <IconBox IconCmpt={Icon.Unarchive} text="Unarchive" />
     <IconBox IconCmpt={Icon.Unlock} text="Unlock" />
+    <IconBox IconCmpt={Icon.Unlink} text="Unlink" />
     <IconBox IconCmpt={Icon.Upload} text="Upload" />
     <IconBox IconCmpt={Icon.User} text="User" />
     <IconBox IconCmpt={Icon.UserCreated} text="UserCreated" />

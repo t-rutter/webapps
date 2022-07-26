@@ -15,19 +15,26 @@ limitations under the License.
 */
 
 import styled from 'styled-components';
+
 import {
   alignItems,
   justifyContent,
   flexWrap,
   flexDirection,
+  gap,
   propTypes,
 } from 'design/system';
 import theme from 'design/theme';
+
 import Box from '../Box';
 
 const Flex = styled(Box)`
   display: flex;
-  ${alignItems} ${justifyContent} ${flexWrap} ${flexDirection};
+  ${alignItems}
+  ${justifyContent}
+  ${flexWrap}
+  ${flexDirection}
+  ${gap};
 `;
 
 Flex.defaultProps = {
@@ -40,6 +47,7 @@ Flex.propTypes = {
   ...propTypes.justifyContent,
   ...propTypes.flexWrap,
   ...propTypes.flexDirection,
+  ...propTypes.gap,
 };
 
 Flex.displayName = 'Flex';

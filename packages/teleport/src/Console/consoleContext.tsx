@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { StoreParties, StoreDocs, DocumentSsh, Document } from './stores';
 import Logger from 'shared/libs/logger';
-import session from 'teleport/services/session';
+
+import webSession from 'teleport/services/websession';
 import history from 'teleport/services/history';
-import cfg, { UrlSshParams } from 'teleport/config';
+import cfg, { UrlResourcesParams, UrlSshParams } from 'teleport/config';
 import { getAccessToken, getHostName } from 'teleport/services/api';
 import Tty from 'teleport/lib/term/tty';
 import TtyAddressResolver from 'teleport/lib/term/ttyAddressResolver';
-import serviceSsh, { Session, ParticipantList } from 'teleport/services/ssh';
+import serviceSession, {
+  Session,
+  ParticipantList,
+} from 'teleport/services/session';
 import serviceNodes from 'teleport/services/nodes';
 import serviceClusters from 'teleport/services/clusters';
-import serviceUser from 'teleport/services/user';
+
+import { StoreParties, StoreDocs, DocumentSsh, Document } from './stores';
 
 const logger = Logger.create('teleport/console');
 
@@ -36,6 +40,7 @@ const logger = Logger.create('teleport/console');
 export default class ConsoleContext {
   storeDocs = new StoreDocs();
   storeParties = new StoreParties();
+  nodesService = new serviceNodes();
 
   constructor() {
     // always initialize the console with 1 document
@@ -122,7 +127,7 @@ export default class ConsoleContext {
     const requests = unique.map(clusterId =>
       // Fetch parties for a given cluster and in case of an error
       // return an empty object.
-      serviceSsh.fetchParticipants({ clusterId }).catch(err => {
+      serviceSession.fetchParticipants({ clusterId }).catch(err => {
         logger.error('failed to refresh participants', err);
         const emptyResults: ParticipantList = {};
         return emptyResults;
@@ -141,15 +146,10 @@ export default class ConsoleContext {
     });
   }
 
-  fetchNodes(clusterId: string) {
-    return Promise.all([
-      serviceUser.fetchUserContext(),
-      serviceNodes.fetchNodes(clusterId),
-    ]).then(values => {
-      const [user, nodesRes] = values;
+  fetchNodes(clusterId: string, params?: UrlResourcesParams) {
+    return this.nodesService.fetchNodes(clusterId, params).then(nodesRes => {
       return {
-        logins: user.acl.sshLogins,
-        nodes: nodesRes.nodes,
+        nodesRes,
       };
     });
   }
@@ -159,11 +159,11 @@ export default class ConsoleContext {
   }
 
   fetchSshSession(clusterId: string, sid: string) {
-    return serviceSsh.fetchSession({ clusterId, sid });
+    return serviceSession.fetchSession({ clusterId, sid });
   }
 
   createSshSession(clusterId: string, serverId: string, login: string) {
-    return serviceSsh.create({
+    return serviceSession.createSession({
       serverId,
       clusterId,
       login,
@@ -171,7 +171,7 @@ export default class ConsoleContext {
   }
 
   logout() {
-    session.logout();
+    webSession.logout();
   }
 
   createTty(session: Session): Tty {

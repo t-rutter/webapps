@@ -14,23 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line import/named
-import { History } from 'history';
 import React from 'react';
 import ThemeProvider from 'design/ThemeProvider';
+
 import { Router, Route, Switch } from 'teleport/components/Router';
 import CatchError from 'teleport/components/CatchError';
 import Authenticated from 'teleport/components/Authenticated';
+
 import Main from './Main';
 import Welcome from './Welcome';
 import Login, { LoginSuccess, LoginFailed } from './Login';
 import AppLauncher from './AppLauncher';
 import Console from './Console';
 import DesktopSession from './DesktopSession';
+import Discover from './Discover';
 import Player from './Player';
 import TeleportContextProvider from './TeleportContextProvider';
 import TeleportContext from './teleportContext';
 import cfg from './config';
+
+import type { History } from 'history';
 
 const Teleport: React.FC<Props> = props => {
   const { ctx, history } = props;
@@ -104,6 +107,9 @@ export function renderPublicRoutes(children = []) {
 export function renderPrivateRoutes(CustomMain = Main) {
   return (
     <Switch>
+      {cfg.enabledDiscoverWizard && (
+        <Route path={cfg.routes.discover} component={Discover} />
+      )}
       <Route path={cfg.routes.desktop} component={DesktopSession} />
       <Route path={cfg.routes.console} component={Console} />
       <Route path={cfg.routes.player} component={Player} />

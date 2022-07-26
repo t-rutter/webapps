@@ -19,59 +19,129 @@ import { Node } from 'teleport/services/nodes';
 export const nodes: Node[] = [
   {
     tunnel: false,
+    sshLogins: ['dev', 'root'],
     id: '104',
     clusterId: 'one',
     hostname: 'fujedu',
     addr: '172.10.1.20:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
   {
     tunnel: false,
+    sshLogins: ['dev', 'root'],
     id: '170',
     clusterId: 'one',
     hostname: 'facuzguv',
     addr: '172.10.1.1:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
   {
     tunnel: false,
+    sshLogins: ['dev', 'root'],
     id: '192',
     clusterId: 'one',
     hostname: 'duzsevkig',
     addr: '172.10.1.1:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
   {
     tunnel: false,
+    sshLogins: ['dev', 'root'],
     id: '64',
     clusterId: 'one',
     hostname: 'kuhinur',
     addr: '172.10.1.1:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
   {
     tunnel: false,
+    sshLogins: ['dev', 'root'],
     id: '81',
     clusterId: 'one',
     hostname: 'zebpecda',
     addr: '172.10.1.1:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
   {
     tunnel: true,
+    sshLogins: ['dev', 'root'],
     id: '81',
     clusterId: 'one',
     hostname: 'zebpecda',
     addr: '172.10.1.1:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
   {
     tunnel: true,
+    sshLogins: ['dev', 'root'],
     id: '81',
     clusterId: 'one',
     hostname: 'zebpecda',
     addr: '172.10.1.1:3022',
-    tags: ['cluster: one', 'kernel: 4.15.0-51-generic'],
+    labels: [
+      {
+        name: 'cluster',
+        value: 'one',
+      },
+      {
+        name: 'kernel',
+        value: '4.15.0-51-generic',
+      },
+    ],
   },
 ];
 

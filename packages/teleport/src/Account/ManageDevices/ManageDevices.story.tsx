@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { State } from './useManageDevices';
 import { ManageDevices } from './ManageDevices';
 
@@ -24,7 +25,7 @@ export default {
 
 export const Loaded = () => <ManageDevices {...props} />;
 
-export const LoadedMfaaOff = () => (
+export const LoadedMfaOff = () => (
   <ManageDevices {...props} mfaDisabled={true} />
 );
 

@@ -16,18 +16,24 @@ limitations under the License.
 
 import React from 'react';
 import styled from 'styled-components';
-import { useParams, useLocation } from 'teleport/components/Router';
+
 import { Flex, Box } from 'design';
-import Tabs, { TabItem } from './PlayerTabs';
-import SshPlayer from './SshPlayer';
-import { DesktopPlayer } from './DesktopPlayer';
-import ActionBar from './ActionBar';
-import session from 'teleport/services/session';
+
+import { Danger } from 'design/Alert';
+
+import { useParams, useLocation } from 'teleport/components/Router';
+
+import session from 'teleport/services/websession';
 import { colors } from 'teleport/Console/colors';
 import { UrlPlayerParams } from 'teleport/config';
 import { getUrlParameter } from 'teleport/services/history';
-import { Danger } from 'design/Alert';
+
 import { RecordingType } from 'teleport/services/recordings';
+
+import ActionBar from './ActionBar';
+import { DesktopPlayer } from './DesktopPlayer';
+import SshPlayer from './SshPlayer';
+import Tabs, { TabItem } from './PlayerTabs';
 
 export default function Player() {
   const { sid, clusterId } = useParams<UrlPlayerParams>();
@@ -40,7 +46,9 @@ export default function Player() {
   const durationMs = Number(getUrlParameter('durationMs', search));
 
   const validRecordingType =
-    recordingType === 'ssh' || recordingType === 'desktop';
+    recordingType === 'ssh' ||
+    recordingType === 'k8s' ||
+    recordingType === 'desktop';
   const validDurationMs = Number.isInteger(durationMs) && durationMs > 0;
 
   document.title = `${clusterId} • Play ${sid}`;
@@ -91,16 +99,14 @@ export default function Player() {
           position: 'relative',
         }}
       >
-        {recordingType === 'ssh' && (
-          <SshPlayer sid={sid} clusterId={clusterId} />
-        )}
-
-        {recordingType === 'desktop' && (
+        {recordingType === 'desktop' ? (
           <DesktopPlayer
             sid={sid}
             clusterId={clusterId}
             durationMs={durationMs}
           />
+        ) : (
+          <SshPlayer sid={sid} clusterId={clusterId} />
         )}
       </Flex>
     </StyledPlayer>

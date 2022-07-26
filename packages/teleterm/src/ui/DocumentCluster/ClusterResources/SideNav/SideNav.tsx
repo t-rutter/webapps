@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import { Flex } from 'design';
+
 import ClusterNavButton from 'teleterm/ui/DocumentCluster/ClusterNavButton';
 import ClusterContext, {
   NavLocation,
@@ -30,7 +31,7 @@ export default function SideNav(props: Props) {
   const $items = items.map((item, index) => {
     return (
       <ClusterNavButton
-        py={1}
+        p={1}
         my={1}
         title={item.title}
         to={item.to}
@@ -60,8 +61,8 @@ const StyledNav = styled(Flex)`
 function createItems(ctx: ClusterContext): SideNavItem[] {
   const serverCount = ctx.getServers().length;
   const dbCount = ctx.getDbs().length;
-  const kubeCount = ctx.getKubes().length;
-  const appCount = ctx.getApps().length;
+  // const kubeCount = ctx.getKubes().length;
+  // const appCount = ctx.getApps().length;
 
   return [
     {
@@ -72,13 +73,13 @@ function createItems(ctx: ClusterContext): SideNavItem[] {
       to: '/resources/databases',
       title: `Databases (${dbCount})`,
     },
-    {
-      to: '/resources/kubes',
-      title: `Kubes (${kubeCount})`,
-    },
-    {
-      to: '/resources/apps',
-      title: `Apps (${appCount})`,
-    },
+    // {
+    //   to: '/resources/kubes',
+    //   title: `Kubes (${kubeCount})`,
+    // },
+    // {
+    //   to: '/resources/apps',
+    //   title: `Apps (${appCount})`,
+    // },
   ];
 }

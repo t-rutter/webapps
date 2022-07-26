@@ -1,9 +1,13 @@
+import { Kind } from 'teleterm/ui/services/workspacesService';
+import { FileStorage } from 'teleterm/services/fileStorage';
+
 import { ConfigService } from '../services/config';
-import { Kind } from 'teleterm/ui/services/docs/types';
 
 export type RuntimeSettings = {
   dev: boolean;
   userDataDir: string;
+  // Points to a directory that should be prepended to PATH. Only present in the packaged version.
+  binDir: string | undefined;
   defaultShell: string;
   platform: Platform;
   tshd: {
@@ -13,14 +17,17 @@ export type RuntimeSettings = {
     homeDir: string;
     flags: string[];
   };
+  sharedProcess: {
+    networkAddr: string;
+  };
 };
 
 export type MainProcessClient = {
   getRuntimeSettings(): RuntimeSettings;
   openTerminalContextMenu(): void;
-  openClusterContextMenu(options: ClusterContextMenuOptions): void;
   openTabContextMenu(options: TabContextMenuOptions): void;
   configService: ConfigService;
+  fileStorage: FileStorage;
 };
 
 export type Platform = NodeJS.Platform;
@@ -41,17 +48,11 @@ export interface TabContextMenuOptions {
   onDuplicatePty(): void;
 }
 
-export const ClusterContextMenuEventChannel = 'ClusterContextMenuEventChannel';
-export const TerminalContextMenuEventChannel = 'TerminalContextMenuEventChannel';
+export const TerminalContextMenuEventChannel =
+  'TerminalContextMenuEventChannel';
 export const TabContextMenuEventChannel = 'TabContextMenuEventChannel';
 export const ConfigServiceEventChannel = 'ConfigServiceEventChannel';
-
-export enum ClusterContextMenuEventType {
-  Refresh = 'Refresh',
-  Login = 'Login',
-  Logout = 'Logout',
-  Remove = 'Remove',
-}
+export const FileStorageEventChannel = 'FileStorageEventChannel';
 
 export enum TabContextMenuEventType {
   Close = 'Close',
@@ -63,4 +64,10 @@ export enum TabContextMenuEventType {
 export enum ConfigServiceEventType {
   Get = 'Get',
   Update = 'Update',
+}
+
+export enum FileStorageEventType {
+  Get = 'Get',
+  Put = 'Put',
+  PutAllSync = 'PutAllSync',
 }

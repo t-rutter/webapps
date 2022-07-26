@@ -1,44 +1,51 @@
-export type PtyOptions = {
-  env?: { [key: string]: string };
-  path: string;
-  args: string[] | string;
-  cwd?: string;
-};
+import { PtyProcessOptions, IPtyProcess } from 'teleterm/sharedProcess/ptyHost';
 
-export type PtyProcess = {
-  write(data: string): void;
-  resize(cols: number, rows: number): void;
-  dispose(): void;
-  onData(cb: (data: string) => void): void;
-  onOpen(cb: () => void): void;
-  start(cols: number, rows: number): void;
-  onExit(cb: (ev: { exitCode: number; signal?: number }) => void);
-  getPid(): number;
-  getCwd(): Promise<string>;
-};
+import { PtyEventsStreamHandler } from './ptyHost/ptyEventsStreamHandler';
+
+export enum PtyProcessCreationStatus {
+  Ok = 'Ok',
+  ResolveShellEnvTimeout = 'ResolveShellEnvTimeout',
+}
+
+export interface PtyHostClient {
+  createPtyProcess(ptyOptions: PtyProcessOptions): Promise<string>;
+
+  getCwd(ptyId: string): Promise<string>;
+
+  exchangeEvents(ptyId: string): PtyEventsStreamHandler;
+}
 
 export type PtyServiceClient = {
-  createPtyProcess: (cmd: PtyCommand) => PtyProcess;
+  createPtyProcess: (cmd: PtyCommand) => Promise<{
+    process: IPtyProcess;
+    creationStatus: PtyProcessCreationStatus;
+  }>;
 };
 
-export type ShellCommand = {
+export type ShellCommand = PtyCommandBase & {
   kind: 'pty.shell';
   cwd?: string;
+  initCommand?: string;
 };
 
-export type TshLoginCommand = {
+export type TshLoginCommand = PtyCommandBase & {
   kind: 'pty.tsh-login';
-  login: string;
+  login?: string;
   serverId: string;
   rootClusterId: string;
   leafClusterId?: string;
 };
 
-export type TshKubeLoginCommand = {
+export type TshKubeLoginCommand = PtyCommandBase & {
   kind: 'pty.tsh-kube-login';
   kubeId: string;
   rootClusterId: string;
   leafClusterId?: string;
+};
+
+type PtyCommandBase = {
+  proxyHost: string;
+  actualClusterName: string;
 };
 
 export type PtyCommand = ShellCommand | TshLoginCommand | TshKubeLoginCommand;

@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ import Validation from 'shared/components/Validation';
 import { requiredToken } from 'shared/components/Validation/rules';
 import FieldInput from 'shared/components/FieldInput';
 import FieldSelect from 'shared/components/FieldSelect';
-import { getMfaOptions, MfaOption } from 'teleport/services/mfa/utils';
+import createMfaOptions, { MfaOption } from 'shared/utils/createMfaOptions';
+
 import useReAuthenticate, { State, Props } from './useReAuthenticate';
 
 export default function Container(props: Props) {
@@ -38,7 +39,6 @@ export default function Container(props: Props) {
 export function ReAuthenticate({
   attempt,
   clearAttempt,
-  submitWithU2f,
   submitWithTotp,
   submitWithWebauthn,
   onClose,
@@ -46,15 +46,16 @@ export function ReAuthenticate({
   preferredMfaType,
 }: State) {
   const [otpToken, setOtpToken] = useState('');
-  const mfaOptions = getMfaOptions(auth2faType, preferredMfaType, true);
+  const mfaOptions = createMfaOptions({
+    auth2faType: auth2faType,
+    preferredType: preferredMfaType,
+    required: true,
+  });
   const [mfaOption, setMfaOption] = useState<MfaOption>(mfaOptions[0]);
 
   function onSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (mfaOption?.value === 'u2f') {
-      submitWithU2f();
-    }
     if (mfaOption?.value === 'webauthn') {
       submitWithWebauthn();
     }
@@ -106,18 +107,14 @@ export function ReAuthenticate({
                   <FieldInput
                     label="Authenticator code"
                     rule={requiredToken}
-                    autoComplete="off"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
                     value={otpToken}
                     onChange={e => setOtpToken(e.target.value)}
                     placeholder="123 456"
                     readonly={attempt.status === 'processing'}
                     mb={0}
                   />
-                )}
-                {mfaOption.value === 'u2f' && attempt.status === 'processing' && (
-                  <Text typography="body2" mb={1}>
-                    Insert your hardware key and press the button on the key.
-                  </Text>
                 )}
               </Box>
             </Flex>

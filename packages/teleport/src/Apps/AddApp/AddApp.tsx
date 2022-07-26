@@ -17,10 +17,15 @@
 import React from 'react';
 import { Flex } from 'design';
 import Dialog, { DialogTitle } from 'design/Dialog';
-import useTeleport from 'teleport/useTeleport';
-import Manually from './Manually';
+
 import * as Icons from 'design/Icon';
+
+import useTeleport from 'teleport/useTeleport';
+
 import { TabIcon } from 'teleport/components/Tabs';
+
+import Manually from './Manually';
+
 import Automatically from './Automatically';
 import useAddApp, { State } from './useAddApp';
 
@@ -31,9 +36,7 @@ export default function Container(props: Props) {
 }
 
 export function AddApp({
-  cmd,
   user,
-  expires,
   onClose,
   createToken,
   isEnterprise,
@@ -42,6 +45,7 @@ export function AddApp({
   automatic,
   setAutomatic,
   isAuthTypeLocal,
+  token,
 }: State & Props) {
   return (
     <Dialog
@@ -76,11 +80,10 @@ export function AddApp({
         </Flex>
         {automatic && (
           <Automatically
-            cmd={cmd}
-            expires={expires}
             onClose={onClose}
             onCreate={createToken}
             attempt={attempt}
+            token={token}
           />
         )}
         {!automatic && (
@@ -90,6 +93,9 @@ export function AddApp({
             onClose={onClose}
             user={user}
             version={version}
+            createToken={createToken}
+            attempt={attempt}
+            token={token}
           />
         )}
       </Flex>

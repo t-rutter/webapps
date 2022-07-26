@@ -19,6 +19,7 @@ import { storiesOf } from '@storybook/react';
 import { Flex } from 'design';
 import { createMemoryHistory } from 'history';
 import { Router, Route } from 'react-router';
+
 import Console from './Console';
 import { colors } from './colors';
 import ConsoleContext from './consoleContext';
@@ -34,11 +35,9 @@ storiesOf('Teleport/Console', module).add('Console', () => {
 });
 
 export function TestLayout(props: PropType) {
-  const [context] = React.useState(
-    (): ConsoleContext => {
-      return props.ctx || new ConsoleContext();
-    }
-  );
+  const [context] = React.useState((): ConsoleContext => {
+    return props.ctx || new ConsoleContext();
+  });
 
   const [history] = React.useState((): any => {
     const history =

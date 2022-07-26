@@ -17,10 +17,12 @@
 import React from 'react';
 import * as Icons from 'design/Icon';
 import { Card, Box, Text, Flex } from 'design';
+
+import styled from 'styled-components';
+
 import { FeatureBox } from 'teleport/components/Layout';
 import useTeleport from 'teleport/useTeleport';
 import cfg from 'teleport/config';
-import styled from 'styled-components';
 
 export default function Container() {
   const ctx = useTeleport();
@@ -31,6 +33,7 @@ export default function Container() {
       {...cluster}
       isEnterprise={cfg.isEnterprise}
       tunnelPublicAddress={cfg.tunnelPublicAddress}
+      isCloud={cfg.isCloud}
     />
   );
 }
@@ -41,6 +44,7 @@ export const Support = ({
   publicURL,
   isEnterprise,
   tunnelPublicAddress,
+  isCloud,
 }: Props) => {
   const docs = getDocUrls(authVersion, isEnterprise);
 
@@ -76,26 +80,14 @@ export const Support = ({
             <SupportLink title="Admin Guide" url={docs.adminGuide} />
             <SupportLink
               title="Download Page"
-              url={
-                isEnterprise
-                  ? 'https://dashboard.gravitational.com/web/downloads '
-                  : 'https://goteleport.com/teleport/download'
-              }
+              url={getDownloadLink(isCloud, isEnterprise)}
             />
             <SupportLink title="FAQ" url={docs.faq} />
           </Box>
           <Box>
             <Header title="Troubleshooting" icon={<Icons.Graph />} />
             <SupportLink
-              title="Monitoring Teleport"
-              url={docs.troubleshooting}
-            />
-            <SupportLink
-              title="Collecting Debug Data"
-              url={docs.troubleshooting}
-            />
-            <SupportLink
-              title="Troubleshooting FAQ"
+              title="Monitoring & Debugging"
               url={docs.troubleshooting}
             />
           </Box>
@@ -155,15 +147,26 @@ const getDocUrls = (version = '', isEnterprise: boolean) => {
     `${url}?product=teleport&version=${verPrefix}_${version}${anchorHash}`;
 
   return {
-    quickstart: withUTM('https://goteleport.com/teleport/docs/quickstart'),
-    userManual: withUTM('https://goteleport.com/teleport/docs/user-manual'),
-    adminGuide: withUTM('https://goteleport.com/teleport/docs/admin-guide'),
+    quickstart: withUTM('https://goteleport.com/docs/getting-started'),
+    userManual: withUTM('https://goteleport.com/docs/server-access/guides/tsh'),
+    adminGuide: withUTM('https://goteleport.com/docs/setup/admin'),
     troubleshooting: withUTM(
-      'https://goteleport.com/teleport/docs/admin-guide',
-      '#troubleshooting'
+      'https://goteleport.com/docs/setup/admin/troubleshooting'
     ),
-    faq: withUTM('https://goteleport.com/teleport/docs/faq'),
+    faq: withUTM('https://goteleport.com/docs/faq'),
   };
+};
+
+const getDownloadLink = (isCloud: boolean, isEnterprise: boolean) => {
+  if (isCloud) {
+    return 'https://goteleport.com/docs/cloud/downloads/';
+  }
+
+  if (isEnterprise) {
+    return 'https://dashboard.gravitational.com/web/downloads';
+  }
+
+  return 'https://goteleport.com/download/';
 };
 
 const SupportLink = ({ title = '', url = '' }) => (
@@ -219,5 +222,6 @@ type Props = {
   authVersion: string;
   publicURL: string;
   isEnterprise: boolean;
+  isCloud: boolean;
   tunnelPublicAddress?: string;
 };

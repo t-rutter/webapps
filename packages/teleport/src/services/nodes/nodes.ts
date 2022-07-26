@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gravitational, Inc.
+Copyright 2019-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,35 +15,27 @@ limitations under the License.
 */
 
 import api from 'teleport/services/api';
-import cfg from 'teleport/config';
-import makeNode from './makeNode';
-import makeNodeToken from './makeNodeToken';
-import makeAppBashCmd from './makeAppBashCmd';
-import { NodeToken, NodesResponse } from './types';
+import cfg, { UrlResourcesParams } from 'teleport/config';
+import { AgentResponse } from 'teleport/services/agents';
 
-const service = {
-  fetchNodes(clusterId?: string): Promise<NodesResponse> {
-    return api.get(cfg.getClusterNodesUrl(clusterId)).then(json => {
+import { Node } from './types';
+import makeNode from './makeNode';
+
+class NodeService {
+  fetchNodes(
+    clusterId?: string,
+    params?: UrlResourcesParams
+  ): Promise<AgentResponse<Node>> {
+    return api.get(cfg.getClusterNodesUrl(clusterId, params)).then(json => {
       const items = json?.items || [];
 
       return {
-        nodes: items.map(makeNode),
+        agents: items.map(makeNode),
         startKey: json?.startKey,
         totalCount: json?.totalCount,
       };
     });
-  },
+  }
+}
 
-  fetchJoinToken(): Promise<NodeToken> {
-    return api.post(cfg.getNodeJoinTokenUrl()).then(makeNodeToken);
-  },
-
-  createAppBashCommand(appName: string, appUri: string) {
-    return api
-      .post(cfg.getNodeJoinTokenUrl())
-      .then(makeNodeToken)
-      .then(token => makeAppBashCmd(token, appName, appUri));
-  },
-};
-
-export default service;
+export default NodeService;

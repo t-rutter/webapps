@@ -18,7 +18,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonBorder, Text } from 'design';
 import Table, { Cell } from 'design/DataTable';
+import { dateMatcher } from 'design/utils/match';
 import { displayDate } from 'shared/services/loc';
+
 import { MfaDevice } from 'teleport/services/mfa/types';
 
 export default function MfaDeviceList({
@@ -71,6 +73,7 @@ export default function MfaDeviceList({
         key: 'registeredDate',
         dir: 'DESC',
       }}
+      customSearchMatchers={[dateMatcher(['registeredDate', 'lastUsedDate'])]}
     />
   );
 }
@@ -97,7 +100,7 @@ const renderRemoveCell = (
   mfaDisabled: boolean
 ) => {
   if (id === mostRecentDevice?.id) {
-    return null;
+    return <Cell align="right"></Cell>;
   }
 
   return (

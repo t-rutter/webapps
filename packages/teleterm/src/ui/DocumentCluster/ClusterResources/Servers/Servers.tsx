@@ -15,11 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import { useServers, State } from './useServers';
+
+import { Cell } from 'design/DataTable';
+
+import { MenuLogin } from 'shared/components/MenuLogin';
+
+import { Danger } from 'design/Alert';
+
 import * as types from 'teleterm/ui/services/clusters/types';
-import Table, { Cell } from 'design/DataTable';
-import { ButtonBorder } from 'design';
+import { Table } from 'teleterm/ui/components/Table';
+
 import { renderLabelCell } from '../renderLabelCell';
+
+import { MenuLoginTheme } from '../MenuLoginTheme';
+
+import { useServers, State } from './useServers';
 
 export default function Container() {
   const state = useServers();
@@ -27,52 +37,69 @@ export default function Container() {
 }
 
 function ServerList(props: State) {
-  const { servers = [], connect } = props;
+  const { servers = [], getSshLogins, connect, syncStatus } = props;
   return (
-    <Table
-      columns={[
-        {
-          key: 'hostname',
-          headerText: 'Hostname',
-          isSortable: true,
-        },
-        {
-          key: 'addr',
-          headerText: 'Address',
-          isSortable: true,
-          render: renderAddressCell,
-        },
-        {
-          key: 'labelsList',
-          headerText: 'Labels',
-          render: renderLabelCell,
-        },
-        {
-          altKey: 'connect-btn',
-          render: server => renderConnectCell(server.uri, connect),
-        },
-      ]}
-      emptyText="No Nodes Found"
-      data={servers}
-      pagination={{ pageSize: 100, pagerPosition: 'bottom' }}
-    />
+    <>
+      {syncStatus.status === 'failed' && (
+        <Danger>{syncStatus.statusText}</Danger>
+      )}
+      <Table
+        columns={[
+          {
+            key: 'hostname',
+            headerText: 'Hostname',
+            isSortable: true,
+          },
+          {
+            key: 'addr',
+            headerText: 'Address',
+            isSortable: true,
+            render: renderAddressCell,
+          },
+          {
+            key: 'labelsList',
+            headerText: 'Labels',
+            render: renderLabelCell,
+          },
+          {
+            altKey: 'connect-btn',
+            render: server =>
+              renderConnectCell(
+                () => getSshLogins(server.uri),
+                login => connect(server.uri, login)
+              ),
+          },
+        ]}
+        emptyText="No Nodes Found"
+        data={servers}
+        pagination={{ pageSize: 15, pagerPosition: 'bottom' }}
+      />
+    </>
   );
 }
 
 const renderConnectCell = (
-  serverUri: string,
-  connect: (serverUri: string) => void
+  getSshLogins: () => string[],
+  onConnect: (login: string) => void
 ) => {
   return (
     <Cell align="right">
-      <ButtonBorder
-        size="small"
-        onClick={() => {
-          connect(serverUri);
-        }}
-      >
-        Connect
-      </ButtonBorder>
+      <MenuLoginTheme>
+        <MenuLogin
+          getLoginItems={() =>
+            getSshLogins().map(login => ({ login, url: '' }))
+          }
+          onSelect={(e, login) => onConnect(login)}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: 'right',
+          }}
+        />
+      </MenuLoginTheme>
     </Cell>
   );
 };

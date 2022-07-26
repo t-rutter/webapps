@@ -15,8 +15,10 @@
  */
 
 import React from 'react';
+
 import AppContextProvider from 'teleterm/ui/appContextProvider';
 import { MockAppContext } from 'teleterm/ui/fixtures/mocks';
+
 import QuickInput from './QuickInput';
 
 export default {
@@ -26,6 +28,17 @@ export default {
 export const Story = () => {
   const appContext = new MockAppContext();
 
+  appContext.workspacesService.state = {
+    workspaces: {
+      '/clusters/localhost': {
+        documents: [],
+        location: '',
+        localClusterUri: '/clusters/localhost',
+      },
+    },
+    rootClusterUri: '/clusters/localhost',
+  };
+
   appContext.clustersService.getClusters = () => {
     return [
       {
@@ -33,6 +46,8 @@ export const Story = () => {
         name: 'Test',
         leaf: false,
         connected: true,
+        actualName: 'Test',
+        proxyHost: 'localhost:3080',
         loggedInUser: {
           name: 'admin',
           acl: {},

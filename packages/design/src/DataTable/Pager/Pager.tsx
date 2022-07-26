@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Flex, Text } from 'design';
 import { CircleArrowLeft, CircleArrowRight } from 'design/Icon';
+
 import { StyledArrowBtn, StyledFetchMoreBtn } from './StyledPager';
 import usePager, { State, Props } from './usePager';
 
@@ -19,16 +21,16 @@ export function Pager({
   count,
   onFetchMore,
   fetchStatus,
+  serversideProps,
 }: State) {
   const isFetchingEnabled = onFetchMore && fetchStatus !== 'disabled';
   return (
-    <Flex>
+    <Flex justifyContent="flex-end" width="100%">
       <Flex alignItems="center" mr={2}>
-        <Text typography="body2" color="primary.contrastText" mr={1}>
-          SHOWING <strong>{from + 1}</strong> - <strong>{to + 1}</strong> of{' '}
-          <strong>{count}</strong>
-        </Text>
-        {isFetchingEnabled && (
+        {!serversideProps && (
+          <PageIndicatorText from={from + 1} to={to + 1} count={count} />
+        )}
+        {isFetchingEnabled && !serversideProps && (
           <StyledFetchMoreBtn
             disabled={fetchStatus === 'loading'}
             onClick={onFetchMore}
@@ -56,5 +58,22 @@ export function Pager({
         </StyledArrowBtn>
       </Flex>
     </Flex>
+  );
+}
+
+export function PageIndicatorText({
+  from,
+  to,
+  count,
+}: {
+  from: number;
+  to: number;
+  count: number;
+}) {
+  return (
+    <Text typography="body2" color="primary.contrastText" mr={1}>
+      SHOWING <strong>{from}</strong> - <strong>{to}</strong> of{' '}
+      <strong>{count}</strong>
+    </Text>
   );
 }

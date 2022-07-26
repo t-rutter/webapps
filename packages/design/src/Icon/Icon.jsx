@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gravitational, Inc.
+Copyright 2019-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import { space, fontSize, width, color } from 'styled-system';
-import './../assets/icomoon/style.css';
+import '../assets/icomoon/style.css';
 
 const Icon = styled.span`
   display: inline-block;
-  transition: color .3s;
-  ${space} ${width} ${color} ${fontSize} `;
+  transition: color 0.3s;
+  ${space} ${width} ${color} ${fontSize}
+`;
 
 Icon.displayName = `Icon`;
 Icon.defaultProps = {
@@ -31,7 +32,7 @@ Icon.defaultProps = {
 
 function makeFontIcon(name, iconClassName) {
   const iconClass = `icon ${iconClassName}`;
-  return function({ className = '', ...rest }) {
+  return function ({ className = '', ...rest }) {
     const classes = `${iconClass} ${className}`;
     return <Icon className={classes} {...rest} />;
   };
@@ -47,6 +48,8 @@ export const Apple = makeFontIcon('Apple', 'icon-apple');
 export const AppRollback = makeFontIcon('AppRollback', 'icon-app-rollback');
 export const Archive = makeFontIcon('Archive', 'icon-archive2');
 export const ArrowDown = makeFontIcon('ArrowDown', 'icon-chevron-down');
+export const ArrowForward = makeFontIcon('ArrowForward', 'icon-arrow_forward');
+export const ArrowBack = makeFontIcon('ArrowBack', 'icon-arrow_back');
 export const ArrowLeft = makeFontIcon('ArrowLeft', 'icon-chevron-left');
 export const ArrowRight = makeFontIcon('ArrowRight', 'icon-chevron-right');
 export const ArrowsVertical = makeFontIcon(
@@ -69,6 +72,10 @@ export const CarrotRight = makeFontIcon('CarrotRight', 'icon-caret-right');
 export const CarrotSort = makeFontIcon('CarrotSort', 'icon-sort');
 export const CarrotUp = makeFontIcon('CarrotUp', 'icon-caret-up');
 export const Cash = makeFontIcon('Cash', 'icon-cash-dollar');
+export const ChatBubble = makeFontIcon(
+  'ChatBubble',
+  'icon-chat_bubble_outline'
+);
 export const ChevronCircleDown = makeFontIcon(
   'ChevronCircleDown',
   'icon-chevron-down-circle'
@@ -139,10 +146,13 @@ export const EqualizerVertical = makeFontIcon(
   'EqualizerVertical',
   'icon-equalizer1'
 );
+export const ExitRight = makeFontIcon('ExitRight', 'icon-exit-right');
 export const Expand = makeFontIcon('Expand', 'icon-frame-expand');
 export const Facebook = makeFontIcon('Facebook', 'icon-facebook');
 export const FacebookSquare = makeFontIcon('FacebookSquare', 'icon-facebook2');
 export const FileCode = makeFontIcon('Youtube', 'icon-file-code');
+export const FolderPlus = makeFontIcon('FolderPlus', 'icon-folder-plus');
+export const FolderShared = makeFontIcon('FolderShared', 'icon-folder-shared');
 export const ForwarderAdded = makeFontIcon(
   'ForwarderAdded',
   'icon-add-fowarder'
@@ -152,6 +162,7 @@ export const Google = makeFontIcon('Google', 'icon-google-plus');
 export const Graph = makeFontIcon('Graph', 'icon-graph');
 export const Home = makeFontIcon('Home', 'icon-home3');
 export const Info = makeFontIcon('Info', 'icon-info_outline');
+export const Key = makeFontIcon('Key', 'icon-key');
 export const Keypair = makeFontIcon('Keypair', 'icon-keypair');
 export const Kubernetes = makeFontIcon('Kubernetes', 'icon-kubernetes');
 export const Label = makeFontIcon('Label', 'icon-label');
@@ -243,6 +254,7 @@ export const Twitter = makeFontIcon('Twitter', 'icon-twitter');
 export const UsbDrive = makeFontIcon('UsbDrive', 'icon-usb-drive');
 export const Unarchive = makeFontIcon('Unarchive', 'icon-unarchive');
 export const Unlock = makeFontIcon('Unlock', 'icon-unlock');
+export const Unlink = makeFontIcon('Unlink', 'icon-unlink2');
 export const Upload = makeFontIcon('Upload', 'icon-file_upload');
 export const User = makeFontIcon('User', 'icon-user');
 export const UserCreated = makeFontIcon('UserCreated', 'icon-user-created');

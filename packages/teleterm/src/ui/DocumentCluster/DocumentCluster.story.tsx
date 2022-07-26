@@ -16,12 +16,14 @@
 
 import React from 'react';
 import styled from 'styled-components';
+
 import AppContextProvider from 'teleterm/ui/appContextProvider';
 import { MockAppContext } from 'teleterm/ui/fixtures/mocks';
 import {
   createClusterServiceState,
   ClustersServiceState,
 } from 'teleterm/ui/services/clusters';
+
 import DocumentCluster from './DocumentCluster';
 
 export default {
@@ -35,6 +37,8 @@ export const Online = () => {
     leaf: false,
     name: 'localhost',
     connected: true,
+    actualName: 'localhost',
+    proxyHost: 'localhost:3080',
   });
 
   return renderState(state);
@@ -47,6 +51,8 @@ export const Offline = () => {
     leaf: false,
     name: 'localhost',
     connected: false,
+    actualName: 'localhost',
+    proxyHost: 'localhost:3080',
   });
 
   return renderState(state);
@@ -59,7 +65,8 @@ export const Notfound = () => {
 
 function renderState(state: ClustersServiceState) {
   const appContext = new MockAppContext();
-  appContext.docsService.update = () => null;
+  appContext.workspacesService.getActiveWorkspaceDocumentService().update =
+    () => null;
   appContext.clustersService.state = state;
 
   const doc = {

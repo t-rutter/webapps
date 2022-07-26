@@ -14,22 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useAppContext } from 'teleterm/ui/appContextProvider';
-import * as types from 'teleterm/ui/services/docs/types';
 import useAttempt from 'shared/hooks/useAttemptNext';
+
+import { useEffect } from 'react';
+
+import { useAppContext } from 'teleterm/ui/appContextProvider';
+import * as types from 'teleterm/ui/services/workspacesService';
+import { useWorkspaceDocumentsService } from 'teleterm/ui/Documents';
 
 export function useReconnect(doc: types.DocumentTshNode) {
   const ctx = useAppContext();
+  const workspaceDocumentsService = useWorkspaceDocumentsService();
   const { attempt, setAttempt } = useAttempt('');
+  const cluster = ctx.clustersService.findRootClusterByResource(doc.serverUri);
 
-  function updateDoc() {
-    ctx.docsService.update(doc.uri, { status: 'connected' });
+  function markDocumentAsConnected() {
+    workspaceDocumentsService.update(doc.uri, { status: 'connected' });
   }
 
+  useEffect(() => {
+    if (cluster.connected) {
+      markDocumentAsConnected();
+    }
+  }, []);
+
   function reconnect() {
-    const cluster = ctx.clustersService.findRootClusterByResource(
-      doc.serverUri
-    );
     if (!cluster) {
       setAttempt({
         status: 'failed',
@@ -42,13 +51,13 @@ export function useReconnect(doc: types.DocumentTshNode) {
     if (!cluster.connected) {
       ctx.commandLauncher.executeCommand('cluster-connect', {
         clusterUri: cluster.uri,
-        onSuccess: updateDoc,
+        onSuccess: markDocumentAsConnected,
       });
 
       return;
     }
 
-    updateDoc();
+    markDocumentAsConnected();
   }
 
   return { reconnect, attempt };

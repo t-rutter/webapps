@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import styled from 'styled-components';
-import Icon from '../Icon';
+
 import { space, borderRadius } from 'design/system';
 import { darken } from 'design/theme/utils/colorManipulator';
+
+import Icon from '../Icon';
 
 export const StyledTable = styled.table(
   props => `
@@ -25,7 +27,6 @@ export const StyledTable = styled.table(
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
   border-collapse: collapse;
   border-spacing: 0;
-  border-radius: 8px;
   font-size: 12px;
   width: 100%;
 
@@ -81,16 +82,6 @@ export const StyledTable = styled.table(
 
   tbody tr:hover {
     background-color: ${darken(props.theme.colors.primary.lighter, 0.14)};
-  }
-
-  tbody > tr:last-child {
-    td:first-child {
-      border-bottom-left-radius: 8px;
-    }
-    
-    td:last-child {
-      border-bottom-right-radius: 8px;
-    }
   }
 
   `,

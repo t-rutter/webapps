@@ -15,10 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import { useKubes, State } from './useKubes';
-import Table, { Cell } from 'design/DataTable';
+
+import { Cell } from 'design/DataTable';
 import { ButtonBorder } from 'design';
+
+import { Danger } from 'design/Alert';
+
+import { Table } from 'teleterm/ui/components/Table';
+
 import { renderLabelCell } from '../renderLabelCell';
+
+import { useKubes, State } from './useKubes';
 
 export default function Container() {
   const state = useKubes();
@@ -26,30 +33,35 @@ export default function Container() {
 }
 
 function KubeList(props: State) {
-  const { kubes = [], pageSize = 100, connect } = props;
+  const { kubes = [], pageSize = 15, connect, syncStatus } = props;
 
   return (
-    <Table
-      data={kubes}
-      columns={[
-        {
-          key: 'name',
-          headerText: 'Name',
-          isSortable: true,
-        },
-        {
-          key: 'labelsList',
-          headerText: 'Labels',
-          render: renderLabelCell,
-        },
-        {
-          altKey: 'connect-btn',
-          render: kube => renderConnectButtonCell(kube.uri, connect),
-        },
-      ]}
-      emptyText="No Kubernetes Clusters Found"
-      pagination={{ pageSize, pagerPosition: 'bottom' }}
-    />
+    <>
+      {syncStatus.status === 'failed' && (
+        <Danger>{syncStatus.statusText}</Danger>
+      )}
+      <Table
+        data={kubes}
+        columns={[
+          {
+            key: 'name',
+            headerText: 'Name',
+            isSortable: true,
+          },
+          {
+            key: 'labelsList',
+            headerText: 'Labels',
+            render: renderLabelCell,
+          },
+          {
+            altKey: 'connect-btn',
+            render: kube => renderConnectButtonCell(kube.uri, connect),
+          },
+        ]}
+        emptyText="No Kubernetes Clusters Found"
+        pagination={{ pageSize, pagerPosition: 'bottom' }}
+      />
+    </>
   );
 }
 

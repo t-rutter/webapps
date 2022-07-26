@@ -23,8 +23,10 @@ import Dialog, {
   DialogFooter,
 } from 'design/Dialog';
 import { useAttemptNext } from 'shared/hooks';
-import UserTokenLink from './../UserTokenLink';
+
 import { ResetToken } from 'teleport/services/user';
+
+import UserTokenLink from './../UserTokenLink';
 
 export default function Container(props: Props) {
   const dialog = useDialog(props);
@@ -50,19 +52,19 @@ export function UserReset({
       open={true}
     >
       <DialogHeader>
-        <DialogTitle>Reset User Password?</DialogTitle>
+        <DialogTitle>Reset User Authentication?</DialogTitle>
       </DialogHeader>
       <DialogContent>
         {attempt.status === 'failed' && (
           <Alert kind="danger" children={attempt.statusText} />
         )}
         <Text mb={4} mt={1}>
-          You are about to reset password for user
+          You are about to reset authentication for user
           <Text bold as="span">
             {` ${username} `}
           </Text>
-          . This will generate a temporary URL which can be used to set up a new
-          password.
+          . This will generate a temporary URL which can be used to set up new
+          authentication.
         </Text>
       </DialogContent>
       <DialogFooter>

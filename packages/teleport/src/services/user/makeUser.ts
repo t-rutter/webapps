@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Gravitational, Inc.
+ * Copyright 2020-2022 Gravitational, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-import { at } from 'lodash';
 import { User } from './types';
 
-export default function makeUser(json): User {
-  const [name, roles, authType] = at(json, ['name', 'roles', 'authType']);
+export default function makeUser(json: any): User {
+  json = json || {};
+  const { name, roles, authType, traits = {} } = json;
+
   return {
     name,
-    roles,
+    roles: roles ? roles.sort() : [],
     authType: authType === 'local' ? 'teleport local user' : authType,
     isLocal: authType === 'local',
+    traits: {
+      logins: traits.logins || [],
+      databaseUsers: traits.databaseUsers || [],
+      databaseNames: traits.databaseNames || [],
+      kubeUsers: traits.kubeUsers || [],
+      kubeGroups: traits.kubeGroups || [],
+      windowsLogins: traits.windowsLogins || [],
+      awsRoleArns: traits.awsRoleArns || [],
+    },
   };
 }
 

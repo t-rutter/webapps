@@ -15,8 +15,11 @@ limitations under the License.
 */
 
 import * as Icons from 'design/Icon';
+
 import Ctx from 'teleport/teleportContext';
 import cfg from 'teleport/config';
+
+import { Feature } from './types';
 import Audit from './Audit';
 import Nodes from './Nodes';
 import Sessions from './Sessions';
@@ -33,10 +36,8 @@ import AuthConnectors from './AuthConnectors';
 import Databases from './Databases';
 import Desktops from './Desktops';
 
-export class FeatureClusters {
-  getTopNavTitle() {
-    return 'Clusters';
-  }
+export class FeatureClusters extends Feature {
+  topNavTitle = 'Clusters';
 
   route = {
     title: 'Clusters',
@@ -44,6 +45,11 @@ export class FeatureClusters {
     exact: false,
     component: Clusters,
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isAvailable(ctx: Ctx): boolean {
+    return true; // TODO(isaiah)
+  }
 
   register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
@@ -60,10 +66,8 @@ export class FeatureClusters {
   }
 }
 
-export class FeatureAuthConnectors {
-  getTopNavTitle() {
-    return 'Team';
-  }
+export class FeatureAuthConnectors extends Feature {
+  topNavTitle = 'Team';
 
   route = {
     title: 'Auth Connectors',
@@ -72,11 +76,11 @@ export class FeatureAuthConnectors {
     component: AuthConnectors,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().authConnector) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().authConnector;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       group: 'team',
       title: 'Auth Connectors',
@@ -91,10 +95,8 @@ export class FeatureAuthConnectors {
   }
 }
 
-export class FeatureHelpAndSupport {
-  getTopNavTitle() {
-    return 'Help & Support';
-  }
+export class FeatureHelpAndSupport extends Feature {
+  topNavTitle = 'Help & Support';
 
   route = {
     title: 'Help & Support',
@@ -102,6 +104,10 @@ export class FeatureHelpAndSupport {
     exact: true,
     component: Support,
   };
+
+  isAvailable(): boolean {
+    return true;
+  }
 
   register(ctx: Ctx) {
     ctx.storeNav.addTopMenuItem({
@@ -117,10 +123,8 @@ export class FeatureHelpAndSupport {
   }
 }
 
-export class FeatureAudit {
-  getTopNavTitle() {
-    return 'Account Settings';
-  }
+export class FeatureAudit extends Feature {
+  topNavTitle = 'Account Settings';
 
   route = {
     title: 'Audit Log',
@@ -128,11 +132,11 @@ export class FeatureAudit {
     component: Audit,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().audit) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().audit;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       group: 'activity',
       title: 'Audit Log',
@@ -146,16 +150,18 @@ export class FeatureAudit {
   }
 }
 
-export class FeatureAccount {
-  getTopNavTitle() {
-    return 'Account Settings';
-  }
+export class FeatureAccount extends Feature {
+  topNavTitle = 'Account Settings';
 
   route = {
     title: 'Account Settings',
     path: cfg.routes.account,
     component: Account,
   };
+
+  isAvailable(): boolean {
+    return true;
+  }
 
   register(ctx: Ctx) {
     ctx.storeNav.addTopMenuItem({
@@ -170,10 +176,8 @@ export class FeatureAccount {
   }
 }
 
-export class FeatureNodes {
-  getTopNavTitle() {
-    return '';
-  }
+export class FeatureNodes extends Feature {
+  topNavTitle = '';
 
   route = {
     title: 'Servers',
@@ -181,6 +185,10 @@ export class FeatureNodes {
     exact: true,
     component: Nodes,
   };
+
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().nodes;
+  }
 
   register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
@@ -196,10 +204,8 @@ export class FeatureNodes {
   }
 }
 
-export class FeatureRecordings {
-  getTopNavTitle() {
-    return '';
-  }
+export class FeatureRecordings extends Feature {
+  topNavTitle = '';
 
   route = {
     title: 'Session Recordings',
@@ -208,11 +214,11 @@ export class FeatureRecordings {
     component: Recordings,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().recordings) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().recordings;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       group: 'activity',
       title: 'Session Recordings',
@@ -227,10 +233,8 @@ export class FeatureRecordings {
   }
 }
 
-export class FeatureSessions {
-  getTopNavTitle() {
-    return 'Sessions';
-  }
+export class FeatureSessions extends Feature {
+  topNavTitle = 'Sessions';
 
   route = {
     title: 'Sessions',
@@ -238,6 +242,10 @@ export class FeatureSessions {
     exact: true,
     component: Sessions,
   };
+
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().activeSessions;
+  }
 
   register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
@@ -254,10 +262,8 @@ export class FeatureSessions {
   }
 }
 
-export class FeatureRoles {
-  getTopNavTitle() {
-    return 'Team';
-  }
+export class FeatureRoles extends Feature {
+  topNavTitle = 'Team';
 
   route = {
     title: 'Roles',
@@ -266,11 +272,11 @@ export class FeatureRoles {
     component: Roles,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().roles) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().roles;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       title: 'Roles',
       group: 'team',
@@ -285,10 +291,8 @@ export class FeatureRoles {
   }
 }
 
-export class FeatureUsers {
-  getTopNavTitle() {
-    return 'Team';
-  }
+export class FeatureUsers extends Feature {
+  topNavTitle = 'Team';
 
   route = {
     title: 'Users',
@@ -297,11 +301,11 @@ export class FeatureUsers {
     component: Users,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().users) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().users;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       title: 'Users',
       group: 'team',
@@ -316,10 +320,8 @@ export class FeatureUsers {
   }
 }
 
-export class FeatureApps {
-  getTopNavTitle() {
-    return 'Applications';
-  }
+export class FeatureApps extends Feature {
+  topNavTitle = 'Applications';
 
   route = {
     title: 'Applications',
@@ -328,11 +330,11 @@ export class FeatureApps {
     component: Applications,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().applications) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().applications;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       title: 'Applications',
       Icon: Icons.NewTab,
@@ -346,10 +348,8 @@ export class FeatureApps {
   }
 }
 
-export class FeatureKubes {
-  getTopNavTitle() {
-    return '';
-  }
+export class FeatureKubes extends Feature {
+  topNavTitle = '';
 
   route = {
     title: 'Kubernetes',
@@ -358,11 +358,11 @@ export class FeatureKubes {
     component: Kubes,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().kubernetes) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().kubernetes;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       title: 'Kubernetes',
       Icon: Icons.Kubernetes,
@@ -376,10 +376,8 @@ export class FeatureKubes {
   }
 }
 
-export class FeatureTrust {
-  getTopNavTitle() {
-    return 'Clusters';
-  }
+export class FeatureTrust extends Feature {
+  topNavTitle = 'Clusters';
 
   route = {
     title: 'Trust',
@@ -387,11 +385,11 @@ export class FeatureTrust {
     component: Trust,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().trustedClusters) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().trustedClusters;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       group: 'clusters',
       title: 'Trust',
@@ -405,10 +403,8 @@ export class FeatureTrust {
   }
 }
 
-export class FeatureDatabases {
-  getTopNavTitle() {
-    return '';
-  }
+export class FeatureDatabases extends Feature {
+  topNavTitle = '';
 
   route = {
     title: 'Databases',
@@ -417,11 +413,11 @@ export class FeatureDatabases {
     component: Databases,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().databases) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().databases;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       title: 'Databases',
       Icon: Icons.Database,
@@ -435,10 +431,8 @@ export class FeatureDatabases {
   }
 }
 
-export class FeatureDesktops {
-  getTopNavTitle() {
-    return '';
-  }
+export class FeatureDesktops extends Feature {
+  topNavTitle = '';
 
   route = {
     title: 'Desktops',
@@ -447,11 +441,11 @@ export class FeatureDesktops {
     component: Desktops,
   };
 
-  register(ctx: Ctx) {
-    if (!ctx.getFeatureFlags().desktops) {
-      return;
-    }
+  isAvailable(ctx: Ctx): boolean {
+    return ctx.getFeatureFlags().desktops;
+  }
 
+  register(ctx: Ctx) {
     ctx.storeNav.addSideItem({
       title: 'Desktops',
       Icon: Icons.Desktop,
@@ -465,7 +459,7 @@ export class FeatureDesktops {
   }
 }
 
-export default function getFeatures() {
+export default function getFeatures(): Feature[] {
   return [
     new FeatureNodes(),
     new FeatureApps(),

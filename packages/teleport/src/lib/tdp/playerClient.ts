@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { base64ToArrayBuffer } from 'shared/utils/base64';
+
 import Client, { TdpClientEvent } from './client';
 
 enum Action {
@@ -24,6 +25,7 @@ export enum PlayerClientEvent {
   TOGGLE_PLAY_PAUSE = 'play/pause',
   UPDATE_CURRENT_TIME = 'time',
   SESSION_END = 'end',
+  PLAYBACK_ERROR = 'playback error',
 }
 
 export class PlayerClient extends Client {
@@ -35,20 +37,23 @@ export class PlayerClient extends Client {
 
   // togglePlayPause toggles the playback system between "playing" and "paused" states.
   togglePlayPause() {
-    this.socket?.send(JSON.stringify({ action: Action.TOGGLE_PLAY_PAUSE }));
+    this.send(JSON.stringify({ action: Action.TOGGLE_PLAY_PAUSE }));
     this.emit(PlayerClientEvent.TOGGLE_PLAY_PAUSE);
   }
 
   // Overrides Client implementation.
   processMessage(buffer: ArrayBuffer) {
     const json = JSON.parse(this.textDecoder.decode(buffer));
+
     if (json.message === 'end') {
       this.emit(PlayerClientEvent.SESSION_END);
-      return;
+    } else if (json.message === 'error') {
+      this.emit(PlayerClientEvent.PLAYBACK_ERROR, new Error(json.errorText));
+    } else {
+      const ms = json.ms;
+      this.emit(PlayerClientEvent.UPDATE_CURRENT_TIME, ms);
+      super.processMessage(base64ToArrayBuffer(json.message));
     }
-    const ms = json.ms;
-    super.processMessage(base64ToArrayBuffer(json.message));
-    this.emit(PlayerClientEvent.UPDATE_CURRENT_TIME, ms);
   }
 
   // Overrides Client implementation.

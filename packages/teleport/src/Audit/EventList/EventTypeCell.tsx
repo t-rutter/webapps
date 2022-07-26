@@ -18,6 +18,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Cell } from 'design/DataTable';
 import Icon, * as Icons from 'design/Icon/Icon';
+
 import { eventCodes, Event, EventCode } from 'teleport/services/audit';
 import cfg from 'teleport/config';
 
@@ -65,16 +66,20 @@ const EventIconMap: Record<EventCode, React.FC> = {
   [eventCodes.ACCESS_REQUEST_UPDATED]: Icons.Info,
   [eventCodes.ACCESS_REQUEST_REVIEWED]: Icons.Info,
   [eventCodes.ACCESS_REQUEST_DELETED]: Icons.Info,
+  [eventCodes.ACCESS_REQUEST_RESOURCE_SEARCH]: Icons.Info,
   [eventCodes.USER_LOCAL_LOGIN]: Icons.Info,
   [eventCodes.USER_LOCAL_LOGINFAILURE]: Icons.Info,
   [eventCodes.USER_SSO_LOGIN]: Icons.Info,
   [eventCodes.USER_SSO_LOGINFAILURE]: Icons.Info,
+  [eventCodes.USER_SSO_TEST_FLOW_LOGIN]: Icons.Info,
+  [eventCodes.USER_SSO_TEST_FLOW_LOGINFAILURE]: Icons.Info,
   [eventCodes.KUBE_REQUEST]: Icons.Kubernetes,
   [eventCodes.DATABASE_SESSION_STARTED]: Icons.Database,
   [eventCodes.DATABASE_SESSION_STARTED_FAILURE]: Icons.Database,
   [eventCodes.DATABASE_SESSION_ENDED]: Icons.Database,
   [eventCodes.DATABASE_SESSION_QUERY]: Icons.Database,
   [eventCodes.DATABASE_SESSION_QUERY_FAILURE]: Icons.Database,
+  [eventCodes.DATABASE_SESSION_MALFORMED_PACKET]: Icons.Database,
   [eventCodes.DATABASE_CREATED]: Icons.Database,
   [eventCodes.DATABASE_UPDATED]: Icons.Database,
   [eventCodes.DATABASE_DELETED]: Icons.Database,
@@ -90,6 +95,14 @@ const EventIconMap: Record<EventCode, React.FC> = {
   [eventCodes.MYSQL_STATEMENT_RESET]: Icons.Database,
   [eventCodes.MYSQL_STATEMENT_FETCH]: Icons.Database,
   [eventCodes.MYSQL_STATEMENT_BULK_EXECUTE]: Icons.Database,
+  [eventCodes.MYSQL_INIT_DB]: Icons.Database,
+  [eventCodes.MYSQL_CREATE_DB]: Icons.Database,
+  [eventCodes.MYSQL_DROP_DB]: Icons.Database,
+  [eventCodes.MYSQL_SHUT_DOWN]: Icons.Database,
+  [eventCodes.MYSQL_PROCESS_KILL]: Icons.Database,
+  [eventCodes.MYSQL_DEBUG]: Icons.Database,
+  [eventCodes.MYSQL_REFRESH]: Icons.Database,
+  [eventCodes.SQLSERVER_RPC_REQUEST]: Icons.Database,
   [eventCodes.DESKTOP_SESSION_STARTED]: Icons.Desktop,
   [eventCodes.DESKTOP_SESSION_STARTED_FAILED]: Icons.Desktop,
   [eventCodes.DESKTOP_SESSION_ENDED]: Icons.Desktop,
@@ -116,6 +129,7 @@ const EventIconMap: Record<EventCode, React.FC> = {
   [eventCodes.X11_FORWARD]: Icons.Info,
   [eventCodes.X11_FORWARD_FAILURE]: Icons.Info,
   [eventCodes.CERTIFICATE_CREATED]: Icons.Keypair,
+  [eventCodes.UNKNOWN]: Icons.Question,
 };
 
 export default function renderTypeCell(event: Event, clusterId: string) {

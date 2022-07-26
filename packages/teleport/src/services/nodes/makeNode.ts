@@ -17,14 +17,23 @@ limitations under the License.
 import { Node } from './types';
 
 export default function makeNode(json): Node {
-  const { id, siteId, hostname, addr, tunnel, tags = [] } = json;
+  const {
+    id,
+    siteId,
+    hostname,
+    addr,
+    tunnel,
+    tags = [],
+    sshLogins = [],
+  } = json;
 
   return {
     id,
     clusterId: siteId,
     hostname,
-    tags: tags.map(tag => `${tag.name}: ${tag.value}`),
+    labels: tags,
     addr,
     tunnel,
+    sshLogins,
   };
 }

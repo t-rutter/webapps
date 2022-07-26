@@ -17,14 +17,22 @@ limitations under the License.
 import React, { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import { Indicator, Box, Alert, Text, Flex } from 'design';
+
 import TdpClientCanvas from 'teleport/components/TdpClientCanvas';
 import AuthnDialog from 'teleport/components/AuthnDialog';
+
 import useDesktopSession, { State } from './useDesktopSession';
 import TopBar from './TopBar';
 
 export default function Container() {
   const state = useDesktopSession();
   return <DesktopSession {...state} />;
+}
+
+declare global {
+  interface Window {
+    showDirectoryPicker: () => Promise<FileSystemDirectoryHandle>;
+  }
 }
 
 export function DesktopSession(props: State) {
@@ -62,14 +70,12 @@ export function DesktopSession(props: State) {
     alertText = clipboardState.errorText || 'clipboard sharing failed';
   } else if (unknownConnectionError) {
     alertText = 'Session disconnected for an unknown reason';
-  } else {
-    alertText = '';
   }
 
   if (alertText) {
     return (
       <Session {...props}>
-        <DesktopSessionAlert my={2} children={alertText} />
+        <DesktopSessionAlert my={2} mx={10} children={alertText} />
       </Session>
     );
   }
@@ -109,7 +115,10 @@ function Session(props: PropsWithChildren<State>) {
     username,
     hostname,
     clipboardState,
-    isRecording,
+    setClipboardState,
+    canShareDirectory,
+    isSharingDirectory,
+    setIsSharingDirectory,
     onPngFrame,
     onClipboardData,
     onTdpError,
@@ -141,16 +150,36 @@ function Session(props: PropsWithChildren<State>) {
     !disconnected &&
     clipboardSuccess;
 
+  const onShareDirectory = () => {
+    window
+      .showDirectoryPicker()
+      .then(sharedDirHandle => {
+        setIsSharingDirectory(true);
+        tdpClient.sharedDirectory = sharedDirHandle;
+        tdpClient.sendSharedDirectoryAnnounce();
+      })
+      .catch(() => {
+        setIsSharingDirectory(false);
+      });
+  };
+
   return (
     <Flex flexDirection="column">
       <TopBar
         onDisconnect={() => {
           setDisconnected(true);
+          setClipboardState(prevState => ({
+            ...prevState,
+            enabled: false,
+          }));
+          setIsSharingDirectory(false);
           tdpClient.nuke();
         }}
         userHost={`${username}@${hostname}`}
-        clipboard={clipboardSharingActive}
-        recording={isRecording}
+        clipboardSharingEnabled={clipboardSharingActive}
+        canShareDirectory={canShareDirectory}
+        isSharingDirectory={isSharingDirectory}
+        onShareDirectory={onShareDirectory}
       />
 
       {props.children}

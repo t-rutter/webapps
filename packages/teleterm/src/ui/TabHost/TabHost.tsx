@@ -17,109 +17,107 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import { Flex } from 'design';
+
 import { useAppContext } from 'teleterm/ui/appContextProvider';
-import * as types from 'teleterm/ui/services/docs/types';
+import * as types from 'teleterm/ui/services/workspacesService/documentsService/types';
 import { Tabs } from 'teleterm/ui/Tabs';
-import Document from 'teleterm/ui/Document';
-import DocumentHome from 'teleterm/ui/DocumentHome';
-import DocumentGateway from 'teleterm/ui/DocumentGateway';
-import DocumentTerminal from 'teleterm/ui/DocumentTerminal';
-import DocumentCluster from 'teleterm/ui/DocumentCluster';
+
+import { DocumentsRenderer } from 'teleterm/ui/Documents';
+
+import AppContext from 'teleterm/ui/appContext';
+
+import { useKeyboardShortcutFormatters } from 'teleterm/ui/services/keyboardShortcuts';
+
 import { useTabShortcuts } from './useTabShortcuts';
+import { useNewTabOpener } from './useNewTabOpener';
+import { ClusterConnectPanel } from './ClusterConnectPanel/ClusterConnectPanel';
 
-export function TabHost() {
+export function TabHostContainer() {
   const ctx = useAppContext();
-  const { docsService } = ctx;
-  const documents = docsService.getDocuments();
-  const docActive = docsService.getActive();
+  ctx.workspacesService.useState();
+  const isRootClusterSelected = !!ctx.workspacesService.getRootClusterUri();
 
-  // enable keyboard shortcuts
-  useTabShortcuts();
+  if (isRootClusterSelected) {
+    return <TabHost ctx={ctx} />;
+  }
+  return <ClusterConnectPanel />;
+}
 
-  // subscribe
-  docsService.useState();
+export function TabHost({ ctx }: { ctx: AppContext }) {
+  const documentsService =
+    ctx.workspacesService.getActiveWorkspaceDocumentService();
+  const activeDocument = documentsService?.getActive();
+
+  // TODO(gzdunek): make workspace refactor - it'd be helpful to have a single object that fully represents a workspace
+  const { openClusterTab } = useNewTabOpener({
+    documentsService,
+    localClusterUri:
+      ctx.workspacesService.getActiveWorkspace()?.localClusterUri,
+  });
+  const { getLabelWithShortcut } = useKeyboardShortcutFormatters();
+
+  useTabShortcuts({
+    documentsService,
+    localClusterUri:
+      ctx.workspacesService.getActiveWorkspace()?.localClusterUri,
+  });
 
   function handleTabClick(doc: types.Document) {
-    docsService.open(doc.uri);
+    documentsService.open(doc.uri);
   }
 
   function handleTabClose(doc: types.Document) {
-    docsService.close(doc.uri);
+    documentsService.close(doc.uri);
   }
 
   function handleTabMoved(oldIndex: number, newIndex: number) {
-    docsService.swapPosition(oldIndex, newIndex);
-  }
-
-  function handleTabNew() {
-    docsService.openNewTerminal();
+    documentsService.swapPosition(oldIndex, newIndex);
   }
 
   function handleTabContextMenu(doc: types.Document) {
     ctx.mainProcessClient.openTabContextMenu({
       documentKind: doc.kind,
       onClose: () => {
-        docsService.close(doc.uri);
+        documentsService.close(doc.uri);
       },
       onCloseOthers: () => {
-        docsService.closeOthers(doc.uri);
+        documentsService.closeOthers(doc.uri);
       },
       onCloseToRight: () => {
-        docsService.closeToRight(doc.uri);
+        documentsService.closeToRight(doc.uri);
       },
       onDuplicatePty: () => {
-        docsService.duplicatePtyAndActivate(doc.uri);
+        documentsService.duplicatePtyAndActivate(doc.uri);
       },
     });
   }
 
-  const $docs = documents.map(doc => {
-    const isActiveDoc = doc === docActive;
-    return <MemoizedDocument doc={doc} visible={isActiveDoc} key={doc.uri} />;
-  });
+  function getActiveWorkspaceDocuments() {
+    return ctx.workspacesService
+      .getActiveWorkspaceDocumentService()
+      .getDocuments();
+  }
 
   return (
     <StyledTabHost>
-      <Flex bg="terminalDark" height="32px">
+      <Flex height="32px">
         <Tabs
           flex="1"
-          items={documents.filter(d => d.kind !== 'doc.home')}
+          items={getActiveWorkspaceDocuments()}
           onClose={handleTabClose}
           onSelect={handleTabClick}
           onContextMenu={handleTabContextMenu}
-          activeTab={docActive.uri}
+          activeTab={activeDocument?.uri}
           onMoved={handleTabMoved}
           disableNew={false}
-          onNew={handleTabNew}
+          onNew={openClusterTab}
+          newTabTooltip={getLabelWithShortcut('New Tab', 'tab-new')}
+          closeTabTooltip={getLabelWithShortcut('Close', 'tab-close')}
         />
       </Flex>
-      {$docs}
+      <DocumentsRenderer />
     </StyledTabHost>
   );
-}
-
-function MemoizedDocument(props: { doc: types.Document; visible: boolean }) {
-  const { doc, visible } = props;
-  return React.useMemo(() => {
-    switch (doc.kind) {
-      case 'doc.home':
-        return <DocumentHome doc={doc} visible={visible} />;
-      case 'doc.cluster':
-        return <DocumentCluster doc={doc} visible={visible} />;
-      case 'doc.gateway':
-        return <DocumentGateway doc={doc} visible={visible} />;
-      case 'doc.terminal_shell':
-      case 'doc.terminal_tsh_node':
-      case 'doc.terminal_tsh_kube':
-        return <DocumentTerminal doc={doc} visible={visible} />;
-      default:
-        return (
-          <Document visible={visible}>
-            Document kind "{doc.kind}" is not supported
-          </Document>
-        );
-    }
-  }, [visible, doc]);
 }
 
 const StyledTabHost = styled.div`

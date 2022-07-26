@@ -17,11 +17,13 @@ limitations under the License.
 import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router';
 import useAttempt from 'shared/hooks/useAttemptNext';
-import { useClipboardReadWrite } from './useClipboard';
+
 import useWebAuthn from 'teleport/lib/useWebAuthn';
 import { UrlDesktopParams } from 'teleport/config';
 import desktopService from 'teleport/services/desktops';
 import userService from 'teleport/services/user';
+
+import { useClipboardReadWrite } from './useClipboard';
 import useTdpClientCanvas from './useTdpClientCanvas';
 
 export default function useDesktopSession() {
@@ -43,8 +45,8 @@ export default function useDesktopSession() {
   // disconnected tracks whether the user intentionally disconnected the client
   const [disconnected, setDisconnected] = useState(false);
 
-  // recording tracks whether or not a recording is in progress
-  const [isRecording, setIsRecording] = useState(false);
+  const [canShareDirectory, setCanShareDirectory] = useState(false);
+  const [isSharingDirectory, setIsSharingDirectory] = useState(false);
 
   const { username, desktopName, clusterId } = useParams<UrlDesktopParams>();
 
@@ -121,10 +123,10 @@ export default function useDesktopSession() {
       Promise.all([
         desktopService
           .fetchDesktop(clusterId, desktopName)
-          .then(desktop => setHostname(desktop.addr)),
+          .then(desktop => setHostname(desktop.name)),
         userService.fetchUserContext().then(user => {
           setHasClipboardSharingEnabled(user.acl.clipboardSharingEnabled);
-          setIsRecording(user.acl.desktopSessionRecordingEnabled);
+          setCanShareDirectory(user.acl.directorySharingEnabled);
         }),
       ])
     );
@@ -136,6 +138,8 @@ export default function useDesktopSession() {
     clusterId,
     setTdpConnection,
     setWsConnection,
+    setClipboardState,
+    setIsSharingDirectory,
     enableClipboardSharing:
       clipboardState.enabled &&
       clipboardState.permission.state === 'granted' &&
@@ -148,7 +152,10 @@ export default function useDesktopSession() {
     hostname,
     username,
     clipboardState,
-    isRecording,
+    setClipboardState,
+    canShareDirectory,
+    isSharingDirectory,
+    setIsSharingDirectory,
     fetchAttempt,
     tdpConnection,
     wsConnection,

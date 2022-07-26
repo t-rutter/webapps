@@ -14,30 +14,55 @@
  * limitations under the License.
  */
 
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import { Box, Flex } from 'design';
-import { space, width, color, height } from 'styled-system';
-import useQuickInput, { State } from './useQuickInput';
+import { color, height, space, width } from 'styled-system';
+
+import { useAppContext } from 'teleterm/ui/appContextProvider';
+
+import useQuickInput from './useQuickInput';
 import QuickInputList from './QuickInputList';
 
 export default function Container() {
-  const state = useQuickInput();
-  return <QuickInput {...state} />;
+  const { workspacesService } = useAppContext();
+
+  workspacesService.useState();
+
+  if (!workspacesService.getRootClusterUri()) {
+    return null;
+  }
+  return <QuickInput />;
 }
 
-export function QuickInput(props: State) {
-  const { visible, listItems, activeItem } = props;
+function QuickInput() {
+  const props = useQuickInput();
+  const { visible, activeSuggestion, autocompleteResult, inputValue } = props;
+  const hasSuggestions =
+    autocompleteResult.kind === 'autocomplete.partial-match';
   const refInput = useRef<HTMLInputElement>();
+  const measuringInputRef = useRef<HTMLSpanElement>();
   const refList = useRef<HTMLElement>();
   const refContainer = useRef<HTMLElement>();
+  const [measuredInputTextWidth, setMeasuredInputTextWidth] =
+    useState<number>();
 
   const handleInputChange = useMemo(() => {
     return debounce(() => {
       props.onInputChange(refInput.current.value);
+      measureInputTextWidth();
     }, 100);
   }, []);
+
+  // Update input value if it changed outside of this component. This happens when the user pick an
+  // autocomplete suggestion.
+  useEffect(() => {
+    if (refInput.current.value !== inputValue) {
+      refInput.current.value = inputValue;
+      measureInputTextWidth();
+    }
+  }, [inputValue]);
 
   function handleOnFocus(e: React.SyntheticEvent) {
     // trigger a callback when focus is coming from external element
@@ -66,22 +91,29 @@ export function QuickInput(props: State) {
 
   const handleArrowKey = (e: React.KeyboardEvent, nudge = 0) => {
     e.stopPropagation();
-    const next = getNext(activeItem + nudge, listItems.length);
-    props.onActiveItem(next);
+    if (!hasSuggestions) {
+      return;
+    }
+    const next = getNext(
+      activeSuggestion + nudge,
+      autocompleteResult.suggestions.length
+    );
+    props.onActiveSuggestion(next);
+  };
+
+  const measureInputTextWidth = () => {
+    const width = measuringInputRef.current?.getBoundingClientRect().width || 0;
+    setMeasuredInputTextWidth(width);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const keyCode = e.which;
     switch (keyCode) {
       case KeyEnum.RETURN:
-        if (listItems.length > 0) {
-          e.stopPropagation();
-          e.preventDefault();
-          if (listItems[activeItem].kind !== 'item.empty') {
-            refInput.current.value = '';
-            props.onPickItem(activeItem);
-          }
-        }
+        e.stopPropagation();
+        e.preventDefault();
+
+        props.onEnter(activeSuggestion);
         return;
       case KeyEnum.ESC:
         props.onBack();
@@ -113,48 +145,74 @@ export function QuickInput(props: State) {
     <Flex
       style={{
         position: 'relative',
+        width: '100%',
+        height: '100%',
       }}
-      justifyContent="center"
+      flex={1}
       ref={refContainer}
       onFocus={handleOnFocus}
       onBlur={handleOnBlur}
     >
-      <Box width="600px" mx="auto">
-        <Input
-          ref={refInput}
-          placeholder="Enter a command and press enter"
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-        />
-      </Box>
-      {visible && (
+      <MeasuringInput ref={measuringInputRef}>{inputValue}</MeasuringInput>
+      <Input
+        ref={refInput}
+        spellCheck={false}
+        placeholder="Enter a command and press enter"
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        isOpened={visible}
+      />
+      {!visible && <Shortcut>{props.keyboardShortcut}</Shortcut>}
+      {visible && hasSuggestions && (
         <QuickInputList
           ref={refList}
-          items={listItems}
-          activeItem={activeItem}
-          onPick={props.onPickItem}
+          position={measuredInputTextWidth}
+          items={autocompleteResult.suggestions}
+          activeItem={activeSuggestion}
+          onPick={props.onEnter}
         />
       )}
     </Flex>
   );
 }
 
+const MeasuringInput = styled.span`
+  z-index: -1;
+  font-size: 14px;
+  padding-left: 8px;
+  position: absolute;
+  visibility: hidden;
+`;
+
 const Input = styled.input(props => {
   const { theme } = props;
   return {
-    height: '32px',
-    background: theme.colors.primary.lighter,
+    height: '100%',
+    background: 'inherit',
+    display: 'flex',
+    flex: '1',
+    zIndex: '0',
     boxSizing: 'border-box',
     color: theme.colors.text.primary,
     width: '100%',
-    border: 'none',
+    fontSize: '14px',
+    border: `0.5px ${theme.colors.action.disabledBackground} solid`,
+    borderRadius: '4px',
     outline: 'none',
-    padding: '2px 8px',
+    padding: props.isOpened ? '2px 8px' : '2px 46px 2px 8px', // wider right margin makes place for a shortcut
+    '::placeholder': {
+      color: theme.colors.text.secondary,
+    },
     '&:hover, &:focus': {
       color: theme.colors.primary.contrastText,
-      background: theme.colors.primary.lighter,
-
-      opacity: 1,
+      borderColor: theme.colors.light,
+    },
+    '&:focus': {
+      borderColor: theme.colors.secondary.main,
+      backgroundColor: theme.colors.primary.darker,
+      '::placeholder': {
+        color: theme.colors.text.placeholder,
+      },
     },
 
     ...space(props),
@@ -163,6 +221,18 @@ const Input = styled.input(props => {
     ...color(props),
   };
 });
+
+const Shortcut = styled(Box)`
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  padding: 2px 3px;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  background-color: ${({ theme }) => theme.colors.primary.light};
+  line-height: 12px;
+  font-size: 12px;
+  border-radius: 2px;
+`;
 
 const KeyEnum = {
   BACKSPACE: 8,

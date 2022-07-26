@@ -15,8 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+
+import { Attempt } from 'shared/hooks/useAsync';
+
 import * as types from 'teleterm/ui/services/clusters/types';
-import { Attempt } from 'teleterm/ui/useAsync';
+
 import { ClusterLoginPresentation } from './ClusterLogin';
 
 export default {
@@ -45,6 +48,7 @@ function makeProps() {
       } as types.AuthSettings,
     } as const,
 
+    loggedInUserName: null,
     onCloseDialog: () => null,
     onAbort: () => null,
     onLoginWithLocal: () => Promise.resolve<[void, Error]>([null, null]),

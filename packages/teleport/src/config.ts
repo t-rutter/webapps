@@ -16,21 +16,43 @@ limitations under the License.
 
 import { generatePath } from 'react-router';
 import { merge } from 'lodash';
-import { AuthProvider, Auth2faType, PreferredMfaType } from 'shared/services';
+
+import {
+  AuthProvider,
+  Auth2faType,
+  AuthType,
+  PrimaryAuthType,
+  PreferredMfaType,
+} from 'shared/services';
+
+import { SortType } from 'teleport/services/agents';
 import { RecordingType } from 'teleport/services/recordings';
 
+import generateResourcePath from './generateResourcePath';
+
 const cfg = {
+  // TODO(isaiah): remove after feature is finished.
+  enableDirectorySharing: false, // note to reviewers: should be false in any PRs.
+  enabledDiscoverWizard: false, // TODO (anyone): remove after wizard is finished
   isEnterprise: false,
   isCloud: false,
   tunnelPublicAddress: '',
+
+  configDir: '$HOME/.config',
 
   baseUrl: window.location.origin,
 
   auth: {
     localAuthEnabled: true,
+    allowPasswordless: false,
+    // localConnectorName is used to determine primary "local" auth preference.
+    // Currently, there is only one bookmarked connector name "passwordless"
+    // that when used, passwordless is the preferred authn method. Empty means
+    // local user + password authn preference.
+    localConnectorName: '',
     providers: [] as AuthProvider[],
     second_factor: 'off' as Auth2faType,
-    authType: 'local',
+    authType: 'local' as AuthType,
     preferredLocalMfa: '' as PreferredMfaType,
   },
 
@@ -43,6 +65,7 @@ const cfg = {
 
   routes: {
     root: '/web',
+    discover: '/web/discover',
     apps: '/web/cluster/:clusterId/apps',
     appLauncher: '/web/launch/:fqdn/:clusterId?/:publicAddr?/:arn?',
     support: '/web/support',
@@ -67,7 +90,7 @@ const cfg = {
     consoleNodes: '/web/cluster/:clusterId/console/nodes',
     consoleConnect: '/web/cluster/:clusterId/console/node/:serverId/:login',
     consoleSession: '/web/cluster/:clusterId/console/session/:sid',
-    player: '/web/cluster/:clusterId/session/:sid', // ?recordingType=ssh|desktop&durationMs=1234
+    player: '/web/cluster/:clusterId/session/:sid', // ?recordingType=ssh|desktop|k8s&durationMs=1234
     login: '/web/login',
     loginSuccess: '/web/msg/info/login_success',
     loginErrorLegacy: '/web/msg/error/login_failed',
@@ -88,7 +111,8 @@ const cfg = {
   api: {
     appSession: '/v1/webapi/sessions/app',
     appFqdnPath: '/v1/webapi/apps/:fqdn/:clusterId?/:publicAddr?',
-    applicationsPath: '/v1/webapi/sites/:clusterId/apps',
+    applicationsPath:
+      '/v1/webapi/sites/:clusterId/apps?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?',
     clustersPath: '/v1/webapi/sites',
     clusterEventsPath: `/v1/webapi/sites/:clusterId/events/search?from=:start?&to=:end?&limit=:limit?&startKey=:startKey?&include=:include?`,
     clusterEventsRecordingsPath: `/v1/webapi/sites/:clusterId/events/search/sessions?from=:start?&to=:end?&limit=:limit?&startKey=:startKey?`,
@@ -100,9 +124,10 @@ const cfg = {
     userStatusPath: '/v1/webapi/user/status',
     passwordTokenPath: '/v1/webapi/users/password/token/:tokenId?',
     changeUserPasswordPath: '/v1/webapi/users/password',
-    nodesPath: '/v1/webapi/sites/:clusterId/nodes',
-    databasesPath: `/v1/webapi/sites/:clusterId/databases`,
-    desktopsPath: `/v1/webapi/sites/:clusterId/desktops`,
+    nodesPath:
+      '/v1/webapi/sites/:clusterId/nodes?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?',
+    databasesPath: `/v1/webapi/sites/:clusterId/databases?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?`,
+    desktopsPath: `/v1/webapi/sites/:clusterId/desktops?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?`,
     desktopPath: `/v1/webapi/sites/:clusterId/desktops/:desktopName`,
     desktopWsAddr:
       'wss://:fqdn/v1/webapi/sites/:clusterId/desktops/:desktopName/connect?access_token=:token&username=:username&width=:width&height=:height',
@@ -112,17 +137,18 @@ const cfg = {
     ttyWsAddr:
       'wss://:fqdn/v1/webapi/sites/:clusterId/connect?access_token=:token&params=:params',
     terminalSessionPath: '/v1/webapi/sites/:clusterId/sessions/:sid?',
-    kubernetesPath: '/v1/webapi/sites/:clusterId/kubernetes',
+    kubernetesPath:
+      '/v1/webapi/sites/:clusterId/kubernetes?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?',
 
     usersPath: '/v1/webapi/users',
-    usersDelete: '/v1/webapi/users/:username',
+    userWithUsernamePath: '/v1/webapi/users/:username',
     createPrivilegeTokenPath: '/v1/webapi/users/privilege/token',
 
     rolesPath: '/v1/webapi/roles/:name?',
     githubConnectorsPath: '/v1/webapi/github/:name?',
     trustedClustersPath: '/v1/webapi/trustedcluster/:name?',
 
-    nodeTokenPath: '/v1/webapi/nodes/token',
+    joinTokenPath: '/v1/webapi/token',
     nodeScriptPath: '/scripts/:token/install-node.sh',
     appNodeScriptPath: '/scripts/:token/install-app.sh?name=:name&uri=:uri',
 
@@ -180,6 +206,20 @@ const cfg = {
     return cfg.auth.localAuthEnabled;
   },
 
+  isPasswordlessEnabled() {
+    return cfg.auth.allowPasswordless;
+  },
+
+  getPrimaryAuthType(): PrimaryAuthType {
+    if (cfg.auth.localConnectorName === 'passwordless') {
+      return 'passwordless';
+    }
+
+    if (cfg.auth.authType === 'local') return 'local';
+
+    return 'sso';
+  },
+
   getAuthType() {
     return cfg.auth.authType;
   },
@@ -204,8 +244,8 @@ const cfg = {
     return generatePath(cfg.routes.desktops, { clusterId });
   },
 
-  getNodeJoinTokenUrl() {
-    return cfg.api.nodeTokenPath;
+  getJoinTokenUrl() {
+    return cfg.api.joinTokenPath;
   },
 
   getNodeScriptUrl(token: string) {
@@ -319,32 +359,44 @@ const cfg = {
     return cfg.api.usersPath;
   },
 
-  getUsersDeleteUrl(username = '') {
-    return generatePath(cfg.api.usersDelete, { username });
+  getUserWithUsernameUrl(username: string) {
+    return generatePath(cfg.api.userWithUsernamePath, { username });
   },
 
   getTerminalSessionUrl({ clusterId, sid }: UrlParams) {
     return generatePath(cfg.api.terminalSessionPath, { clusterId, sid });
   },
 
-  getClusterNodesUrl(clusterId: string) {
-    return generatePath(cfg.api.nodesPath, { clusterId });
+  getClusterNodesUrl(clusterId: string, params: UrlResourcesParams) {
+    return generateResourcePath(cfg.api.nodesPath, {
+      clusterId,
+      ...params,
+    });
   },
 
-  getDatabasesUrl(clusterId: string) {
-    return generatePath(cfg.api.databasesPath, { clusterId });
+  getDatabasesUrl(clusterId: string, params: UrlResourcesParams) {
+    return generateResourcePath(cfg.api.databasesPath, {
+      clusterId,
+      ...params,
+    });
   },
 
-  getDesktopsUrl(clusterId: string) {
-    return generatePath(cfg.api.desktopsPath, { clusterId });
+  getDesktopsUrl(clusterId: string, params: UrlResourcesParams) {
+    return generateResourcePath(cfg.api.desktopsPath, {
+      clusterId,
+      ...params,
+    });
   },
 
   getDesktopUrl(clusterId: string, desktopName: string) {
     return generatePath(cfg.api.desktopPath, { clusterId, desktopName });
   },
 
-  getApplicationsUrl(clusterId: string) {
-    return generatePath(cfg.api.applicationsPath, { clusterId });
+  getApplicationsUrl(clusterId: string, params: UrlResourcesParams) {
+    return generateResourcePath(cfg.api.applicationsPath, {
+      clusterId,
+      ...params,
+    });
   },
 
   getScpUrl(params: UrlScpParams) {
@@ -369,8 +421,11 @@ const cfg = {
     return generatePath(cfg.api.rolesPath, { name });
   },
 
-  getKubernetesUrl(clusterId: string) {
-    return generatePath(cfg.api.kubernetesPath, { clusterId });
+  getKubernetesUrl(clusterId: string, params: UrlResourcesParams) {
+    return generateResourcePath(cfg.api.kubernetesPath, {
+      clusterId,
+      ...params,
+    });
   },
 
   getAuthnChallengeWithTokenUrl(tokenId: string) {
@@ -464,6 +519,15 @@ export interface UrlDesktopParams {
   username?: string;
   desktopName?: string;
   clusterId: string;
+}
+
+export interface UrlResourcesParams {
+  query?: string;
+  search?: string;
+  sort?: SortType;
+  limit?: number;
+  startKey?: string;
+  searchAsRoles?: 'yes' | '';
 }
 
 export default cfg;

@@ -12,6 +12,7 @@ limitations under the License.
 */
 
 import { Store } from 'shared/libs/stores';
+
 import { UserContext } from 'teleport/services/user';
 
 export default class StoreUserContext extends Store<UserContext> {
@@ -35,10 +36,6 @@ export default class StoreUserContext extends Store<UserContext> {
 
   getRoleAccess() {
     return this.state.acl.roles;
-  }
-
-  getSshLogins() {
-    return this.state.acl.sshLogins;
   }
 
   getWindowsLogins() {
@@ -94,10 +91,18 @@ export default class StoreUserContext extends Store<UserContext> {
   }
 
   getSessionsAccess() {
-    return this.state.acl.sessions;
+    return this.state.acl.recordedSessions;
+  }
+
+  getActiveSessionsAccess() {
+    return this.state.acl.activeSessions;
   }
 
   getClipboardAccess() {
     return this.state.acl.clipboardSharingEnabled;
+  }
+
+  getNodeAccess() {
+    return this.state.acl.nodes;
   }
 }

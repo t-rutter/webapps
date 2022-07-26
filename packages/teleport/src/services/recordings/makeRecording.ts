@@ -1,13 +1,15 @@
 import { differenceInMilliseconds, formatDistanceStrict } from 'date-fns';
-import { Recording } from './types';
+
 import { eventCodes } from 'teleport/services/audit';
+
+import { Recording } from './types';
 
 // Takes in json objects built by SessionEnd and WindowsDesktopSessionEnd as defined in teleport/api/types/events/events.proto.
 export function makeRecording(event: any): Recording {
   if (event.code === eventCodes.DESKTOP_SESSION_ENDED) {
     return makeDesktopRecording(event);
   } else {
-    return makeSshRecording(event);
+    return makeSshOrKubeRecording(event);
   }
 }
 
@@ -40,8 +42,8 @@ function makeDesktopRecording({
   } as Recording;
 }
 
-function makeSshRecording({
-  participants = [],
+function makeSshOrKubeRecording({
+  participants,
   time,
   session_start,
   session_stop,
@@ -77,10 +79,10 @@ function makeSshRecording({
     durationText,
     sid,
     createdDate: new Date(time),
-    users: participants.join(', '),
+    users: participants ? participants.join(', ') : [],
     hostname,
     description,
-    recordingType: 'ssh',
+    recordingType: kubernetes_cluster ? 'k8s' : 'ssh',
     playable,
   } as Recording;
 }

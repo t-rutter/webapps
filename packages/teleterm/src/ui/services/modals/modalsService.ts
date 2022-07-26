@@ -15,13 +15,8 @@ limitations under the License.
 */
 
 import { useStore } from 'shared/libs/stores';
-import { ImmutableStore } from '../immutableStore';
 
-type OpenProxyDbDialogOpts = {
-  dbUri: string;
-  port?: string;
-  onSuccess?: (gatewayUri: string) => void;
-};
+import { ImmutableStore } from '../immutableStore';
 
 export class ModalsService extends ImmutableStore<Dialog> {
   state: Dialog = {
@@ -32,30 +27,24 @@ export class ModalsService extends ImmutableStore<Dialog> {
     this.setState(() => dialog);
   }
 
-  openProxyDbDialog(opts: OpenProxyDbDialogOpts) {
-    this.setState(() => ({
-      kind: 'create-gateway',
-      onSuccess: opts.onSuccess,
-      targetUri: opts.dbUri,
-      port: opts.port,
-    }));
-  }
-
-  openProxySshDialog(serverUri: string) {
-    this.setState(() => ({
-      kind: 'server-connect',
-      serverUri,
-    }));
-  }
-
-  openClusterConnectDialog(
-    clusterUri?: string,
-    onSuccess?: (clusterUri: string) => void
-  ) {
+  openClusterConnectDialog(options: {
+    clusterUri?: string;
+    onSuccess?(clusterUri: string): void;
+    onCancel?(): void;
+  }) {
     this.setState(() => ({
       kind: 'cluster-connect',
-      clusterUri,
-      onSuccess,
+      ...options,
+    }));
+  }
+
+  openDocumentsReopenDialog(options: {
+    onConfirm?(): void;
+    onCancel?(): void;
+  }) {
+    this.setState(() => ({
+      kind: 'documents-reopen',
+      ...options,
     }));
   }
 
@@ -74,33 +63,31 @@ export interface DialogBase {
   kind: 'none';
 }
 
-export interface DialogNewGateway {
-  kind: 'create-gateway';
-  targetUri: string;
-  port?: string;
-  onSuccess?: (gatewayUri: string) => void;
-}
-
 export interface DialogClusterConnect {
   kind: 'cluster-connect';
   clusterUri?: string;
+
   onSuccess?(clusterUri: string): void;
+
+  onCancel?(): void;
 }
 
-export interface DialogClusterRemove {
-  kind: 'cluster-remove';
+export interface DialogClusterLogout {
+  kind: 'cluster-logout';
   clusterUri: string;
   clusterTitle: string;
 }
 
-export interface DialogServerConnect {
-  kind: 'server-connect';
-  serverUri: string;
+export interface DialogDocumentsReopen {
+  kind: 'documents-reopen';
+
+  onConfirm?(): void;
+
+  onCancel?(): void;
 }
 
 export type Dialog =
   | DialogBase
   | DialogClusterConnect
-  | DialogNewGateway
-  | DialogServerConnect
-  | DialogClusterRemove;
+  | DialogClusterLogout
+  | DialogDocumentsReopen;

@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+
 import { AddApp } from './AddApp';
 
 export default {
@@ -26,7 +27,7 @@ export const Created = () => (
 );
 
 export const Loaded = () => {
-  return <AddApp {...props} cmd="" />;
+  return <AddApp {...props} />;
 };
 
 export const Processing = () => (
@@ -40,10 +41,23 @@ export const Failed = () => (
   />
 );
 
-export const ManuallyLocal = () => <AddApp {...props} automatic={false} />;
+export const ManuallyProcessing = () => (
+  <AddApp {...props} automatic={false} attempt={{ status: 'processing' }} />
+);
 
-export const ManuallySSO = () => (
-  <AddApp {...props} automatic={false} isAuthTypeLocal={false} />
+export const ManuallyWithToken = () => <AddApp {...props} automatic={false} />;
+
+export const ManuallyWithoutTokenLocal = () => (
+  <AddApp {...props} automatic={false} attempt={{ status: 'failed' }} />
+);
+
+export const ManuallyWithoutTokenSSO = () => (
+  <AddApp
+    {...props}
+    automatic={false}
+    attempt={{ status: 'failed' }}
+    isAuthTypeLocal={false}
+  />
 );
 
 const props = {
@@ -54,13 +68,13 @@ const props = {
   setAutomatic: () => null,
   createToken: () => Promise.resolve(true),
   onClose: () => null,
+  setCmdParams: () => null,
   createJoinToken: () => Promise.resolve(null),
   version: '5.0.0-dev',
-  cmd: `sudo bash -c "$(curl -fsSL 'http://localhost/scripts/86/install-app.sh?name=test&uri=http://myapp/')"`,
-  expires: '1 hour',
   reset: () => null,
   attempt: {
     status: '',
     statusText: '',
   } as any,
+  token: { id: 'join-token', expiryText: '1 hour', expiry: null },
 };

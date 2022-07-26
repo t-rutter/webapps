@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { State } from './useChangePassword';
 import { ChangePassword } from './ChangePassword';
 
@@ -26,7 +27,6 @@ export const Loaded = () => <ChangePassword {...props} />;
 
 const props: State = {
   changePassword: () => null,
-  changePasswordWithU2f: () => null,
   changePasswordWithWebauthn: () => null,
   preferredMfaType: 'webauthn',
   auth2faType: 'on',

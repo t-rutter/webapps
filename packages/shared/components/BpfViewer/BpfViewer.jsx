@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import ace from 'ace-builds/src-min-noconflict/ace';
+
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import './ace-mode-bpf';
@@ -96,7 +97,7 @@ const StyledTextEditor = styled.div`
 
   .ace-monokai .ace_marker-layer .ace_active-line {
     //background: #928787;
-   }
+  }
 
   //.ace-monokai .ace_gutter,
   //.ace-monokai .ace_gutter-cell {

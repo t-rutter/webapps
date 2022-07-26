@@ -15,21 +15,23 @@
  */
 
 import api from 'teleport/services/api';
-import nodes from 'teleport/services/nodes';
+import NodesService from 'teleport/services/nodes';
 
 test('correct formatting of nodes fetch response', async () => {
+  const nodesService = new NodesService();
   jest.spyOn(api, 'get').mockResolvedValue(mockResponse);
-  const response = await nodes.fetchNodes('does-not-matter');
+  const response = await nodesService.fetchNodes('does-not-matter');
 
   expect(response).toEqual({
-    nodes: [
+    agents: [
       {
         id: '00a53f99-993b-40bc-af51-5ba259af4e43',
         clusterId: 'im-a-cluster-name',
         hostname: 'im-a-nodename',
-        tags: ['env: dev'],
+        labels: [{ name: 'env', value: 'dev' }],
         addr: '192.168.86.132:3022',
         tunnel: false,
+        sshLogins: [],
       },
     ],
     startKey: mockResponse.startKey,
@@ -38,22 +40,24 @@ test('correct formatting of nodes fetch response', async () => {
 });
 
 test('null response from nodes fetch', async () => {
+  const nodesService = new NodesService();
   jest.spyOn(api, 'get').mockResolvedValue(null);
 
-  const response = await nodes.fetchNodes('does-not-matter');
+  const response = await nodesService.fetchNodes('does-not-matter');
 
   expect(response).toEqual({
-    nodes: [],
+    agents: [],
     startKey: undefined,
     totalCount: undefined,
   });
 });
 
 test('null labels field in nodes fetch response', async () => {
+  const nodesService = new NodesService();
   jest.spyOn(api, 'get').mockResolvedValue({ items: [{ labels: null }] });
-  const response = await nodes.fetchNodes('does-not-matter');
+  const response = await nodesService.fetchNodes('does-not-matter');
 
-  expect(response.nodes[0].tags).toEqual([]);
+  expect(response.agents[0].labels).toEqual([]);
 });
 
 const mockResponse = {

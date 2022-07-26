@@ -2,6 +2,11 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
+
+import { AppInitializer } from 'teleterm/ui/AppInitializer';
+
+import { NotificationsHost } from 'teleterm/ui/components/Notifcations';
+
 import CatchError from './components/CatchError';
 import ModalsHost from './ModalsHost';
 import AppContextProvider from './appContextProvider';
@@ -17,8 +22,11 @@ const App: React.FC<{ ctx: AppContext }> = ({ ctx }) => {
         <DndProvider backend={HTML5Backend}>
           <AppContextProvider value={ctx}>
             <ThemeProvider appearanceConfig={appearance}>
-              <LayoutManager />
-              <ModalsHost />
+              <AppInitializer>
+                <LayoutManager />
+                <ModalsHost />
+                <NotificationsHost />
+              </AppInitializer>
             </ThemeProvider>
           </AppContextProvider>
         </DndProvider>

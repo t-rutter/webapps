@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gravitational, Inc.
+Copyright 2019-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,9 +25,11 @@ import {
   requiredToken,
   requiredField,
 } from 'shared/components/Validation/rules';
-import { Attempt } from 'teleterm/ui/useAsync';
+import { Attempt } from 'shared/hooks/useAsync';
 import createMfaOptions, { MfaOption } from 'shared/utils/createMfaOptions';
+
 import * as types from 'teleterm/ui/services/clusters/types';
+
 import SSOButtonList from './SsoButtons';
 import PromptHardwareKey from './PromptHardwareKey';
 import PromptSsoStatus from './PromptSsoStatus';
@@ -35,6 +37,7 @@ import PromptSsoStatus from './PromptSsoStatus';
 export default function LoginForm(props: Props) {
   const {
     title,
+    loggedInUserName,
     loginAttempt,
     preferredMfa,
     onAbort,
@@ -55,7 +58,7 @@ export default function LoginForm(props: Props) {
   });
   const [mfaType, setMfaType] = useState<MfaOption>(mfaOptions[0]);
   const [pass, setPass] = useState('');
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState(loggedInUserName || '');
   const [token, setToken] = useState('');
 
   const [isExpanded, toggleExpander] = useState(
@@ -118,11 +121,17 @@ export default function LoginForm(props: Props) {
             </FlexBordered>
           )}
           {isLocalAuthEnabled && isExpanded && (
-            <FlexBordered as="form" onSubmit={preventDefault}>
+            <FlexBordered
+              as="form"
+              onSubmit={e => {
+                e.preventDefault();
+                validator.validate() && handleLocalLoginClick();
+              }}
+            >
               <FieldInput
                 rule={requiredField('Username is required')}
                 label="Username"
-                autoFocus
+                autoFocus={!loggedInUserName}
                 value={user}
                 onChange={e => setUser(e.target.value)}
                 placeholder="Username"
@@ -132,6 +141,7 @@ export default function LoginForm(props: Props) {
                   rule={requiredField('Password is required')}
                   label="Password"
                   value={pass}
+                  autoFocus={!!loggedInUserName}
                   onChange={e => setPass(e.target.value)}
                   type="password"
                   placeholder="Password"
@@ -162,18 +172,13 @@ export default function LoginForm(props: Props) {
                         width="50%"
                         label="Authenticator code"
                         rule={requiredToken}
-                        autoComplete="off"
+                        inputMode="numeric"
+                        autoComplete="one-time-code"
                         value={token}
                         onChange={e => setToken(e.target.value)}
                         placeholder="123 456"
                         mb={0}
                       />
-                    )}
-                    {mfaType.value === 'u2f' && isProcessing && (
-                      <Text typography="body2" mb={1}>
-                        Insert your hardware key and press the button on the
-                        key.
-                      </Text>
                     )}
                   </Flex>
                 </Box>
@@ -183,7 +188,6 @@ export default function LoginForm(props: Props) {
                 mt={3}
                 type="submit"
                 size="large"
-                onClick={() => validator.validate() && handleLocalLoginClick()}
                 disabled={isProcessing}
               >
                 LOGIN
@@ -232,6 +236,7 @@ type Props = {
   preferredMfa: types.PreferredMfaType;
   auth2faType?: types.Auth2faType;
   authProviders: types.AuthProvider[];
+  loggedInUserName?: string;
   onAbort(): void;
   onLoginWithSso(provider: types.AuthProvider): void;
   onLogin(
@@ -240,9 +245,4 @@ type Props = {
     token: string,
     auth2fa: types.Auth2faType
   ): void;
-};
-
-const preventDefault = (e: React.SyntheticEvent) => {
-  e.stopPropagation();
-  e.preventDefault();
 };

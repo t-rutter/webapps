@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line import/named
-import { RouteProps, matchPath, generatePath } from 'react-router';
+import { matchPath, generatePath } from 'react-router';
+
+import type { RouteProps } from 'react-router';
 
 export const paths = {
   rootCluster: '/clusters/:rootClusterId',
@@ -34,6 +35,18 @@ export const routing = {
     const leafMatch = routing.parseUri(uri, paths.leafCluster);
     const rootMatch = routing.parseUri(uri, paths.rootCluster);
     return leafMatch || rootMatch;
+  },
+
+  // Pass either a root or a leaf cluster URI to get back a root cluster URI.
+  ensureRootClusterUri(uri: string) {
+    const { rootClusterId } = routing.parseClusterUri(uri).params;
+    return routing.getClusterUri({ rootClusterId });
+  },
+
+  // Pass any resource URI to get back a cluster URI.
+  ensureClusterUri(uri: string) {
+    const params = routing.parseClusterUri(uri).params;
+    return routing.getClusterUri(params);
   },
 
   parseKubeUri(uri: string) {
@@ -81,6 +94,10 @@ export const routing = {
     return generatePath(paths.rootCluster, params as any);
   },
 
+  getServerUri(params: Params) {
+    return generatePath(paths.server, params as any);
+  },
+
   isClusterServer(clusterUri: string, serverUri: string) {
     return serverUri.startsWith(`${clusterUri}/servers/`);
   },
@@ -95,6 +112,13 @@ export const routing = {
 
   isClusterApp(clusterUri: string, appUri: string) {
     return appUri.startsWith(`${clusterUri}/apps/`);
+  },
+
+  belongsToProfile(clusterUri: string, resourceUri: string) {
+    const rootClusterUri = this.ensureRootClusterUri(clusterUri);
+    const resourceRootClusterUri = this.ensureRootClusterUri(resourceUri);
+
+    return resourceRootClusterUri === rootClusterUri;
   },
 };
 

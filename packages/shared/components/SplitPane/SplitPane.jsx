@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import { Flex, Box } from 'design';
+
 import useDraggable from 'shared/hooks/useDraggable';
 
 export default function SplitPane({
@@ -60,14 +61,8 @@ const Pane = styled(Flex)`
 `;
 
 export function PaneSide(props) {
-  const {
-    children,
-    position,
-    isDragging,
-    split,
-    defaultSize,
-    hasTwoSides,
-  } = props;
+  const { children, position, isDragging, split, defaultSize, hasTwoSides } =
+    props;
 
   const compRef = React.useRef();
 

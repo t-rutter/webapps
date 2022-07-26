@@ -16,8 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import styled from 'styled-components';
-import Icon from '../Icon';
+
 import { space, color } from 'design/system';
+
+import Icon from '../Icon';
 
 const sizeMap = {
   0: {
@@ -77,10 +79,10 @@ const StyledButtonIcon = styled.button`
   flex: 0 0 auto;
   background: transparent;
   color: inherit;
-  transition: all .3s;
+  transition: all 0.3s;
   -webkit-font-smoothing: antialiased;
 
-  ${Icon}{
+  ${Icon} {
     color: inherit;
   }
 

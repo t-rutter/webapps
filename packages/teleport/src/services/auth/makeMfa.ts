@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { base64urlToBuffer, bufferToBase64url } from 'shared/utils/base64';
+
 import { MfaAuthenticateChallenge, MfaRegistrationChallenge } from './types';
 
 // makeMfaRegistrationChallenge formats fetched register challenge JSON.
@@ -41,7 +42,6 @@ export function makeMfaRegistrationChallenge(json): MfaRegistrationChallenge {
   }
 
   return {
-    u2fRegisterRequest: json.u2f,
     qrCode: json.totp?.qrCode,
     webauthnPublicKey,
   };
@@ -68,11 +68,6 @@ export function makeMfaAuthenticateChallenge(json): MfaAuthenticateChallenge {
   }
 
   return {
-    u2f: {
-      appId: json.appId,
-      challenge: json.challenge,
-      registeredKeys: json.u2f_challenges || [],
-    },
     webauthnPublicKey: webauthnPublicKey,
   };
 }

@@ -18,9 +18,34 @@ steps:
       - "go run ./cmd/checkout -w=/workspace"
 
   - name: gcr.io/cloud-builders/docker
-    id: build
+    id: install-deps
+    args:
+      - build
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    id: lint
+    waitFor: ['install-deps']
     args:
       - build
       - '--build-arg'
-      - NPM_SCRIPT=build
+      - NPM_SCRIPT=lint
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    id: build-teleport
+    waitFor: ['install-deps']
+    args:
+      - build
+      - '--build-arg'
+      - NPM_SCRIPT=build-teleport
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    id: build-term
+    waitFor: ['install-deps']
+    args:
+      - build
+      - '--build-arg'
+      - NPM_SCRIPT=build-and-package-term
       - .

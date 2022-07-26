@@ -1,5 +1,7 @@
+import { useAsync } from 'shared/hooks/useAsync';
+
 import { useAppContext } from 'teleterm/ui/appContextProvider';
-import useAsync from 'teleterm/ui/useAsync';
+
 import { ClusterAddProps, ClusterAddPresentationProps } from './ClusterAdd';
 
 export function useClusterAdd(
@@ -18,7 +20,7 @@ export function useClusterAdd(
     addCluster,
     status,
     statusText,
-    onClose: props.onClose,
+    onCancel: props.onCancel,
   };
 }
 

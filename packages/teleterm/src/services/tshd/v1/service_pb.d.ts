@@ -94,6 +94,8 @@ export class LoginRequest extends jspb.Message {
     setSso(value?: LoginRequest.SsoParams): LoginRequest;
 
 
+    getParamsCase(): LoginRequest.ParamsCase;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): LoginRequest.AsObject;
     static toObject(includeInstance: boolean, msg: LoginRequest): LoginRequest.AsObject;
@@ -164,6 +166,16 @@ export namespace LoginRequest {
             providerType: string,
             providerName: string,
         }
+    }
+
+
+    export enum ParamsCase {
+        PARAMS_NOT_SET = 0,
+    
+    LOCAL = 2,
+
+    SSO = 3,
+
     }
 
 }
@@ -336,6 +348,50 @@ export namespace ListDatabasesResponse {
     }
 }
 
+export class ListDatabaseUsersRequest extends jspb.Message { 
+    getDbUri(): string;
+    setDbUri(value: string): ListDatabaseUsersRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListDatabaseUsersRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: ListDatabaseUsersRequest): ListDatabaseUsersRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListDatabaseUsersRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListDatabaseUsersRequest;
+    static deserializeBinaryFromReader(message: ListDatabaseUsersRequest, reader: jspb.BinaryReader): ListDatabaseUsersRequest;
+}
+
+export namespace ListDatabaseUsersRequest {
+    export type AsObject = {
+        dbUri: string,
+    }
+}
+
+export class ListDatabaseUsersResponse extends jspb.Message { 
+    clearUsersList(): void;
+    getUsersList(): Array<string>;
+    setUsersList(value: Array<string>): ListDatabaseUsersResponse;
+    addUsers(value: string, index?: number): string;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListDatabaseUsersResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: ListDatabaseUsersResponse): ListDatabaseUsersResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListDatabaseUsersResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListDatabaseUsersResponse;
+    static deserializeBinaryFromReader(message: ListDatabaseUsersResponse, reader: jspb.BinaryReader): ListDatabaseUsersResponse;
+}
+
+export namespace ListDatabaseUsersResponse {
+    export type AsObject = {
+        usersList: Array<string>,
+    }
+}
+
 export class CreateGatewayRequest extends jspb.Message { 
     getTargetUri(): string;
     setTargetUri(value: string): CreateGatewayRequest;
@@ -345,6 +401,9 @@ export class CreateGatewayRequest extends jspb.Message {
 
     getLocalPort(): string;
     setLocalPort(value: string): CreateGatewayRequest;
+
+    getTargetSubresourceName(): string;
+    setTargetSubresourceName(value: string): CreateGatewayRequest;
 
 
     serializeBinary(): Uint8Array;
@@ -362,6 +421,7 @@ export namespace CreateGatewayRequest {
         targetUri: string,
         targetUser: string,
         localPort: string,
+        targetSubresourceName: string,
     }
 }
 
@@ -429,6 +489,52 @@ export class RemoveGatewayRequest extends jspb.Message {
 export namespace RemoveGatewayRequest {
     export type AsObject = {
         gatewayUri: string,
+    }
+}
+
+export class RestartGatewayRequest extends jspb.Message { 
+    getGatewayUri(): string;
+    setGatewayUri(value: string): RestartGatewayRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): RestartGatewayRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: RestartGatewayRequest): RestartGatewayRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: RestartGatewayRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): RestartGatewayRequest;
+    static deserializeBinaryFromReader(message: RestartGatewayRequest, reader: jspb.BinaryReader): RestartGatewayRequest;
+}
+
+export namespace RestartGatewayRequest {
+    export type AsObject = {
+        gatewayUri: string,
+    }
+}
+
+export class SetGatewayTargetSubresourceNameRequest extends jspb.Message { 
+    getGatewayUri(): string;
+    setGatewayUri(value: string): SetGatewayTargetSubresourceNameRequest;
+
+    getTargetSubresourceName(): string;
+    setTargetSubresourceName(value: string): SetGatewayTargetSubresourceNameRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetGatewayTargetSubresourceNameRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: SetGatewayTargetSubresourceNameRequest): SetGatewayTargetSubresourceNameRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetGatewayTargetSubresourceNameRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetGatewayTargetSubresourceNameRequest;
+    static deserializeBinaryFromReader(message: SetGatewayTargetSubresourceNameRequest, reader: jspb.BinaryReader): SetGatewayTargetSubresourceNameRequest;
+}
+
+export namespace SetGatewayTargetSubresourceNameRequest {
+    export type AsObject = {
+        gatewayUri: string,
+        targetSubresourceName: string,
     }
 }
 

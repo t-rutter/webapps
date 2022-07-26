@@ -16,8 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import styled from 'styled-components';
-import { space } from 'design/system';
+
 import PropTypes from 'prop-types';
+
+import { space } from 'design/system';
 
 const kind = ({ kind, theme }) => {
   if (kind === 'secondary') {
@@ -37,6 +39,13 @@ const kind = ({ kind, theme }) => {
   if (kind === 'danger') {
     return {
       backgroundColor: theme.colors.danger,
+      color: theme.colors.primary.contrastText,
+    };
+  }
+
+  if (kind === 'success') {
+    return {
+      backgroundColor: theme.colors.success,
       color: theme.colors.primary.contrastText,
     };
   }
@@ -65,7 +74,14 @@ const Label = styled.div`
 `;
 
 Label.propTypes = {
-  kind: PropTypes.oneOf(['primary', 'secondary', 'warning', 'danger']),
+  kind: PropTypes.oneOf([
+    'primary',
+    'secondary',
+    'warning',
+    'danger',
+    'success',
+  ]),
+  invert: PropTypes.oneOf([true, false]),
 };
 
 export default Label;

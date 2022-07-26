@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { Text, Box, Flex, ButtonPrimary, Card } from 'design';
 import * as Icons from 'design/Icon';
+
 import { State as ResourceState } from 'teleport/components/useResources';
 
 export default function EmptyList({ onCreate }: Props) {
@@ -42,7 +43,7 @@ export default function EmptyList({ onCreate }: Props) {
           <Text
             as="a"
             color="light"
-            href="https://goteleport.com/teleport/docs/admin-guide/#github-oauth-20"
+            href="https://goteleport.com/docs/setup/admin/github-sso/"
             target="_blank"
           >
             view our documentation

@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+
+import useAttempt from 'shared/hooks/useAttemptNext';
+
 import cfg from 'teleport/config';
 import auth from 'teleport/services/auth';
-import useAttempt from 'shared/hooks/useAttemptNext';
 
 export default function useReAuthenticate({ onAuthenticated, onClose }: Props) {
   const { attempt, setAttempt, handleError } = useAttempt('');
@@ -26,14 +28,6 @@ export default function useReAuthenticate({ onAuthenticated, onClose }: Props) {
     setAttempt({ status: 'processing' });
     auth
       .createPrivilegeTokenWithTotp(secondFactorToken)
-      .then(onAuthenticated)
-      .catch(handleError);
-  }
-
-  function submitWithU2f() {
-    setAttempt({ status: 'processing' });
-    auth
-      .createPrivilegeTokenWithU2f()
       .then(onAuthenticated)
       .catch(handleError);
   }
@@ -54,7 +48,6 @@ export default function useReAuthenticate({ onAuthenticated, onClose }: Props) {
     attempt,
     clearAttempt,
     submitWithTotp,
-    submitWithU2f,
     submitWithWebauthn,
     auth2faType: cfg.getAuth2faType(),
     preferredMfaType: cfg.getPreferredMfaType(),

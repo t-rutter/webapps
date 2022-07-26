@@ -17,22 +17,27 @@ limitations under the License.
 import { MainProcessClient, ElectronGlobals } from 'teleterm/types';
 import { ClustersService } from 'teleterm/ui/services/clusters';
 import { ModalsService } from 'teleterm/ui/services/modals';
-import { DocumentsService } from 'teleterm/ui/services/docs';
 import { TerminalsService } from 'teleterm/ui/services/terminals';
 import { ConnectionTrackerService } from 'teleterm/ui/services/connectionTracker';
 import { QuickInputService } from 'teleterm/ui/services/quickInput';
-import { WorkspaceService } from 'teleterm/ui/services/workspace';
+import { StatePersistenceService } from 'teleterm/ui/services/statePersistence';
 import { KeyboardShortcutsService } from 'teleterm/ui/services/keyboardShortcuts';
-import { CommandLauncher } from './commandLauncher';
 
-export default class AppContext {
+import { WorkspacesService } from 'teleterm/ui/services/workspacesService/workspacesService';
+import { NotificationsService } from 'teleterm/ui/services/notifications';
+
+import { CommandLauncher } from './commandLauncher';
+import { IAppContext } from './types';
+
+export default class AppContext implements IAppContext {
   clustersService: ClustersService;
   modalsService: ModalsService;
-  docsService: DocumentsService;
+  notificationsService: NotificationsService;
   terminalsService: TerminalsService;
   keyboardShortcutsService: KeyboardShortcutsService;
   quickInputService: QuickInputService;
-  workspaceService: WorkspaceService;
+  statePersistenceService: StatePersistenceService;
+  workspacesService: WorkspacesService;
   mainProcessClient: MainProcessClient;
   commandLauncher: CommandLauncher;
   connectionTracker: ConnectionTrackerService;
@@ -40,32 +45,45 @@ export default class AppContext {
   constructor(config: ElectronGlobals) {
     const { tshClient, ptyServiceClient, mainProcessClient } = config;
     this.mainProcessClient = mainProcessClient;
-    this.clustersService = new ClustersService(tshClient);
+    this.statePersistenceService = new StatePersistenceService(
+      this.mainProcessClient.fileStorage
+    );
     this.modalsService = new ModalsService();
+    this.notificationsService = new NotificationsService();
+    this.clustersService = new ClustersService(
+      tshClient,
+      this.notificationsService
+    );
+    this.workspacesService = new WorkspacesService(
+      this.modalsService,
+      this.clustersService,
+      this.notificationsService,
+      this.statePersistenceService
+    );
     this.terminalsService = new TerminalsService(ptyServiceClient);
-    this.docsService = new DocumentsService();
 
     this.keyboardShortcutsService = new KeyboardShortcutsService(
       this.mainProcessClient.getRuntimeSettings().platform,
       this.mainProcessClient.configService
     );
 
-    this.workspaceService = new WorkspaceService(config.fileStorage);
     this.commandLauncher = new CommandLauncher(this);
 
     this.quickInputService = new QuickInputService(
       this.commandLauncher,
-      this.clustersService
+      this.clustersService,
+      this.workspacesService
     );
 
     this.connectionTracker = new ConnectionTrackerService(
-      this.workspaceService,
-      this.docsService,
+      this.statePersistenceService,
+      this.workspacesService,
       this.clustersService
     );
   }
 
-  async init() {
+  async init(): Promise<void> {
     await this.clustersService.syncRootClusters();
+    this.workspacesService.restorePersistedState();
   }
 }

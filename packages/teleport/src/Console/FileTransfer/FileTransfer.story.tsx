@@ -15,10 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
+
+import { Uploader, Downloader } from 'teleport/Console/services/fileTransfer';
+
 import { FileTransfer } from './FileTransfer';
 import { ScpContext } from './scpContextProvider';
 import { Scp } from './scpContext';
-import { Uploader, Downloader } from 'teleport/Console/services/fileTransfer';
 
 export default {
   title: 'Teleport/Console/FileTransfer',
@@ -105,7 +107,6 @@ const defaultFile = {
   location: '~test',
   id: '1547581437406~/test',
   url: '/v1/webapi/sites/one/nodes/',
-  name:
-    '~/test~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf',
+  name: '~/test~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf~/mamaffsdfsdfdssdf',
   blob: [],
 };

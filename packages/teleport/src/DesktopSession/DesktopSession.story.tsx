@@ -15,11 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import { DesktopSession } from './DesktopSession';
-import { State } from './useDesktopSession';
+
 import { TdpClient, TdpClientEvent } from 'teleport/lib/tdp';
 import { PngFrame } from 'teleport/lib/tdp/codec';
+
 import { arrayBuf2260x1130 } from '../lib/tdp/fixtures';
+
+import { State } from './useDesktopSession';
+import { DesktopSession } from './DesktopSession';
 
 export default {
   title: 'Teleport/DesktopSession',
@@ -46,14 +49,17 @@ const props: State = {
     permission: { state: '' },
     errorText: '',
   },
-  isRecording: false,
   tdpClient: fakeClient(),
   username: 'user',
   onWsOpen: () => {},
   onWsClose: () => {},
   wsConnection: 'closed',
   disconnected: false,
-  setDisconnected: () => null,
+  setDisconnected: () => {},
+  setClipboardState: () => {},
+  canShareDirectory: true,
+  isSharingDirectory: false,
+  setIsSharingDirectory: () => {},
   onPngFrame: () => {},
   onTdpError: () => {},
   onKeyDown: () => {},
@@ -108,7 +114,6 @@ export const ConnectedSettingsFalse = () => {
         permission: { state: '' },
         errorText: '',
       }}
-      isRecording={false}
       onPngFrame={(ctx: CanvasRenderingContext2D) => {
         fillGray(ctx.canvas);
       }}
@@ -135,7 +140,7 @@ export const ConnectedSettingsTrue = () => {
         permission: { state: 'granted' },
         errorText: '',
       }}
-      isRecording={true}
+      isSharingDirectory={true}
       onPngFrame={(ctx: CanvasRenderingContext2D) => {
         fillGray(ctx.canvas);
       }}

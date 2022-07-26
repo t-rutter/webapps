@@ -17,7 +17,9 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
 import { Text } from 'design';
+
 import TopNavItem from '../TopNavItem';
 import Menu from '../../Menu/Menu';
 
@@ -54,12 +56,7 @@ class TopNavUserMenu extends React.Component {
       menuListCss,
     } = this.props;
     const initial =
-      user && user.length
-        ? user
-            .trim()
-            .charAt(0)
-            .toUpperCase()
-        : '';
+      user && user.length ? user.trim().charAt(0).toUpperCase() : '';
     const anchorEl = open ? this.btnRef : null;
     return (
       <>

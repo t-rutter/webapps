@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import styled from 'styled-components';
 import { Flex } from 'design';
+
 import { useClusterContext } from 'teleterm/ui/DocumentCluster/clusterContext';
+
 import SideNav from './SideNav';
 import Servers from './Servers';
 import Databases from './Databases';
 import Applications from './Applications';
 import Kubes from './Kubes';
-import ClusterSearch from './ClusterSearch';
 
 export default function ClusterResources() {
   const clusterCtx = useClusterContext();
@@ -40,7 +41,6 @@ export default function ClusterResources() {
 
   return (
     <StyledMain>
-      <ClusterSearch onChange={clusterCtx.changeSearchValue} />
       <Flex mt={3} flexDirection="column">
         <SideNav mb={2} />
         <HorizontalSplit>

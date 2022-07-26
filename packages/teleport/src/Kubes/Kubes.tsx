@@ -1,5 +1,5 @@
 /*
-Copyright 2021 Gravitational, Inc.
+Copyright 2021-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { Box, Indicator, ButtonPrimary, Text, Link } from 'design';
-import { Danger } from 'design/Alert';
+import React, { useState } from 'react';
+import { Box, Indicator } from 'design';
+
 import KubeList from 'teleport/Kubes/KubeList';
 import {
   FeatureBox,
   FeatureHeader,
   FeatureHeaderTitle,
 } from 'teleport/components/Layout';
-import useTeleport from 'teleport/useTeleport';
 import Empty, { EmptyStateInfo } from 'teleport/components/Empty';
+import ErrorMessage from 'teleport/components/AgentErrorMessage';
+import useTeleport from 'teleport/useTeleport';
+
+import AgentButtonAdd from 'teleport/components/AgentButtonAdd';
+
 import useKubes, { State } from './useKubes';
+import AddKube from './AddKube';
 
 export default function Container() {
   const ctx = useTeleport();
@@ -37,73 +42,98 @@ const DOC_URL = 'https://goteleport.com/docs/kubernetes-access/guides';
 
 export function Kubes(props: State) {
   const {
-    kubes,
     attempt,
     username,
     authType,
     isLeafCluster,
     clusterId,
     canCreate,
+    results,
+    fetchNext,
+    fetchPrev,
+    from,
+    to,
+    pageSize,
+    params,
+    setParams,
+    startKeys,
+    setSort,
+    pathname,
+    replaceHistory,
+    fetchStatus,
+    isSearchEmpty,
+    onLabelClick,
   } = props;
 
-  const isEmpty = attempt.status === 'success' && kubes.length === 0;
-  const hasKubes = attempt.status === 'success' && kubes.length > 0;
+  const [showAddKube, setShowAddKube] = useState(false);
+
+  const hasNoKubes = results.kubes.length === 0 && isSearchEmpty;
 
   return (
     <FeatureBox>
       <FeatureHeader alignItems="center" justifyContent="space-between">
         <FeatureHeaderTitle>Kubernetes</FeatureHeaderTitle>
-        <ButtonPrimary
-          as="a"
-          width="240px"
-          target="_blank"
-          href={DOC_URL}
-          rel="noreferrer"
-        >
-          View documentation
-        </ButtonPrimary>
+        {attempt.status === 'success' && !hasNoKubes && (
+          <AgentButtonAdd
+            onClick={() => setShowAddKube(true)}
+            agent="kubernetes"
+            beginsWithVowel={false}
+            isLeafCluster={isLeafCluster}
+            canCreate={canCreate}
+          />
+        )}
       </FeatureHeader>
-      {attempt.status === 'failed' && <Danger>{attempt.statusText}</Danger>}
+      {attempt.status === 'failed' && (
+        <ErrorMessage message={attempt.statusText} />
+      )}
       {attempt.status === 'processing' && (
         <Box textAlign="center" m={10}>
           <Indicator />
         </Box>
       )}
-      {hasKubes && (
+      {attempt.status !== 'processing' && !hasNoKubes && (
         <>
           <KubeList
-            kubes={kubes}
+            kubes={results.kubes}
             username={username}
             authType={authType}
             clusterId={clusterId}
+            fetchNext={fetchNext}
+            fetchPrev={fetchPrev}
+            fetchStatus={fetchStatus}
+            from={from}
+            to={to}
+            totalCount={results.totalCount}
+            pageSize={pageSize}
+            params={params}
+            setParams={setParams}
+            startKeys={startKeys}
+            setSort={setSort}
+            pathname={pathname}
+            replaceHistory={replaceHistory}
+            onLabelClick={onLabelClick}
           />
         </>
       )}
-      {isEmpty && (
+      {attempt.status === 'success' && hasNoKubes && (
         <Empty
           clusterId={clusterId}
           canCreate={canCreate && !isLeafCluster}
-          onClick={() => window.open(DOC_URL)}
+          onClick={() => setShowAddKube(true)}
           emptyStateInfo={emptyStateInfo}
         />
       )}
+      {showAddKube && <AddKube onClose={() => setShowAddKube(false)} />}
     </FeatureBox>
   );
 }
 
 const emptyStateInfo: EmptyStateInfo = {
-  title: 'ADD YOUR FIRST KUBERNETES CLUSTER',
-  description: (
-    <Text>
-      Fast, secure access to Kubernetes clusters. Follow{' '}
-      <Link target="_blank" href={DOC_URL}>
-        the documentation
-      </Link>{' '}
-      to connect your first cluster.
-    </Text>
-  ),
-  videoLink: 'https://www.youtube.com/watch?v=2diX_UAmJ1c',
-  buttonText: 'VIEW DOCUMENTATION',
+  title: 'Add your first Kubernetes cluster to Teleport',
+  byline:
+    'Teleport Kubenetes Access provides secure access to Kubernetes clusters.',
+  docsURL: DOC_URL,
+  resourceType: 'kubernetes',
   readOnly: {
     title: 'No Kubernetes Clusters Found',
     resource: 'kubernetes clusters',

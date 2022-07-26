@@ -15,14 +15,20 @@
  */
 
 import React from 'react';
+
+import { render, screen } from 'design/utils/testing';
+
 import {
   Loaded,
   Failed,
   ManuallyWithoutTokenLocal,
   ManuallyWithoutTokenSSO,
   ManuallyWithToken,
+  IamWithoutToken,
+  IamWithToken,
+  IamProcessing,
+  IamFailed,
 } from './AddNode.story';
-import { render, screen } from 'design/utils/testing';
 
 test('render automatic tab', async () => {
   render(<Loaded />);
@@ -46,5 +52,25 @@ test('render manual tab with sso user', async () => {
 
 test('render manual tab with join token', async () => {
   render(<ManuallyWithToken />);
+  expect(screen.getByTestId('Modal')).toMatchSnapshot();
+});
+
+test('render iam method without a token generated yet', async () => {
+  render(<IamWithoutToken />);
+  expect(screen.getByTestId('Modal')).toMatchSnapshot();
+});
+
+test('render iam method after token generation', async () => {
+  render(<IamWithToken />);
+  expect(screen.getByTestId('Modal')).toMatchSnapshot();
+});
+
+test('render iam method while processing', async () => {
+  render(<IamProcessing />);
+  expect(screen.getByTestId('Modal')).toMatchSnapshot();
+});
+
+test('render iam method when failed', async () => {
+  render(<IamFailed />);
   expect(screen.getByTestId('Modal')).toMatchSnapshot();
 });

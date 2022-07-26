@@ -21,31 +21,42 @@ const plugins = [
   '@babel/plugin-syntax-dynamic-import',
 ];
 
-function makePresents(test = false) {
-  const presents = ['@babel/preset-react', '@babel/preset-typescript'];
-
+function makePresets(test = false) {
   if (test) {
     return [
       ['@babel/preset-env', { targets: { node: 'current' } }],
-      ...presents,
+      '@babel/preset-react',
+      '@babel/preset-typescript',
     ];
   }
 
-  return ['@babel/preset-env', ...presents];
+  return [
+    [
+      '@babel/preset-env',
+      {
+        targets:
+          'last 2 chrome version, last 2 edge version, last 2 firefox version, last 2 safari version',
+      },
+    ],
+    '@babel/preset-react',
+  ];
 }
 
 module.exports = {
   env: {
     test: {
-      presets: makePresents(true),
+      presets: makePresets(true),
     },
     development: {
       plugins: [
         ...plugins,
-        'babel-plugin-styled-components',
+        ['babel-plugin-styled-components', { displayName: true, ssr: false }],
       ],
     },
   },
-  presets: makePresents(),
-  plugins,
+  presets: makePresets(),
+  plugins: [
+    ...plugins,
+    ['babel-plugin-styled-components', { displayName: false, ssr: false }],
+  ],
 };

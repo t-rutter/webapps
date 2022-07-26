@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 Gravitational, Inc.
+Copyright 2019-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import FormLogin from 'teleport/components/FormLogin';
 import Logo from 'teleport/components/LogoHero';
+
 import useLogin, { State } from './useLogin';
 
 const logoSrc = require('design/assets/images/teleport-medallion.svg');
@@ -29,7 +31,6 @@ export default function Container() {
 export function Login({
   attempt,
   onLogin,
-  onLoginWithU2f,
   onLoginWithWebauthn,
   onLoginWithSso,
   authProviders,
@@ -37,6 +38,8 @@ export function Login({
   preferredMfaType,
   isLocalAuthEnabled,
   clearAttempt,
+  isPasswordlessEnabled,
+  primaryAuthType,
 }: State) {
   return (
     <>
@@ -48,11 +51,12 @@ export function Login({
         preferredMfaType={preferredMfaType}
         isLocalAuthEnabled={isLocalAuthEnabled}
         onLoginWithSso={onLoginWithSso}
-        onLoginWithU2f={onLoginWithU2f}
         onLoginWithWebauthn={onLoginWithWebauthn}
         onLogin={onLogin}
         attempt={attempt}
         clearAttempt={clearAttempt}
+        isPasswordlessEnabled={isPasswordlessEnabled}
+        primaryAuthType={primaryAuthType}
       />
     </>
   );

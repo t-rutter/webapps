@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Gravitational, Inc.
+ * Copyright 2021-2022 Gravitational, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,32 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
+
+import { useAsync } from 'shared/hooks/useAsync';
+
 import * as types from 'teleterm/ui/services/clusters/types';
 import { useAppContext } from 'teleterm/ui/appContextProvider';
-import useAsync from 'teleterm/ui/useAsync';
+import { getClusterName } from 'teleterm/ui/utils';
 
 export default function useClusterLogin(props: Props) {
-  const { onClose, onSuccess, clusterUri } = props;
+  const { onSuccess, clusterUri } = props;
   const { clustersService } = useAppContext();
   const cluster = clustersService.findCluster(clusterUri);
   const refAbortCtrl = useRef<types.tsh.TshAbortController>(null);
   const [shouldPromptSsoStatus, promptSsoStatus] = useState(false);
   const [shouldPromptHardwareKey, promptHardwareKey] = useState(false);
+  const loggedInUserName = cluster.loggedInUser?.name || null;
 
-  const [initAttempt, init] = useAsync(() => {
-    return clustersService.getAuthSettings(clusterUri);
+  const [initAttempt, init] = useAsync(async () => {
+    const authSettings = await clustersService.getAuthSettings(clusterUri);
+
+    if (authSettings.preferredMfa === 'u2f') {
+      throw new Error(`the U2F API for hardware keys is deprecated, \
+        please notify your system administrator to update cluster \
+        settings to use WebAuthn as the second factor protocol.`);
+    }
+
+    return authSettings;
   });
 
   const [loginAttempt, login] = useAsync((opts: types.LoginParams) => {
@@ -42,7 +54,7 @@ export default function useClusterLogin(props: Props) {
     token: '',
     authType?: types.Auth2faType
   ) => {
-    promptHardwareKey(authType === 'webauthn' || authType === 'u2f');
+    promptHardwareKey(authType === 'webauthn');
     login({
       clusterUri,
       local: {
@@ -57,7 +69,7 @@ export default function useClusterLogin(props: Props) {
     promptSsoStatus(true);
     login({
       clusterUri,
-      oss: {
+      sso: {
         providerName: provider.name,
         providerType: provider.type,
       },
@@ -70,7 +82,7 @@ export default function useClusterLogin(props: Props) {
 
   const onCloseDialog = () => {
     onAbort();
-    props?.onClose();
+    props.onCancel();
   };
 
   useEffect(() => {
@@ -84,7 +96,6 @@ export default function useClusterLogin(props: Props) {
     }
 
     if (loginAttempt.status === 'success') {
-      onClose();
       onSuccess?.();
     }
   }, [loginAttempt.status]);
@@ -92,7 +103,8 @@ export default function useClusterLogin(props: Props) {
   return {
     shouldPromptSsoStatus,
     shouldPromptHardwareKey,
-    title: cluster.name,
+    title: getClusterName(cluster),
+    loggedInUserName,
     onLoginWithLocal,
     onLoginWithSso,
     onCloseDialog,
@@ -106,6 +118,6 @@ export type State = ReturnType<typeof useClusterLogin>;
 
 export type Props = {
   clusterUri: string;
-  onClose(): void;
+  onCancel(): void;
   onSuccess?(): void;
 };

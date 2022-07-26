@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text } from 'design';
+
+import { Text, Indicator, Box } from 'design';
 import * as Icons from 'design/Icon';
+
 import { StyledTable, StyledPanel } from './StyledTable';
 import { TableProps } from './types';
 import { SortHeaderCell, TextCell } from './Cells';
@@ -25,18 +27,38 @@ export function Table<T>({
   fetching,
   className,
   style,
+  serversideProps,
+  customSort,
 }: State<T>) {
   const renderHeaders = () => {
-    const headers = columns.map(column => {
+    const headers = columns.flatMap(column => {
+      if (column.isNonRender) {
+        return []; // does not include this column.
+      }
+
       const headerText = column.headerText || '';
+
+      let dir;
+      if (customSort) {
+        dir = customSort.fieldName == column.key ? customSort.dir : null;
+      } else {
+        dir =
+          state.sort?.key === column.key ||
+          state.sort?.key === column.altSortKey
+            ? state.sort?.dir
+            : null;
+      }
+
       const $cell = column.isSortable ? (
-        <SortHeaderCell
-          onClick={() => onSort(column)}
+        <SortHeaderCell<T>
+          column={column}
+          serversideProps={serversideProps}
           text={headerText}
-          dir={state.sort.key === column.key ? state.sort.dir : null}
+          onClick={() => onSort(column)}
+          dir={dir}
         />
       ) : (
-        <th>{headerText}</th>
+        <th style={{ cursor: 'default' }}>{headerText}</th>
       );
 
       return (
@@ -56,8 +78,15 @@ export function Table<T>({
   const renderBody = (data: T[]) => {
     const rows = [];
 
+    if (fetching?.fetchStatus === 'loading') {
+      return <LoadingIndicator colSpan={columns.length} />;
+    }
     data.map((item, rowIdx) => {
-      const cells = columns.map((column, columnIdx) => {
+      const cells = columns.flatMap((column, columnIdx) => {
+        if (column.isNonRender) {
+          return []; // does not include this column.
+        }
+
         const $cell = column.render ? (
           column.render(item)
         ) : (
@@ -79,6 +108,23 @@ export function Table<T>({
 
     return <EmptyIndicator emptyText={emptyText} colSpan={columns.length} />;
   };
+
+  if (serversideProps) {
+    return (
+      <ServersideTable
+        style={style}
+        className={className}
+        data={state.data}
+        renderHeaders={renderHeaders}
+        renderBody={renderBody}
+        nextPage={nextPage}
+        prevPage={prevPage}
+        pagination={state.pagination}
+        fetching={fetching}
+        serversideProps={serversideProps}
+      />
+    );
+  }
 
   if (state.pagination) {
     return (
@@ -233,6 +279,37 @@ function PagedTable<T>({
   );
 }
 
+function ServersideTable<T>({
+  nextPage,
+  prevPage,
+  renderHeaders,
+  renderBody,
+  data,
+  fetching,
+  className,
+  style,
+  serversideProps,
+}: ServersideTableProps<T>) {
+  return (
+    <>
+      {serversideProps.serversideSearchPanel}
+      <StyledTable className={className} style={style}>
+        {renderHeaders()}
+        {renderBody(data)}
+      </StyledTable>
+      <StyledPanel borderBottomLeftRadius={3} borderBottomRightRadius={3}>
+        <Pager
+          nextPage={nextPage}
+          prevPage={prevPage}
+          data={data}
+          serversideProps={serversideProps}
+          {...fetching}
+        />
+      </StyledPanel>
+    </>
+  );
+}
+
 const EmptyIndicator = ({
   emptyText,
   colSpan,
@@ -261,6 +338,18 @@ const EmptyIndicator = ({
   </tfoot>
 );
 
+const LoadingIndicator = ({ colSpan }: { colSpan: number }) => (
+  <tfoot>
+    <tr>
+      <td colSpan={colSpan}>
+        <Box m={4} textAlign="center">
+          <Indicator delay="none" />
+        </Box>
+      </td>
+    </tr>
+  </tfoot>
+);
+
 type BasicTableProps<T> = {
   data: T[];
   renderHeaders: () => JSX.Element;
@@ -279,4 +368,12 @@ type PagedTableProps<T> = SearchableBasicTableProps<T> & {
   prevPage: () => void;
   pagination: State<T>['state']['pagination'];
   fetching?: State<T>['fetching'];
+};
+
+type ServersideTableProps<T> = BasicTableProps<T> & {
+  nextPage: () => void;
+  prevPage: () => void;
+  pagination: State<T>['state']['pagination'];
+  fetching: State<T>['fetching'];
+  serversideProps: State<T>['serversideProps'];
 };

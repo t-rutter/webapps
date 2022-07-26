@@ -18,9 +18,10 @@ import 'xterm/css/xterm.css';
 import { IDisposable, Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { debounce } from 'lodash';
-import { PtyProcess } from 'teleterm/services/pty/types';
-import { colors } from 'teleport/Console/colors';
-import Logger from 'teleterm/ui/logger';
+
+import { IPtyProcess } from 'teleterm/sharedProcess/ptyHost';
+import Logger from 'teleterm/logger';
+import theme from 'teleterm/ui/ThemeProvider/theme';
 
 const WINDOW_RESIZE_DEBOUNCE_DELAY = 200;
 
@@ -37,7 +38,7 @@ export default class TtyTerminal {
   private debouncedResize: () => void;
   private logger = new Logger('lib/term/terminal');
 
-  constructor(private ptyProcess: PtyProcess, private options: Options) {
+  constructor(private ptyProcess: IPtyProcess, private options: Options) {
     this.el = options.el;
     this.term = null;
 
@@ -51,8 +52,9 @@ export default class TtyTerminal {
     this.term = new Terminal({
       cursorBlink: false,
       fontFamily: this.options.fontFamily,
+      scrollback: 5000,
       theme: {
-        background: colors.bgTerminal,
+        background: theme.colors.primary.darker,
       },
       windowOptions: {
         setWinSizeChars: true,

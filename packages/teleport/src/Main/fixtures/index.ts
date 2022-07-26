@@ -26,12 +26,12 @@ const fullAccess: Access = {
 };
 
 export const fullAcl: Acl = {
-  sshLogins: ['dev', 'root'],
   windowsLogins: ['Administrator'],
   tokens: fullAccess,
   appServers: fullAccess,
   kubeServers: fullAccess,
-  sessions: fullAccess,
+  recordedSessions: fullAccess,
+  activeSessions: fullAccess,
   authConnectors: fullAccess,
   roles: fullAccess,
   users: fullAccess,
@@ -41,8 +41,10 @@ export const fullAcl: Acl = {
   billing: fullAccess,
   dbServers: fullAccess,
   desktops: fullAccess,
+  nodes: fullAccess,
   clipboardSharingEnabled: true,
   desktopSessionRecordingEnabled: true,
+  directorySharingEnabled: true,
 };
 
 export const userContext = makeUserContext({

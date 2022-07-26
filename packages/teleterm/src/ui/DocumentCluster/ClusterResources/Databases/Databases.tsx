@@ -15,10 +15,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import { useDatabases, State } from './useDatabases';
-import { ButtonBorder } from 'design';
-import Table, { Cell } from 'design/DataTable';
+
+import { Cell } from 'design/DataTable';
+
+import { Danger } from 'design/Alert';
+import { MenuLogin, MenuLoginProps } from 'shared/components/MenuLogin';
+
+import { Table } from 'teleterm/ui/components/Table';
+
+import { useAppContext } from 'teleterm/ui/appContextProvider';
+import { retryWithRelogin } from 'teleterm/ui/utils';
+import { IAppContext } from 'teleterm/ui/types';
+import { GatewayProtocol } from 'teleterm/ui/services/clusters';
+
+import { MenuLoginTheme } from '../MenuLoginTheme';
 import { renderLabelCell } from '../renderLabelCell';
+
+import { useDatabases, State } from './useDatabases';
 
 export default function Container() {
   const state = useDatabases();
@@ -27,41 +40,113 @@ export default function Container() {
 
 function DatabaseList(props: State) {
   return (
-    <Table
-      data={props.dbs}
-      columns={[
-        {
-          key: 'name',
-          headerText: 'Name',
-          isSortable: true,
-        },
-        {
-          key: 'labelsList',
-          headerText: 'Labels',
-          render: renderLabelCell,
-        },
-        {
-          altKey: 'connect-btn',
-          render: db => renderConnectButton(db.uri, props.connect),
-        },
-      ]}
-      pagination={{ pageSize: 100, pagerPosition: 'bottom' }}
-      emptyText="No Databases Found"
-    />
+    <>
+      {props.syncStatus.status === 'failed' && (
+        <Danger>{props.syncStatus.statusText}</Danger>
+      )}
+      <Table
+        data={props.dbs}
+        columns={[
+          {
+            key: 'name',
+            headerText: 'Name',
+            isSortable: true,
+          },
+          {
+            key: 'labelsList',
+            headerText: 'Labels',
+            render: renderLabelCell,
+          },
+          {
+            altKey: 'connect-btn',
+            render: db => (
+              <ConnectButton
+                documentUri={props.documentUri}
+                dbUri={db.uri}
+                protocol={db.protocol as GatewayProtocol}
+                onConnect={dbUser => props.connect(db.uri, dbUser)}
+              />
+            ),
+          },
+        ]}
+        pagination={{ pageSize: 15, pagerPosition: 'bottom' }}
+        emptyText="No Databases Found"
+      />
+    </>
   );
 }
 
-function renderConnectButton(uri: string, connect: (uri: string) => void) {
+function ConnectButton({
+  documentUri,
+  dbUri,
+  protocol,
+  onConnect,
+}: {
+  documentUri: string;
+  dbUri: string;
+  protocol: GatewayProtocol;
+  onConnect: (dbUser: string) => void;
+}) {
+  const appContext = useAppContext();
+
   return (
     <Cell align="right">
-      <ButtonBorder
-        size="small"
-        onClick={() => {
-          connect(uri);
-        }}
-      >
-        Connect
-      </ButtonBorder>
+      <MenuLoginTheme>
+        <MenuLogin
+          {...getMenuLoginOptions(protocol)}
+          width="195px"
+          getLoginItems={() => getDatabaseUsers(appContext, documentUri, dbUri)}
+          onSelect={(_, user) => {
+            onConnect(user);
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: 'right',
+          }}
+        />
+      </MenuLoginTheme>
     </Cell>
   );
+}
+
+function getMenuLoginOptions(
+  protocol: GatewayProtocol
+): Pick<MenuLoginProps, 'placeholder' | 'required'> {
+  if (protocol === 'redis') {
+    return {
+      placeholder: 'Enter username (optional)',
+      required: false,
+    };
+  }
+
+  return {
+    placeholder: 'Enter username',
+    required: true,
+  };
+}
+
+async function getDatabaseUsers(
+  appContext: IAppContext,
+  documentUri: string,
+  dbUri: string
+) {
+  try {
+    const dbUsers = await retryWithRelogin(appContext, documentUri, dbUri, () =>
+      appContext.clustersService.getDbUsers(dbUri)
+    );
+    return dbUsers.map(user => ({ login: user, url: '' }));
+  } catch (e) {
+    // Emitting a warning instead of an error here because fetching those username suggestions is
+    // not the most important part of the app.
+    appContext.notificationsService.notifyWarning({
+      title: 'Could not fetch database usernames',
+      description: e.message,
+    });
+
+    throw e;
+  }
 }

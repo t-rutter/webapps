@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Gravitational, Inc.
+ * Copyright 2020-2022 Gravitational, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import user from './user';
 import api from 'teleport/services/api';
+
+import user from './user';
 
 test('undefined values in context response gives proper default values', async () => {
   const mockContext = {
@@ -48,7 +49,6 @@ test('undefined values in context response gives proper default values', async (
     username: 'foo',
     authType: 'local',
     acl: {
-      sshLogins: [],
       windowsLogins: [],
       authConnectors: {
         list: true,
@@ -65,6 +65,13 @@ test('undefined values in context response gives proper default values', async (
         create: false,
         remove: false,
       },
+      nodes: {
+        create: false,
+        edit: false,
+        list: false,
+        read: false,
+        remove: false,
+      },
       roles: {
         list: false,
         read: false,
@@ -72,7 +79,7 @@ test('undefined values in context response gives proper default values', async (
         create: false,
         remove: false,
       },
-      sessions: {
+      recordedSessions: {
         list: false,
         read: false,
         edit: false,
@@ -98,6 +105,13 @@ test('undefined values in context response gives proper default values', async (
         read: false,
         edit: false,
         create: false,
+        remove: false,
+      },
+      activeSessions: {
+        create: false,
+        edit: false,
+        list: false,
+        read: false,
         remove: false,
       },
       appServers: {
@@ -144,6 +158,7 @@ test('undefined values in context response gives proper default values', async (
       },
       clipboardSharingEnabled: true,
       desktopSessionRecordingEnabled: true,
+      directorySharingEnabled: false,
     },
     cluster: {
       clusterId: 'aws',
@@ -163,9 +178,29 @@ test('undefined values in context response gives proper default values', async (
   });
 });
 
-test('fetch users, null response gives empty array', async () => {
+test('fetch users, null response values gives empty array', async () => {
   jest.spyOn(api, 'get').mockResolvedValue(null);
-
-  const response = await user.fetchUsers();
+  let response = await user.fetchUsers();
   expect(response).toStrictEqual([]);
+
+  jest.spyOn(api, 'get').mockResolvedValue([{ name: '', authType: '' }]);
+
+  response = await user.fetchUsers();
+  expect(response).toStrictEqual([
+    {
+      authType: '',
+      isLocal: false,
+      name: '',
+      roles: [],
+      traits: {
+        awsRoleArns: [],
+        databaseNames: [],
+        databaseUsers: [],
+        kubeGroups: [],
+        kubeUsers: [],
+        logins: [],
+        windowsLogins: [],
+      },
+    },
+  ]);
 });

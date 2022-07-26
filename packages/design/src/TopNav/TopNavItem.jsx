@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import styled from 'styled-components';
+
 import { space, width, maxWidth, height, maxHeight } from 'design/system';
 
 /**
@@ -37,21 +38,22 @@ const TopNavItem = styled.button`
   position: relative;
   text-decoration: none;
 
-  &:hover, &:focus {
-    background:  ${props =>
+  &:hover,
+  &:focus {
+    background: ${props =>
       props.active
         ? props.theme.colors.primary.light
         : 'rgba(255, 255, 255, .06)'};
   }
 
-  &.active{
-    background:  ${props => props.theme.colors.primary.light};
+  &.active {
+    background: ${props => props.theme.colors.primary.light};
     color: ${props => props.theme.colors.light};
   }
 
   &.active:after {
     background-color: ${props => props.theme.colors.accent};
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;

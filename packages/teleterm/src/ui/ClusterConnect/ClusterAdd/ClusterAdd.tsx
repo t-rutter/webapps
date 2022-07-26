@@ -21,8 +21,10 @@ import FieldInput from 'shared/components/FieldInput';
 import Validation from 'shared/components/Validation';
 import { requiredField } from 'shared/components/Validation/rules';
 import { DialogContent, DialogHeader } from 'design/Dialog';
+
+import { Attempt } from 'shared/hooks/useAsync';
+
 import { useClusterAdd } from 'teleterm/ui/ClusterConnect/ClusterAdd/useClusterAdd';
-import { Attempt } from 'teleterm/ui/useAsync';
 
 export function ClusterAdd(props: ClusterAddProps) {
   const clusterAdd = useClusterAdd(props);
@@ -30,7 +32,7 @@ export function ClusterAdd(props: ClusterAddProps) {
 }
 
 export function ClusterAddPresentation({
-  onClose,
+  onCancel,
   addCluster,
   status,
   statusText,
@@ -40,7 +42,12 @@ export function ClusterAddPresentation({
   return (
     <Validation>
       {({ validator }) => (
-        <form>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            validator.validate() && addCluster(addr);
+          }}
+        >
           <DialogHeader>
             <Text typography="h4">Enter cluster address</Text>
           </DialogHeader>
@@ -53,24 +60,22 @@ export function ClusterAddPresentation({
               value={addr}
               autoFocus
               onChange={e => setAddr(e.target.value)}
-              placeholder="https://cluster"
+              placeholder="teleport.example.com"
             />
             <Box mt="5">
               <ButtonPrimary
                 disabled={status === 'processing'}
                 mr="3"
-                onClick={e => {
-                  e.preventDefault();
-                  validator.validate() && addCluster(addr);
-                }}
+                type="submit"
               >
                 Next
               </ButtonPrimary>
               <ButtonSecondary
                 disabled={status === 'processing'}
+                type="button"
                 onClick={e => {
                   e.preventDefault();
-                  onClose();
+                  onCancel();
                 }}
               >
                 CANCEL
@@ -84,12 +89,12 @@ export function ClusterAddPresentation({
 }
 
 export type ClusterAddProps = {
-  onClose(): void;
+  onCancel(): void;
   onSuccess(clusterUri: string): void;
 };
 
 export type ClusterAddPresentationProps = {
-  onClose(): void;
+  onCancel(): void;
   addCluster(address: string): void;
   status: Attempt<any>['status'];
   statusText: string;

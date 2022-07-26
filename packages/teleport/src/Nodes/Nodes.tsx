@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gravitational, Inc.
+Copyright 2019-2022 Gravitational, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { Indicator, Box, Flex, Text } from 'design';
-import { Danger } from 'design/Alert';
+import { Indicator, Box, Flex } from 'design';
+
 import {
   FeatureBox,
   FeatureHeader,
@@ -25,11 +25,14 @@ import {
 import QuickLaunch from 'teleport/components/QuickLaunch';
 import Empty, { EmptyStateInfo } from 'teleport/components/Empty';
 import NodeList from 'teleport/components/NodeList';
+import ErrorMessage from 'teleport/components/AgentErrorMessage';
 import useTeleport from 'teleport/useTeleport';
 import useStickyClusterId from 'teleport/useStickyClusterId';
+
+import AgentButtonAdd from 'teleport/components/AgentButtonAdd';
+
 import useNodes, { State } from './useNodes';
 import AddNode from './AddNode';
-import ButtonAdd from './ButtonAdd';
 
 export default function Container() {
   const teleCtx = useTeleport();
@@ -40,7 +43,7 @@ export default function Container() {
 
 export function Nodes(props: State) {
   const {
-    nodes,
+    results,
     getNodeLoginOptions,
     startSshSession,
     attempt,
@@ -50,6 +53,20 @@ export function Nodes(props: State) {
     isLeafCluster,
     isAddNodeVisible,
     clusterId,
+    fetchNext,
+    fetchPrev,
+    from,
+    to,
+    pageSize,
+    params,
+    setParams,
+    startKeys,
+    setSort,
+    pathname,
+    replaceHistory,
+    fetchStatus,
+    isSearchEmpty,
+    onLabelClick,
   } = props;
 
   function onLoginSelect(e: React.MouseEvent, login: string, serverId: string) {
@@ -61,40 +78,57 @@ export function Nodes(props: State) {
     startSshSession(login, serverId);
   }
 
-  const isEmpty = attempt.status === 'success' && nodes.length === 0;
-  const hasNodes = attempt.status === 'success' && nodes.length > 0;
+  const hasNoNodes = results.nodes.length === 0 && isSearchEmpty;
 
   return (
     <FeatureBox>
       <FeatureHeader alignItems="center" justifyContent="space-between">
         <FeatureHeaderTitle>Servers</FeatureHeaderTitle>
-        <Flex alignItems="center">
-          {hasNodes && (
+        {attempt.status === 'success' && !hasNoNodes && (
+          <Flex alignItems="center">
             <QuickLaunch width="280px" onPress={onSshEnter} mr={3} />
-          )}
-          <ButtonAdd
-            isLeafCluster={isLeafCluster}
-            canCreate={canCreate}
-            onClick={showAddNode}
-          />
-        </Flex>
+            <AgentButtonAdd
+              agent="server"
+              beginsWithVowel={true}
+              isLeafCluster={isLeafCluster}
+              canCreate={canCreate}
+              onClick={showAddNode}
+            />
+          </Flex>
+        )}
       </FeatureHeader>
-      {attempt.status === 'failed' && <Danger>{attempt.statusText} </Danger>}
+      {attempt.status === 'failed' && (
+        <ErrorMessage message={attempt.statusText} />
+      )}
       {attempt.status === 'processing' && (
         <Box textAlign="center" m={10}>
           <Indicator />
         </Box>
       )}
-      {hasNodes && (
+      {attempt.status !== 'processing' && !hasNoNodes && (
         <>
           <NodeList
-            nodes={nodes}
+            nodes={results.nodes}
+            totalCount={results.totalCount}
             onLoginMenuOpen={getNodeLoginOptions}
             onLoginSelect={onLoginSelect}
+            fetchNext={fetchNext}
+            fetchPrev={fetchPrev}
+            fetchStatus={fetchStatus}
+            from={from}
+            to={to}
+            pageSize={pageSize}
+            params={params}
+            setParams={setParams}
+            startKeys={startKeys}
+            setSort={setSort}
+            pathname={pathname}
+            replaceHistory={replaceHistory}
+            onLabelClick={onLabelClick}
           />
         </>
       )}
-      {isEmpty && (
+      {attempt.status === 'success' && hasNoNodes && (
         <Empty
           clusterId={clusterId}
           canCreate={canCreate && !isLeafCluster}
@@ -108,14 +142,11 @@ export function Nodes(props: State) {
 }
 
 const emptyStateInfo: EmptyStateInfo = {
-  title: 'ADD YOUR FIRST SERVER',
-  description: (
-    <Text>
-      Instant SSH access for engineers with native security and compliance.
-    </Text>
-  ),
-  buttonText: 'ADD SERVER',
-  videoLink: 'https://www.youtube.com/watch?v=tUXYtwP-Kvw',
+  title: 'Add your first server to Teleport',
+  byline:
+    'Teleport Server Access consolidates SSH access across all environments.',
+  docsURL: 'https://goteleport.com/docs/server-access/getting-started/',
+  resourceType: 'server',
   readOnly: {
     title: 'No Servers Found',
     resource: 'servers',

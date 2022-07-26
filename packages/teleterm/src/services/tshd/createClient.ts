@@ -1,10 +1,13 @@
 import * as grpc from '@grpc/grpc-js';
+
 import { TerminalServiceClient } from 'teleterm/services/tshd/v1/service_grpc_pb';
 import * as api from 'teleterm/services/tshd/v1/service_pb';
 import * as types from 'teleterm/services/tshd/types';
+
+import Logger from 'teleterm/logger';
+
 import middleware, { withLogging } from './middleware';
 import createAbortController from './createAbortController';
-import Logger from 'teleterm/logger';
 
 export function createGrpcClient(addr?: string) {
   return new TerminalServiceClient(addr, grpc.credentials.createInsecure());
@@ -109,6 +112,19 @@ export default function createClient(addr: string) {
       });
     },
 
+    async listDatabaseUsers(dbUri: string) {
+      const req = new api.ListDatabaseUsersRequest().setDbUri(dbUri);
+      return new Promise<string[]>((resolve, reject) => {
+        tshd.listDatabaseUsers(req, (err, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(response.toObject().usersList);
+          }
+        });
+      });
+    },
+
     async listServers(clusterUri: string) {
       const req = new api.ListServersRequest().setClusterUri(clusterUri);
       return new Promise<types.Server[]>((resolve, reject) => {
@@ -149,10 +165,10 @@ export default function createClient(addr: string) {
     },
 
     async login(params: types.LoginParams, abortSignal?: types.TshAbortSignal) {
-      const ssoParams = params.oss
+      const ssoParams = params.sso
         ? new api.LoginRequest.SsoParams()
-            .setProviderName(params.oss.providerName)
-            .setProviderType(params.oss.providerType)
+            .setProviderName(params.sso.providerName)
+            .setProviderType(params.sso.providerType)
         : null;
 
       const localParams = params.local
@@ -163,10 +179,15 @@ export default function createClient(addr: string) {
         : null;
 
       return withAbort(abortSignal, callRef => {
-        const req = new api.LoginRequest()
-          .setClusterUri(params.clusterUri)
-          .setSso(ssoParams)
-          .setLocal(localParams);
+        const req = new api.LoginRequest().setClusterUri(params.clusterUri);
+
+        // LoginRequest has oneof on `Local` and `Sso`, which means that setting one of them clears
+        // the other.
+        if (ssoParams) {
+          req.setSso(ssoParams);
+        } else {
+          req.setLocal(localParams);
+        }
 
         return new Promise<void>((resolve, reject) => {
           callRef.current = tshd.login(req, err => {
@@ -197,7 +218,8 @@ export default function createClient(addr: string) {
       const req = new api.CreateGatewayRequest()
         .setTargetUri(params.targetUri)
         .setTargetUser(params.user)
-        .setLocalPort(params.port);
+        .setLocalPort(params.port)
+        .setTargetSubresourceName(params.subresource_name);
       return new Promise<types.Gateway>((resolve, reject) => {
         tshd.createGateway(req, (err, response) => {
           if (err) {
@@ -230,6 +252,37 @@ export default function createClient(addr: string) {
             reject(err);
           } else {
             resolve();
+          }
+        });
+      });
+    },
+
+    async restartGateway(gatewayUri = '') {
+      const req = new api.RestartGatewayRequest().setGatewayUri(gatewayUri);
+      return new Promise<void>((resolve, reject) => {
+        tshd.restartGateway(req, err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    },
+
+    async setGatewayTargetSubresourceName(
+      gatewayUri = '',
+      targetSubresourceName = ''
+    ) {
+      const req = new api.SetGatewayTargetSubresourceNameRequest()
+        .setGatewayUri(gatewayUri)
+        .setTargetSubresourceName(targetSubresourceName);
+      return new Promise<types.Gateway>((resolve, reject) => {
+        tshd.setGatewayTargetSubresourceName(req, (err, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(response.toObject());
           }
         });
       });

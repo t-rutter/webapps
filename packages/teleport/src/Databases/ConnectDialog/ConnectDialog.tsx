@@ -22,6 +22,7 @@ import Dialog, {
   DialogContent,
   DialogFooter,
 } from 'design/Dialog';
+
 import { AuthType } from 'teleport/services/user';
 import TextSelectCopy from 'teleport/components/TextSelectCopy';
 import { DbProtocol } from 'teleport/services/databases';
@@ -66,7 +67,10 @@ export default function ConnectDialog({
             Step 2
           </Text>
           {' - Retrieve credentials for the database'}
-          <TextSelectCopy mt="2" text={`tsh db login [--db-user=<user>] [--db-name=<name>] ${dbName}`} />
+          <TextSelectCopy
+            mt="2"
+            text={`tsh db login [--db-user=<user>] [--db-name=<name>] ${dbName}`}
+          />
         </Box>
         <Box mb={4}>
           <Text bold as="span">

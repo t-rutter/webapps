@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { App } from './types';
 import cfg from 'teleport/config';
+
+import { App } from './types';
 
 export default function makeApp(json: any): App {
   json = json || {};
@@ -43,7 +44,7 @@ export default function makeApp(json: any): App {
     description,
     uri,
     publicAddr,
-    tags: labels.map(label => `${label.name}: ${label.value}`),
+    labels,
     clusterId,
     fqdn,
     launchUrl,

@@ -22,9 +22,10 @@ import {
   waitFor,
   screen,
   prettyDOM,
-  getByTestId
+  getByTestId,
 } from '@testing-library/react';
 import { MemoryRouter as Router } from 'react-router-dom';
+
 import ThemeProvider from 'design/ThemeProvider';
 import theme from 'design/theme';
 import '@testing-library/jest-dom';
